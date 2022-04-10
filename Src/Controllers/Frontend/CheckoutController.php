@@ -115,7 +115,7 @@ class CheckoutController
             }
             
             $lineItems[] = [
-                'external_reference_id' => 'ext_ref2' . $lineItem->fGesamtgewicht,
+                'external_reference_id' => strval($lineItem->kArtikel),
                 'quantity' => $lineItem->nAnzahl,
                 'title' => $lineItem->Artikel->cName,
                 'net_price_cents' => round(round($lineItem->fPreis, 2) * $lineItem->nAnzahl * 100),

@@ -30,6 +30,18 @@ class MonduClient
         }
     }
 
+    public function createInvoice(array $data = []): ?array
+    {
+        try {
+            $invoice = $this->client->post('orders/' . $data['order_uuid'] . '/invoices', $data);
+
+            return $invoice;
+        }
+        catch (InvalidRequestException $e) {
+            return ['error' => true];
+        }
+    }
+
     public function updateExternalInfo(array $data = []): ?array
     {
         try {

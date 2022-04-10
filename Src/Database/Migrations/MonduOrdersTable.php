@@ -13,7 +13,8 @@ class MonduOrdersTable
             $table->id();
             $table->foreignId('order_id');
             $table->string('state');
-            $table->string('reference_id');
+            $table->string('external_reference_id');
+            $table->string('order_uuid');
             $table->timestamps();
         });
     }

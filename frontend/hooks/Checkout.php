@@ -5,6 +5,7 @@ namespace Plugin\MonduPayment\Hooks;
 use Exception;
 use JTL\Shop;
 use JTL\Link\LinkInterface;
+use JTL\Session\Frontend;
 
 
 class Checkout
@@ -22,11 +23,6 @@ class Checkout
     public function execute($args_arr = []): void
     {
         try {
-
-            # echo '<pre>';
-            # var_dump($_SESSION);
-            # echo '</pre>';
-
             if ($this->isMonduPaymentSelected()) {
                 pq('head')->append('<script src="http://localhost:3002/dist/widget.js"></script>');
                 pq('head')->append("<script>window.MONDU_CONFIG = { selected: true, token_url: 'mondu-api?fetch=token' };</script>");

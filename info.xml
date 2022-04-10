@@ -40,7 +40,7 @@
         </Adminmenu>
         <PaymentMethod>
              <Method>
-                <Name>Mondu Rechnungskauf</Name>
+                <Name>Mondu Payment</Name>
                 <PictureURL>images/plugin.png</PictureURL>
                 <Sort>1</Sort>
                 <SendMail>1</SendMail>
@@ -54,7 +54,7 @@
                 <ClassName>MonduPayment</ClassName>
                 <TemplateFile>template/mondu_payment.tpl</TemplateFile>
                 <MethodLanguage iso="GER">
-                    <Name>Mondu Rechnungskauf, Jetzt kaufen und später bezahlen.</Name>
+                    <Name>Mondu Rechnungskauf</Name>
                     <ChargeName>Mondu</ChargeName>
                     <InfoText>Mondu Rechnungskauf, Jetzt kaufen und später bezahlen.</InfoText>
                 </MethodLanguage>

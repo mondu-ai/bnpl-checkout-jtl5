@@ -10,16 +10,15 @@ class RoutesService
     public function adminRoutes($plugin)
     {
         $pluginId = $plugin->getId();
-        
     }
 
     public function frontEndRoutes($plugin)
     {
         $pluginId = $plugin->getId();
 
-        Route::group(['VerifyFormCsrfToken'], function () {
-            Route::get('token', 'Frontend\CheckoutController@token');
-        });
+        Route::get('token', 'Frontend\CheckoutController@token');
+        Route::post('invoice-create', 'Frontend\InvoicesController@create');
+
         
         Route::resolve(Request::uri(), Request::type(), $pluginId);
         
