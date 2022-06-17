@@ -56,7 +56,7 @@ JTL 5 integration plugin for Mondu Payment.
 2. [Download and install JTL 5 Shop community version](https://guide.jtl-software.de/jtl-shop/jtl-shop-kauf-editionen/jtl-shop-neu-installieren/) and install on the local server
 3. Upload plugin through admin dashboard or clone the repository in the JTL Shop's **/plugins** directory
 
-JTL Wawi
+**JTL Wawi**
 
 1. [Download JTL Wawi](https://www.jtl-software.de/jtl-wawi-download)
 2. Use Parallels Desktop with Windows 10, 11 or similar alternatives to install JTL Wawi on MacOS environment
