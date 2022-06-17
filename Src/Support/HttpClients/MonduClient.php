@@ -4,17 +4,19 @@ namespace Plugin\MonduPayment\Src\Support\HttpClients;
 
 use Plugin\MonduPayment\Src\Support\Http\HttpRequest;
 use Plugin\MonduPayment\Src\Exceptions\InvalidRequestException;
-
+use Plugin\MonduPayment\Src\Services\ConfigService;
 
 class MonduClient
 {
     private HttpRequest $client;
+    private ConfigService $config;
 
     public function __construct() 
     {
+        $this->config = new ConfigService();
         $this->client = new HttpRequest(
-            'http://localhost:3000/api/v1/',
-            ['Content-Type: application/json', 'Api-Token: RN43AAI3LKN7IKQ2MJXWU53YJIEM8ZMX']
+            $this->config->getApiUrl(),
+            ['Content-Type: application/json', 'Api-Token: '. $this->config->getApiSecret()]
         );
     }
 

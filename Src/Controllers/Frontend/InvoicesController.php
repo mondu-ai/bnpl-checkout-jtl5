@@ -25,6 +25,8 @@ class InvoicesController
 
     public function create()
     {
+        # TODO: Add middleware to check webhooks secret sent from JTL Wawi
+        
         $requestData = $_REQUEST;
 
         $orderId = $requestData['order_id'];
