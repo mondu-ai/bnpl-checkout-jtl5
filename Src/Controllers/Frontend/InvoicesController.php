@@ -12,6 +12,8 @@ use Plugin\MonduPayment\Src\Support\Debug\Debugger;
 use JTL\Checkout\Bestellung;
 use Plugin\MonduPayment\Src\Models\Order;
 use Plugin\MonduPayment\Src\Models\MonduOrder;
+use Plugin\MonduPayment\Src\Models\MonduInvoice;
+
 
 
 class InvoicesController
@@ -63,10 +65,40 @@ class InvoicesController
 
         $invoice = $this->monduClient->createInvoice($invoiceData);
 
+        $monduInvoice = new MonduInvoice();
+        $monduInvoice->create([
+            'order_id' => $bestellung->kBestellung,
+            'state' => 'created',
+            'external_reference_id' => $invoiceId,
+            'invoice_uuid' => $invoice['invoice']['uuid']
+        ]);
+
         return Response::json(
             [
-                'error' => false,
-                'token' => ''
+                'error' => false
+            ]
+        );
+    }
+
+    public function cancel()
+    {
+        # TODO: Add middleware to check webhooks secret sent from JTL Wawi
+        
+        $requestData = $_REQUEST;
+
+        $invoiceNumber = $requestData['invoice_number'];
+        
+        $monduInvoice = new MonduInvoice();
+        $monduInvoice = $monduInvoice->select('invoice_uuid, order_id')->where('external_reference_id', $invoiceNumber)->first()[0];
+
+        $monduOrder = new MonduOrder();
+        $monduOrder = $monduOrder->select('order_uuid')->where('order_id', $monduInvoice->order_id)->first()[0];
+
+        $this->monduClient->cancelInvoice(['invoice_uuid' => $monduInvoice->invoice_uuid, 'order_uuid' => $monduOrder->order_uuid]);
+
+        return Response::json(
+            [
+                'error' => false
             ]
         );
     }

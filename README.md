@@ -27,7 +27,9 @@ JTL 5 integration plugin for Mondu Payment.
 2. Select desired Shipping method and click on edit icon
 3. Enable Mondu Payment in the **ACCEPTED PAYMENT METHODS** section
 
-**Configure JTL Wawi**
+**Configure JTL Wawi Workflows**
+
+###### Create Invoice Workflow
 
 1. Navigate to the Admin -> JTL-Workflows
 2. Select **Rechnungen** tab
@@ -45,8 +47,45 @@ JTL 5 integration plugin for Mondu Payment.
          gross_amount_cents={{ Vorgang.Auftrag.Positionen.BruttopreisGesamt2 }}&net_amount_cents={{ Vorgang.Auftrag.Positionen.NettopreisGesamt2 }}&invoice_id={{ Vorgang.Auftrag.Rechnung.InterneRechnungsnummer }}&order_id={{ Vorgang.Auftrag.ExterneAuftragsnummer }}
          ```
 
-<img width="1007" alt="image" src="https://user-images.githubusercontent.com/97665980/174281478-7d96ed59-67d9-42dc-8355-486ebb9f1cca.png">
+###### Cancel Invoice Workflow
 
+1. Navigate to the Admin -> JTL-Workflows
+2. Select **Rechnungen** tab
+3. Select Rechnungen - Manuell, create new Event with "Ereignis anlegen" button
+4. Create new event
+5. Configure condition
+   1. Auftrag\Zahlungsart\Name **Gleich** Mondu Payment
+6. Configure action
+   1. Web-Request POST:
+      1. URL:
+         ```
+         http://{SHOP-URL}/mondu-api?return=cancel-invoice
+         ```
+      2. Parameter:
+         ```
+         invoice_number={{ Vorgang.Rechnungsnummer }}
+         ```
+
+###### Cancel Order Workflow
+
+1. Navigate to the Admin -> JTL-Workflows
+2. Select **Auftrage** tab
+3. Select Auftrag -> Storniert and create a workflow
+4. Configure condition
+   1. Zahlungen\Zahlungsart\Name **Gleich** Mondu Payment
+5. Configure action
+   1. Web-Request POST:
+      1. URL:
+         ```
+         http://{SHOP-URL}/mondu-api?return=cancel-invoice
+         ```
+      2. Parameter:
+         ```
+         order_number={{ Vorgang.Stammdaten.ExterneAuftragsnummer }}
+         ```
+
+
+<img width="1007" alt="image" src="https://user-images.githubusercontent.com/97665980/174281478-7d96ed59-67d9-42dc-8355-486ebb9f1cca.png">
 
 # Development
 

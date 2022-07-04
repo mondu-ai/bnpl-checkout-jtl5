@@ -17,8 +17,12 @@ class RoutesService
         $pluginId = $plugin->getId();
 
         Route::get('token', 'Frontend\CheckoutController@token');
+
         Route::post('invoice-create', 'Frontend\InvoicesController@create');
 
+        Route::post('cancel-invoice', 'Frontend\InvoicesController@cancel');
+
+        Route::post('cancel-order', 'Frontend\OrdersController@cancel');
         
         Route::resolve(Request::uri(), Request::type(), $pluginId);
         

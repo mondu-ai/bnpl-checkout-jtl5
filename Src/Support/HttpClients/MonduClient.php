@@ -32,6 +32,30 @@ class MonduClient
         }
     }
 
+    public function cancelOrder(array $data = []): ?array
+    {
+        try {
+            $order = $this->client->post('orders/' . $data['order_uuid'] . '/cancel');
+
+            return $order;
+        }
+        catch (InvalidRequestException $e) {
+            return ['error' => true];
+        }
+    }
+
+    public function cancelInvoice(array $data = []): ?array
+    {
+        try {
+            $order = $this->client->post('orders/' . $data['order_uuid'] . '/invoices/' . $data['invoice_uuid'] . '/cancel');
+
+            return $order;
+        }
+        catch (InvalidRequestException $e) {
+            return ['error' => true];
+        }
+    }
+
     public function createInvoice(array $data = []): ?array
     {
         try {

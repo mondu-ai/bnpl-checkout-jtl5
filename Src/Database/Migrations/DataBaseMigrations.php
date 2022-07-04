@@ -10,14 +10,14 @@ class DataBaseMigrations extends Migration
     {
         $this->call([
             MonduOrdersTable::class,
-            MonduApiTable::class
+            MonduInvoicesTable::class
         ], 'up');
     }
 
     public function run_down()
     {
         $this->call([
-            MonduApiTable::class,
+            MonduInvoicesTable::class,
             MonduOrdersTable::class,
         ], 'down');
     }
