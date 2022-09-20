@@ -8,11 +8,11 @@ use JTL\Plugin\Helper;
 class ConfigService
 {
     const API_DEVELOPMENT_URL = 'http://localhost:3000/api/v1/';
-    const API_SANDBOX_URL = 'https://api.stage.mondu.ai/api/v1/';
+    const API_SANDBOX_URL = 'https://api.demo.mondu.ai/api/v1/';
     const API_PRODUCTION_URL = 'https://api.mondu.ai/api/v1/';
 
     const WIDGET_DEVELOPMENT_URL = 'http://localhost:3002/dist/widget.js';
-    const WIDGET_SANDBOX_URL = 'https://checkout.stage.mondu.ai/widget.js';
+    const WIDGET_SANDBOX_URL = 'https://checkout.demo.mondu.ai/widget.js';
     const WIDGET_PRODUCTION_URL = 'https://checkout.mondu.ai/widget.js';
 
     private $config;
