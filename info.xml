@@ -59,6 +59,46 @@
                     <InfoText>Mondu Rechnungskauf, Jetzt kaufen und später bezahlen.</InfoText>
                 </MethodLanguage>
           </Method>
+          <Method>
+                <Name>Mondu SEPA-Lastschrift</Name>
+                <PictureURL>images/plugin.png</PictureURL>
+                <Sort>2</Sort>
+                <SendMail>1</SendMail>
+                <Provider>Mondu</Provider>
+                <TSCode>OTHER</TSCode>
+                <PreOrder>0</PreOrder>
+                <Soap>0</Soap>
+                <Curl>1</Curl>
+                <Sockets>0</Sockets>
+                <ClassFile>MonduPayment.php</ClassFile>
+                <ClassName>MonduPayment</ClassName>
+                <TemplateFile>template/mondu_payment.tpl</TemplateFile>
+                <MethodLanguage iso="GER">
+                    <Name>Mondu SEPA-Lastschrift</Name>
+                    <ChargeName>Mondu</ChargeName>
+                    <InfoText>Mondu SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen</InfoText>
+                </MethodLanguage>
+          </Method>
+          <Method>
+                <Name>Mondu Ratenzahlung</Name>
+                <PictureURL>images/plugin.png</PictureURL>
+                <Sort>3</Sort>
+                <SendMail>1</SendMail>
+                <Provider>Mondu</Provider>
+                <TSCode>OTHER</TSCode>
+                <PreOrder>0</PreOrder>
+                <Soap>0</Soap>
+                <Curl>1</Curl>
+                <Sockets>0</Sockets>
+                <ClassFile>MonduPayment.php</ClassFile>
+                <ClassName>MonduPayment</ClassName>
+                <TemplateFile>template/mondu_payment.tpl</TemplateFile>
+                <MethodLanguage iso="GER">
+                    <Name>Mondu Ratenzahlung</Name>
+                    <ChargeName>Mondu</ChargeName>
+                    <InfoText>Mondu Ratenzahlung - Bequem in Raten per Bankeinzug zahlen</InfoText>
+                </MethodLanguage>
+          </Method>
         </PaymentMethod>
         <FrontendLink>
           <Link>

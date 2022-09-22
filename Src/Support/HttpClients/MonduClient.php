@@ -24,7 +24,6 @@ class MonduClient
     {
         try {
             $order = $this->client->post('orders', $data);
-
             return $order;
         }
         catch (InvalidRequestException $e) {
