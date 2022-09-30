@@ -1,0 +1,62 @@
+<?php
+
+namespace Plugin\MonduPayment\Src\Services;
+
+use JTL\Plugin\Helper;
+
+
+class ConfigService
+{
+    const API_DEVELOPMENT_URL = 'http://localhost:3000/api/v1/';
+    const API_SANDBOX_URL = 'https://api.demo.mondu.ai/api/v1/';
+    const API_PRODUCTION_URL = 'https://api.mondu.ai/api/v1/';
+
+    const WIDGET_DEVELOPMENT_URL = 'http://localhost:3002/dist/widget.js';
+    const WIDGET_SANDBOX_URL = 'https://checkout.demo.mondu.ai/widget.js';
+    const WIDGET_PRODUCTION_URL = 'https://checkout.mondu.ai/widget.js';
+
+    private $config;
+
+    public function __construct()
+    {
+        $this->config = Helper::getPluginById('MonduPayment')->getConfig();
+    }
+
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+    public function getSandboxMode()
+    {
+        return $this->config->getValue('sandbox_mode') == '1';
+    }
+
+    public function getApiSecret()
+    {
+        return $this->config->getValue('api_secret');
+    }
+
+    public function getWebhooksSecret()
+    {
+        return $this->config->getValue('webhooks_secret');
+    }
+
+    public function getApiUrl()
+    {
+        if ($this->getSandboxMode()) {
+            return self::API_SANDBOX_URL;
+        }
+
+        return self::API_PRODUCTION_URL;
+    }
+
+    public function getWidgetUrl()
+    {
+        if ($this->getSandboxMode()) {
+            return self::WIDGET_SANDBOX_URL;
+        }
+
+        return self::WIDGET_PRODUCTION_URL;
+    }
+}

@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding="UTF-8"?>
+<jtlshopplugin>
+    <Name>Mondu Payment</Name>
+    <Description>Buy Now, Pay Later.</Description>
+    <Author>Mondu</Author>
+    <URL>https://mondu.ai/</URL>
+    <PluginID>MonduPayment</PluginID>
+    <XMLVersion>100</XMLVersion>
+    <ShopVersion>5.0.0</ShopVersion>
+    <Version>1.0.0</Version>
+    <CreateDate>2022-06-07</CreateDate>
+    <Install>
+        <Hooks>
+            <Hook id="140">hooks/Checkout.php</Hook>
+        </Hooks>
+        <FlushTags>CACHING_GROUP_CATEGORY, CACHING_GROUP_ARTICLE</FlushTags>
+        <Adminmenu>
+            <Settingslink sort="3">
+                  <Name>Mondu Settings</Name>
+                  <Setting type="selectbox" initialValue="Y" sort="1" conf="Y">
+                      <Name>API Sandbox Mode</Name>
+                      <Description></Description>
+                      <ValueName>sandbox_mode</ValueName>
+                      <SelectboxOptions>
+                          <Option value="1" sort="0">Yes</Option>
+                          <Option value="0" sort="1">No</Option>
+                      </SelectboxOptions>
+                  </Setting>
+                  <Setting type="text" initialValue="" sort="1" conf="Y">
+                      <Name>API Secret</Name>
+                      <Description>Please enter your Mondu API Secret.</Description>
+                      <ValueName>api_secret</ValueName>
+                  </Setting>
+                  <Setting type="text" initialValue="" sort="1" conf="Y">
+                      <Name>Webhooks Secret</Name>
+                      <Description>Please enter your Mondu Webhooks Secret.</Description>
+                      <ValueName>webhooks_secret</ValueName>
+                  </Setting>
+               </Settingslink>
+        </Adminmenu>
+        <PaymentMethod>
+             <Method>
+                <Name>Mondu Payment</Name>
+                <PictureURL>images/plugin.png</PictureURL>
+                <Sort>1</Sort>
+                <SendMail>1</SendMail>
+                <Provider>Mondu</Provider>
+                <TSCode>OTHER</TSCode>
+                <PreOrder>0</PreOrder>
+                <Soap>0</Soap>
+                <Curl>1</Curl>
+                <Sockets>0</Sockets>
+                <ClassFile>MonduPayment.php</ClassFile>
+                <ClassName>MonduPayment</ClassName>
+                <TemplateFile>template/mondu_payment.tpl</TemplateFile>
+                <MethodLanguage iso="GER">
+                    <Name>Mondu Rechnungskauf</Name>
+                    <ChargeName>Mondu</ChargeName>
+                    <InfoText>Mondu Rechnungskauf, Jetzt kaufen und später bezahlen.</InfoText>
+                </MethodLanguage>
+          </Method>
+        </PaymentMethod>
+        <FrontendLink>
+          <Link>
+              <Filename>mondu_api.php</Filename>
+              <Name>Mondu_Api</Name>
+              <FullscreenTemplate>mondu_api.tpl</FullscreenTemplate>
+              <VisibleAfterLogin>N</VisibleAfterLogin>
+              <PrintButton>N</PrintButton>
+              <Identifier>mondu_api</Identifier><!-- seit Shop 5.1.0 -->
+              <SSL>0</SSL>
+              <LinkLanguage iso="GER">
+                  <Seo>mondu api</Seo>
+                  <Name>Mondu API</Name>
+                  <Title>Mondu API</Title>
+                  <MetaTitle>Mondu API</MetaTitle>
+                  <MetaKeywords>Mondu API</MetaKeywords>
+                  <MetaDescription>Mondu API</MetaDescription>
+              </LinkLanguage>
+          </Link>
+        </FrontendLink>
+        <JS>
+            <file>
+                <name>HttpRequest.js</name>
+                <priority>1</priority>
+                <position>body</position>
+            </file>
+            <file>
+                <name>plugin.js</name>
+                <priority>1</priority>
+                <position>body</position>
+            </file>
+            <file>
+                <name>main.js</name>
+                <priority>1</priority>
+                <position>body</position>
+            </file>
+        </JS>
+
+        <CSS>
+            <file>
+                <name>style.css</name>
+                <priority>4</priority>
+            </file>
+        </CSS>
+    </Install>
+</jtlshopplugin>
