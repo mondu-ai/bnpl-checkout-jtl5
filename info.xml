@@ -12,10 +12,11 @@
     <Install>
         <Hooks>
             <Hook id="140">hooks/Checkout.php</Hook>
+            <Hook id="8">hooks/CheckoutPaymentMethod.php</Hook>
         </Hooks>
         <FlushTags>CACHING_GROUP_CATEGORY, CACHING_GROUP_ARTICLE</FlushTags>
         <Adminmenu>
-            <Settingslink sort="3">
+            <Settingslink sort="1">
                   <Name>Mondu Settings</Name>
                   <Setting type="selectbox" initialValue="Y" sort="1" conf="Y">
                       <Name>API Sandbox Mode</Name>
@@ -37,10 +38,33 @@
                       <ValueName>webhooks_secret</ValueName>
                   </Setting>
                </Settingslink>
+               <Settingslink sort="2">
+                    <Name>Net Term Configuration</Name>
+                    <Setting type="radio" initialValue="1" sort="1" conf="Y">
+                        <Name>Enable Payment Method Group</Name>
+                        <Description>When enabled, payment methods will be grouped by net terms.</Description>
+                        <ValueName>payment_method_group_enabled</ValueName>
+                        <RadioOptions>
+                            <Option value="0" sort="1">No</Option>
+                            <Option value="1" sort="2">Yes</Option>
+                        </RadioOptions>
+                    </Setting>
+                    <Setting type="text" initialValue="Buy Now, Pay Later {net_term} days with Mondu" sort="2" conf="Y">
+                        <Name>Net Term Group Title</Name>
+                        <Description>Title for the net term group. Use {net_term} symbol to replace with net term in the frontend.</Description>
+                        <ValueName>net_term_title</ValueName>
+                    </Setting>
+                    <Setting type="text" initialValue="{net_term} days net term." sort="3" conf="Y">
+                        <Name>Net Term Group Description</Name>
+                        <Description>Description for the net term group. Use {net_term} symbol to replace with net term in the frontend.</Description>
+                        <ValueName>net_term_description</ValueName>
+                    </Setting>
+                </Settingslink>
         </Adminmenu>
         <PaymentMethod>
-             <Method>
-                <Name>Mondu Payment</Name>
+            <!-- Mondu Rechnungskauf -->
+            <Method>
+                <Name>Mondu Rechnungskauf 14 Tagen</Name>
                 <PictureURL>images/plugin.png</PictureURL>
                 <Sort>1</Sort>
                 <SendMail>1</SendMail>
@@ -54,13 +78,27 @@
                 <ClassName>MonduPayment</ClassName>
                 <TemplateFile>template/mondu_payment.tpl</TemplateFile>
                 <MethodLanguage iso="GER">
-                    <Name>Mondu Rechnungskauf</Name>
+                    <Name>14 Tagen BNPL mit Mondu Rechnungskauf</Name>
                     <ChargeName>Mondu</ChargeName>
                     <InfoText>Mondu Rechnungskauf, Jetzt kaufen und später bezahlen.</InfoText>
                 </MethodLanguage>
-          </Method>
-          <Method>
-                <Name>Mondu SEPA-Lastschrift</Name>
+                <Setting type="selectbox" initialValue="14" sort="50" conf="Y">
+                    <Name>Net Term</Name>
+                    <ValueName>net_term</ValueName>
+                    <SelectboxOptions>
+                        <Option sort="1" value="14">14 Tagen</Option>
+                    </SelectboxOptions>
+                </Setting>
+                <Setting type="selectbox" initialValue="invoice" sort="50" conf="Y">
+                    <Name>Payment Method</Name>
+                    <ValueName>payment_method</ValueName>
+                    <SelectboxOptions>
+                        <Option sort="1" value="invoice">Mondu Rechnungskauf</Option>
+                    </SelectboxOptions>
+                </Setting>
+            </Method>
+            <Method>
+                <Name>Mondu Rechnungskauf 30 Tagen</Name>
                 <PictureURL>images/plugin.png</PictureURL>
                 <Sort>2</Sort>
                 <SendMail>1</SendMail>
@@ -74,15 +112,235 @@
                 <ClassName>MonduPayment</ClassName>
                 <TemplateFile>template/mondu_payment.tpl</TemplateFile>
                 <MethodLanguage iso="GER">
-                    <Name>Mondu SEPA-Lastschrift</Name>
+                    <Name>30 Tagen BNPL mit Mondu Rechnungskauf</Name>
+                    <ChargeName>Mondu</ChargeName>
+                    <InfoText>Mondu Rechnungskauf, Jetzt kaufen und später bezahlen.</InfoText>
+                </MethodLanguage>
+                <Setting type="selectbox" initialValue="30" sort="50" conf="Y">
+                    <Name>Net Term</Name>
+                    <ValueName>net_term</ValueName>
+                    <SelectboxOptions>
+                        <Option sort="1" value="30">30 Tagen</Option>
+                    </SelectboxOptions>
+                </Setting>
+                <Setting type="selectbox" initialValue="invoice" sort="50" conf="Y">
+                    <Name>Payment Method</Name>
+                    <ValueName>payment_method</ValueName>
+                    <SelectboxOptions>
+                        <Option sort="1" value="invoice">Mondu Rechnungskauf</Option>
+                    </SelectboxOptions>
+                </Setting>
+            </Method>
+            <Method>
+                <Name>Mondu Rechnungskauf 45 Tagen</Name>
+                <PictureURL>images/plugin.png</PictureURL>
+                <Sort>3</Sort>
+                <SendMail>1</SendMail>
+                <Provider>Mondu</Provider>
+                <TSCode>OTHER</TSCode>
+                <PreOrder>0</PreOrder>
+                <Soap>0</Soap>
+                <Curl>1</Curl>
+                <Sockets>0</Sockets>
+                <ClassFile>MonduPayment.php</ClassFile>
+                <ClassName>MonduPayment</ClassName>
+                <TemplateFile>template/mondu_payment.tpl</TemplateFile>
+                <MethodLanguage iso="GER">
+                    <Name>45 Tagen BNPL mit Mondu Rechnungskauf</Name>
+                    <ChargeName>Mondu</ChargeName>
+                    <InfoText>Mondu Rechnungskauf, Jetzt kaufen und später bezahlen.</InfoText>
+                </MethodLanguage>
+                <Setting type="selectbox" initialValue="45" sort="50" conf="Y">
+                    <Name>Net Term</Name>
+                    <ValueName>net_term</ValueName>
+                    <SelectboxOptions>
+                        <Option sort="1" value="45">45 Tagen</Option>
+                    </SelectboxOptions>
+                </Setting>
+                <Setting type="selectbox" initialValue="invoice" sort="50" conf="Y">
+                    <Name>Payment Method</Name>
+                    <ValueName>payment_method</ValueName>
+                    <SelectboxOptions>
+                        <Option sort="1" value="invoice">Mondu Rechnungskauf</Option>
+                    </SelectboxOptions>
+                </Setting>
+            </Method>
+            <Method>
+                <Name>Mondu Rechnungskauf 60 Tagen</Name>
+                <PictureURL>images/plugin.png</PictureURL>
+                <Sort>4</Sort>
+                <SendMail>1</SendMail>
+                <Provider>Mondu</Provider>
+                <TSCode>OTHER</TSCode>
+                <PreOrder>0</PreOrder>
+                <Soap>0</Soap>
+                <Curl>1</Curl>
+                <Sockets>0</Sockets>
+                <ClassFile>MonduPayment.php</ClassFile>
+                <ClassName>MonduPayment</ClassName>
+                <TemplateFile>template/mondu_payment.tpl</TemplateFile>
+                <MethodLanguage iso="GER">
+                    <Name>60 Tagen BNPL mit Mondu Rechnungskauf</Name>
+                    <ChargeName>Mondu</ChargeName>
+                    <InfoText>Mondu Rechnungskauf, Jetzt kaufen und später bezahlen.</InfoText>
+                </MethodLanguage>
+                <Setting type="selectbox" initialValue="60" sort="50" conf="Y">
+                    <Name>Net Term</Name>
+                    <ValueName>net_term</ValueName>
+                    <SelectboxOptions>
+                        <Option sort="1" value="60">60 Tagen</Option>
+                    </SelectboxOptions>
+                </Setting>
+                <Setting type="selectbox" initialValue="invoice" sort="50" conf="Y">
+                    <Name>Payment Method</Name>
+                    <ValueName>payment_method</ValueName>
+                    <SelectboxOptions>
+                        <Option sort="1" value="invoice">Mondu Rechnungskauf</Option>
+                    </SelectboxOptions>
+                </Setting>
+            </Method>
+
+            <!-- Mondu SEPA-Lastschrift -->
+            <Method>
+                <Name>Mondu SEPA-Lastschrift 14 Tagen</Name>
+                <PictureURL>images/plugin.png</PictureURL>
+                <Sort>5</Sort>
+                <SendMail>1</SendMail>
+                <Provider>Mondu</Provider>
+                <TSCode>OTHER</TSCode>
+                <PreOrder>0</PreOrder>
+                <Soap>0</Soap>
+                <Curl>1</Curl>
+                <Sockets>0</Sockets>
+                <ClassFile>MonduPayment.php</ClassFile>
+                <ClassName>MonduPayment</ClassName>
+                <TemplateFile>template/mondu_payment.tpl</TemplateFile>
+                <MethodLanguage iso="GER">
+                    <Name>14 Tagen BNPL mit Mondu SEPA Lastschrift</Name>
                     <ChargeName>Mondu</ChargeName>
                     <InfoText>Mondu SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen</InfoText>
                 </MethodLanguage>
-          </Method>
-          <Method>
+                <Setting type="selectbox" initialValue="14" sort="50" conf="Y">
+                    <Name>Net Term</Name>
+                    <ValueName>net_term</ValueName>
+                    <SelectboxOptions>
+                        <Option sort="1" value="14">14 Tagen</Option>
+                    </SelectboxOptions>
+                </Setting>
+                <Setting type="selectbox" initialValue="direct_debit" sort="50" conf="Y">
+                    <Name>Payment Method</Name>
+                    <ValueName>payment_method</ValueName>
+                    <SelectboxOptions>
+                        <Option sort="1" value="direct_debit">Mondu SEPA-Lastschrift</Option>
+                    </SelectboxOptions>
+                </Setting>
+            </Method>
+            <Method>
+                <Name>Mondu SEPA-Lastschrift 30 Tagen</Name>
+                <PictureURL>images/plugin.png</PictureURL>
+                <Sort>6</Sort>
+                <SendMail>1</SendMail>
+                <Provider>Mondu</Provider>
+                <TSCode>OTHER</TSCode>
+                <PreOrder>0</PreOrder>
+                <Soap>0</Soap>
+                <Curl>1</Curl>
+                <Sockets>0</Sockets>
+                <ClassFile>MonduPayment.php</ClassFile>
+                <ClassName>MonduPayment</ClassName>
+                <TemplateFile>template/mondu_payment.tpl</TemplateFile>
+                <MethodLanguage iso="GER">
+                    <Name>30 Tagen BNPL mit Mondu SEPA Lastschrift</Name>
+                    <ChargeName>Mondu</ChargeName>
+                    <InfoText>Mondu SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen</InfoText>
+                </MethodLanguage>
+                <Setting type="selectbox" initialValue="30" sort="50" conf="Y">
+                    <Name>Net Term</Name>
+                    <ValueName>net_term</ValueName>
+                    <SelectboxOptions>
+                        <Option sort="1" value="30">30 Tagen</Option>
+                    </SelectboxOptions>
+                </Setting>
+                <Setting type="selectbox" initialValue="direct_debit" sort="50" conf="Y">
+                    <Name>Payment Method</Name>
+                    <ValueName>payment_method</ValueName>
+                    <SelectboxOptions>
+                        <Option sort="1" value="direct_debit">Mondu SEPA-Lastschrift</Option>
+                    </SelectboxOptions>
+                </Setting>
+            </Method>
+            <Method>
+                <Name>Mondu SEPA-Lastschrift 45 Tagen</Name>
+                <PictureURL>images/plugin.png</PictureURL>
+                <Sort>7</Sort>
+                <SendMail>1</SendMail>
+                <Provider>Mondu</Provider>
+                <TSCode>OTHER</TSCode>
+                <PreOrder>0</PreOrder>
+                <Soap>0</Soap>
+                <Curl>1</Curl>
+                <Sockets>0</Sockets>
+                <ClassFile>MonduPayment.php</ClassFile>
+                <ClassName>MonduPayment</ClassName>
+                <TemplateFile>template/mondu_payment.tpl</TemplateFile>
+                <MethodLanguage iso="GER">
+                    <Name>45 Tagen BNPL mit Mondu SEPA Lastschrift</Name>
+                    <ChargeName>Mondu</ChargeName>
+                    <InfoText>Mondu SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen</InfoText>
+                </MethodLanguage>
+                <Setting type="selectbox" initialValue="45" sort="50" conf="Y">
+                    <Name>Net Term</Name>
+                    <ValueName>net_term</ValueName>
+                    <SelectboxOptions>
+                        <Option sort="1" value="45">45 Tagen</Option>
+                    </SelectboxOptions>
+                </Setting>
+                <Setting type="selectbox" initialValue="direct_debit" sort="50" conf="Y">
+                    <Name>Payment Method</Name>
+                    <ValueName>payment_method</ValueName>
+                    <SelectboxOptions>
+                        <Option sort="1" value="direct_debit">Mondu SEPA-Lastschrift</Option>
+                    </SelectboxOptions>
+                </Setting>
+            </Method>
+            <Method>
+                <Name>Mondu SEPA-Lastschrift 60 Tagen</Name>
+                <PictureURL>images/plugin.png</PictureURL>
+                <Sort>8</Sort>
+                <SendMail>1</SendMail>
+                <Provider>Mondu</Provider>
+                <TSCode>OTHER</TSCode>
+                <PreOrder>0</PreOrder>
+                <Soap>0</Soap>
+                <Curl>1</Curl>
+                <Sockets>0</Sockets>
+                <ClassFile>MonduPayment.php</ClassFile>
+                <ClassName>MonduPayment</ClassName>
+                <TemplateFile>template/mondu_payment.tpl</TemplateFile>
+                <MethodLanguage iso="GER">
+                    <Name>60 Tagen BNPL mit Mondu SEPA Lastschrift</Name>
+                    <ChargeName>Mondu</ChargeName>
+                    <InfoText>Mondu SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen</InfoText>
+                </MethodLanguage>
+                <Setting type="selectbox" initialValue="60" sort="50" conf="Y">
+                    <Name>Net Term</Name>
+                    <ValueName>net_term</ValueName>
+                    <SelectboxOptions>
+                        <Option sort="1" value="60">60 Tagen</Option>
+                    </SelectboxOptions>
+                </Setting>
+                <Setting type="selectbox" initialValue="direct_debit" sort="50" conf="Y">
+                    <Name>Payment Method</Name>
+                    <ValueName>payment_method</ValueName>
+                    <SelectboxOptions>
+                        <Option sort="1" value="direct_debit">Mondu SEPA-Lastschrift</Option>
+                    </SelectboxOptions>
+                </Setting>
+            </Method>
+            <Method>
                 <Name>Mondu Ratenzahlung</Name>
                 <PictureURL>images/plugin.png</PictureURL>
-                <Sort>3</Sort>
+                <Sort>9</Sort>
                 <SendMail>1</SendMail>
                 <Provider>Mondu</Provider>
                 <TSCode>OTHER</TSCode>
@@ -98,7 +356,14 @@
                     <ChargeName>Mondu</ChargeName>
                     <InfoText>Mondu Ratenzahlung - Bequem in Raten per Bankeinzug zahlen</InfoText>
                 </MethodLanguage>
-          </Method>
+                <Setting type="selectbox" initialValue="installment" sort="50" conf="Y">
+                    <Name>Payment Method</Name>
+                    <ValueName>payment_method</ValueName>
+                    <SelectboxOptions>
+                        <Option sort="1" value="installment">Mondu Ratenzahlung</Option>
+                    </SelectboxOptions>
+                </Setting>
+            </Method>
         </PaymentMethod>
         <FrontendLink>
           <Link>

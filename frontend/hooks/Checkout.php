@@ -24,15 +24,12 @@ class Checkout
     public function execute($args_arr = []): void
     {
         try {
-            $paymentMethodName = $_SESSION['Zahlungsart']->cName ?? '';
-            $_SESSION['mondu_payment_method'] = $this->getMonduPaymentMethod($paymentMethodName);
-
             if ($this->isMonduPaymentSelected()) {
                 pq('head')->append('<script src="' . $this->configService->getWidgetUrl() . '"></script>');
                 pq('head')->append("<script>window.MONDU_CONFIG = { selected: true, token_url: 'mondu-api?fetch=token' };</script>");
                 pq('body')->append('<div id="mondu-checkout-widget"></div>');
             }
-        } catch (Exception $e) {
+        } catch (Exception $e) { 
         }
     }
 
@@ -46,17 +43,6 @@ class Checkout
 
     public function getMonduTokenUrl(): string {
         return $this->getLinkByID('mondu_payment_token');
-    }
-
-    public function getMonduPaymentMethod($name): string {
-        switch($name) {
-            case 'Mondu SEPA-Lastschrift':
-                return 'direct_debit';
-            case 'Mondu Ratenzahlung':
-                return 'installment';
-            default:
-                return 'invoice';
-        }
     }
 
     /**

@@ -44,10 +44,10 @@ class HttpRequest
      * @param array $headers
      * @return void
      */
-    public function get(string $url, array $data = [], array $headers = ['Content-type' => 'application/json'])
+    public function get(string $url, array $data = [], array $headers = null)
     {
         $url = $this->baseUrl . $url;
-        $this->headers = $headers;
+        $this->headers = $headers == null ? $this->headers : $headers;
         return $this->send_request($url, $data, 'GET');
     }
 
@@ -129,10 +129,13 @@ class HttpRequest
         }
        
         curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, true);
-       
+        curl_setopt($this->curl, CURLOPT_CONNECTTIMEOUT, 0); 
+        curl_setopt($this->curl, CURLOPT_TIMEOUT, 10);
+
         $response = curl_exec($this->curl);
 
         curl_close($this->curl);
+
         if (!$response) {
             throw new InvalidRequestException();
         }

@@ -8,11 +8,6 @@ use Plugin\MonduPayment\Src\Support\Facades\Filesystem\Storage;
 
 class InstallService
 {
-
-    /**
-     * * it's migrate database tables  and create seeders when plugin installed
-     */
-
     public function install()
     {
 

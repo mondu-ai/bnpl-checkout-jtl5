@@ -1,5 +1,7 @@
 class MonduCheckoutPlugin {
     init() {
+        this._registerPaymentMethodEvents();
+
         if (!this._isMonduPaymentSelected())
             return;
 
@@ -19,6 +21,14 @@ class MonduCheckoutPlugin {
         this.state = {
             isSuccess: false
         };
+    }
+
+    _registerPaymentMethodEvents() {
+        jQuery('html').on('click', '.mondu-payment-method-card-body', function () {
+
+            var siblingMonduPaymentMethods = $(this).siblings('.mondu-payment-methods');
+            siblingMonduPaymentMethods.slideToggle();
+        });
     }
 
     async _handleSubmit(e) {

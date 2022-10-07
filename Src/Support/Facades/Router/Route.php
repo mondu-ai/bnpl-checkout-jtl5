@@ -150,14 +150,6 @@ class Route
         return RouteHandler::call($controllerMethod, $pluginId);
     }
 
-    public static function group(array $middlewares, callable $callback)
-    {
-        foreach ($middlewares as $middleware) {
-            MiddlewareHandler::call($middleware);
-        };
-        return call_user_func($callback);
-    }
-
     public static function  routes_list(): array
     {
         return self::$routes;
