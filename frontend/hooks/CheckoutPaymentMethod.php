@@ -33,14 +33,13 @@ class CheckoutPaymentMethod
      */
     public function execute($args_arr = []): void
     {
-        // TODO: Filter net terms
         $this->filterPaymentMethods();
 
         if (!$this->isPaymentGroupingEnabled()){
           return;
         }
 
-        $this->assignMonduGroups();
+        $this->createMonduGroups();
     }
 
     private function filterPaymentMethods()
@@ -61,41 +60,6 @@ class CheckoutPaymentMethod
         }
 
         $this->smarty->assign('Zahlungsarten', $paymentMethods);
-
-    }
-
-    private function getAllowedPaymentMethods()
-    {
-        try {
-            $apiAllowedPaymentMethods = $this->monduClient->getPaymentMethods();
-
-            if(!isset($apiAllowedPaymentMethods['payment_methods'])){
-                $this->debugger->log('[ERROR]: Get Payment Methods request failed.');
-
-                $this->setMonduPaymentMethodsCache(['error']);
-                return ['error'];
-            } 
-
-            $allowedPaymentMethods = array_map(function ($method) {
-              return $method['identifier'];
-            }, $apiAllowedPaymentMethods['payment_methods']);
-
-            $this->setMonduPaymentMethodsCache($allowedPaymentMethods);
-
-            return $allowedPaymentMethods;
-
-        } catch (Exception $e) {
-            $this->debugger->log('[ERROR]: Get Allowed Payment Methods failed with exception: ' . $e->getMessage());
-
-            $this->setMonduPaymentMethodsCache(['error']);
-            return ['error'];
-        }
-    }
-
-    public function setMonduPaymentMethodsCache($methods)
-    {
-        // TODO: Change expiration to 3600
-        $this->cache->set('mondu_payment_methods', $methods, ['mondu'], 15);
     }
 
     private function isPaymentGroupingEnabled()
@@ -107,10 +71,13 @@ class CheckoutPaymentMethod
         return $groupEnabled;
     }
 
-    private function assignMonduGroups()
+    private function createMonduGroups()
     {
         $availablePaymentMethods = $this->smarty->getTemplateVars('Zahlungsarten');
-        $netTerms = [14, 30, 45, 60];
+        
+        $allowedNetTermsCache = $this->cache->get('mondu_net_terms');
+        $netTerms = $allowedNetTermsCache ? $allowedNetTermsCache : $this->getAllowedNetTerms();
+
         $monduGroups = [];
 
         // Config
@@ -150,6 +117,69 @@ class CheckoutPaymentMethod
         }
 
         $this->smarty->assign('monduGroups', $monduGroups);
+    }
+    
+
+    private function getAllowedPaymentMethods()
+    {
+        try {
+            $apiAllowedPaymentMethods = $this->monduClient->getPaymentMethods();
+
+            if(!isset($apiAllowedPaymentMethods['payment_methods'])){
+                $this->debugger->log('[ERROR]: Get Payment Methods request failed.');
+
+                $this->setMonduPaymentMethodsCache(['error']);
+                return ['error'];
+            } 
+
+            $allowedPaymentMethods = array_map(function ($method) {
+              return $method['identifier'];
+            }, $apiAllowedPaymentMethods['payment_methods']);
+
+            $this->setMonduPaymentMethodsCache($allowedPaymentMethods);
+
+            return $allowedPaymentMethods;
+
+        } catch (Exception $e) {
+            $this->debugger->log('[ERROR]: Get Allowed Payment Methods failed with exception: ' . $e->getMessage());
+
+            $this->setMonduPaymentMethodsCache(['error']);
+            return ['error'];
+        }
+    }
+
+    private function getAllowedNetTerms()
+    {
+      try {
+          $allowedNetTerms = $this->monduClient->getNetTerms();
+
+          if(!isset($allowedNetTerms['net_terms'])){
+              $this->debugger->log('[ERROR]: Get Net Terms request failed.');
+
+              $this->setMonduNetTermsCache([]);
+              return [];
+          } 
+
+          $this->setMonduNetTermsCache($allowedNetTerms['net_terms']);
+          
+          return $allowedNetTerms['net_terms'];
+
+      } catch (Exception $e) {
+          $this->debugger->log('[ERROR]: Get Allowed Net Terms failed with exception: ' . $e->getMessage());
+
+          $this->setMonduNetTermsCache([]);
+          return [];
+      }
+    }
+
+    public function setMonduPaymentMethodsCache($methods)
+    {
+        $this->cache->set('mondu_payment_methods', $methods, ['mondu'], 3600);
+    }
+
+    public function setMonduNetTermsCache($methods)
+    {
+        $this->cache->set('mondu_net_terms', $methods, ['mondu'], 3600);
     }
 }
 

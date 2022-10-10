@@ -79,6 +79,18 @@ class MonduClient
         }
     }
 
+    public function getNetTerms(): ?array
+    {
+        try {
+            //$paymentMethods = $this->client->get('net_terms', []);
+            return ['net_terms' => [14, 30, 45, 60]];
+            return $paymentMethods;
+        }
+        catch (InvalidRequestException $e) {
+            return ['error' => true];
+        }
+    }
+
     public function updateExternalInfo(array $data = []): ?array
     {
         try {
