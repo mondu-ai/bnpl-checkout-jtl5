@@ -82,9 +82,9 @@ class MonduClient
     public function getNetTerms(): ?array
     {
         try {
-            //$paymentMethods = $this->client->get('net_terms', []);
-            return ['net_terms' => [14, 30, 45, 60]];
-            return $paymentMethods;
+            $paymentTerms = $this->client->get('payment_terms', []);
+
+            return $paymentTerms;
         }
         catch (InvalidRequestException $e) {
             return ['error' => true];

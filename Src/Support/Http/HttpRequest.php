@@ -123,7 +123,8 @@ class HttpRequest
      */
     public function send_request(string $url, array $data, string $method)
     {
-        var_dump($url);
+        $this->curl = curl_init();
+        
         curl_setopt($this->curl, CURLOPT_URL, $url);
         curl_setopt($this->curl, CURLOPT_HTTPHEADER, $this->headers);
 

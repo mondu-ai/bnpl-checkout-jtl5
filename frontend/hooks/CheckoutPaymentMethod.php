@@ -153,16 +153,20 @@ class CheckoutPaymentMethod
       try {
           $allowedNetTerms = $this->monduClient->getNetTerms();
 
-          if(!isset($allowedNetTerms['net_terms'])){
+          if(!isset($allowedNetTerms['payment_terms'])){
               $this->debugger->log('[ERROR]: Get Net Terms request failed.');
 
               $this->setMonduNetTermsCache([]);
               return [];
           } 
 
-          $this->setMonduNetTermsCache($allowedNetTerms['net_terms']);
+          $netTerms = array_map(function ($paymentMethod) {
+            return $paymentMethod['net_term'];
+          }, $allowedNetTerms['payment_terms']);
+
+          $this->setMonduNetTermsCache($netTerms);
           
-          return $allowedNetTerms['net_terms'];
+          return $netTerms;
 
       } catch (Exception $e) {
           $this->debugger->log('[ERROR]: Get Allowed Net Terms failed with exception: ' . $e->getMessage());
