@@ -9,21 +9,23 @@ use JTL\Shop;
 use JTL\Cart\CartHelper;
 use JTL\Session\Frontend;
 use Plugin\MonduPayment\Src\Support\Debug\Debugger;
+use JTL\Plugin\Helper;
+use Plugin\MonduPayment\Src\Services\ConfigService;
 
 class CheckoutController
 {
     private MonduClient $monduClient;
+    private ConfigService $configService;
     
     public function __construct()
     {
         $this->monduClient = new MonduClient();
+        $this->configService = new ConfigService();
     }
 
     public function token(Request $request, int $pluginId)
     {
-        $paymentMethod = $_SESSION['mondu_payment_method'] ?? 'invoice';
-
-        $order = $this->monduClient->createOrder($this->getOrderData($paymentMethod));
+        $order = $this->monduClient->createOrder($this->getOrderData());
 
         $monduOrderUuid = @$order['order']['uuid'];
 
@@ -39,7 +41,7 @@ class CheckoutController
         );
     }
 
-    public function getOrderData($paymentMethod = 'invoice')
+    public function getOrderData()
     {
         $cart = Frontend::getCart();
         $cartHelper = new CartHelper();
@@ -69,7 +71,8 @@ class CheckoutController
 
         return [
             'currency' => 'EUR',
-            'payment_method' => $paymentMethod,
+            'payment_method' => $this->getPaymentMethod(),
+            'net_term' => $this->getNetTerm(),
             'external_reference_id' => uniqid('M_JTL_'),
             'buyer' => [
                 'email' => $customer->cMail,
@@ -127,5 +130,39 @@ class CheckoutController
         }
 
         return $lineItems;
+    }
+
+    public function getPaymentMethod()
+    {
+        try { 
+            $paymentMethodModul = $_SESSION['Zahlungsart']->cModulId;
+            $paymentMethod = $this->configService->getPaymentMethodByKPlugin($paymentMethodModul);
+
+            if (isset($paymentMethod)) {
+                return $paymentMethod;
+            }
+
+            return 'invoice';
+        } catch (Exception $e) 
+        {
+            return 'invoice';
+        } 
+    }
+
+    public function getNetTerm()
+    {
+        try { 
+            $paymentMethodModul = $_SESSION['Zahlungsart']->cModulId;
+            $paymentMethod = $this->configService->getNetTermByKPlugin($paymentMethodModul);
+
+            if (isset($paymentMethod)) {
+                return $paymentMethod;
+            }
+
+            return '';
+        } catch (Exception $e) 
+        {
+            return '';
+        } 
     }
 }

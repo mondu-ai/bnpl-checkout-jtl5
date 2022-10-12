@@ -7,12 +7,12 @@ use JTL\Plugin\Helper;
 
 class ConfigService
 {
-    const API_DEVELOPMENT_URL = 'http://localhost:3000/api/v1/';
-    const API_SANDBOX_URL = 'https://api.demo.mondu.ai/api/v1/';
+    const API_SANDBOX_URL = 'http://localhost:3000/api/v1/';
+    const API_SANDBOX_URLs = 'https://api.demo.mondu.ai/api/v1/';
     const API_PRODUCTION_URL = 'https://api.mondu.ai/api/v1/';
 
-    const WIDGET_DEVELOPMENT_URL = 'http://localhost:3002/dist/widget.js';
-    const WIDGET_SANDBOX_URL = 'https://checkout.demo.mondu.ai/widget.js';
+    const WIDGET_SANDBOX_URL = 'http://localhost:3002/dist/widget.js';
+    const WIDGET_SANDBOX_URLs = 'https://checkout.demo.mondu.ai/widget.js';
     const WIDGET_PRODUCTION_URL = 'https://checkout.mondu.ai/widget.js';
 
     private $config;
@@ -42,6 +42,30 @@ class ConfigService
         return $this->config->getValue('webhooks_secret');
     }
 
+    public function getPaymentMethodGroupEnabled()
+    {
+        return $this->config->getValue('payment_method_group_enabled');
+    }
+
+    public function getNetTermTitle()
+    {
+        return $this->config->getValue('net_term_title');
+    }
+
+    public function getNetTermDescription()
+    {
+        return $this->config->getValue('net_term_description');
+    }
+
+    public function getPaymentMethodByKPlugin($kPlugin)
+    {
+        return $this->config->getValue($kPlugin . '_payment_method');
+    }
+
+    public function getNetTermByKPlugin($kPlugin)
+    {
+        return $this->config->getValue($kPlugin . '_net_term');
+    }
     public function getApiUrl()
     {
         if ($this->getSandboxMode()) {

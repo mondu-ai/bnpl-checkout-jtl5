@@ -195,3 +195,52 @@
     bottom: 0;
     left: 0;
   }
+
+.mondu-payment-method-card {
+  border-radius: 8px;
+  border: solid 1px #d9d9d9;
+  padding: 15px 20px;
+  margin-bottom: 10px;
+  width: 100%;
+  max-width: 500px;
+}
+
+.mondu-payment-method-card-body {
+  display: inline-flex;
+  width: 100%;
+  cursor: pointer;
+}
+
+.mondu-payment-method-card:hover {
+  border: solid 1px #886f9a;
+}
+
+.mondu-payment-method-image {
+  float: right;
+  width: 128px;
+}
+
+.mondu-payment-method-title {
+  font-weight: bolder;
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+
+.mondu-payment-method-description {
+  color: grey;
+  font-size: 12px;
+  margin-bottom: 0px;
+}
+
+.mondu-payment-method-image {
+  float: right;
+  margin-top: 15px;
+  width: 90px;
+}
+
+.mondu-payment-method-box {
+  background: #e9e2ed;
+  border-radius: 8px;
+  padding: 10px 15px;
+  margin-top: 18px;
+}

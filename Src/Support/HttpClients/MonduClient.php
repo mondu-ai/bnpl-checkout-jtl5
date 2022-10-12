@@ -67,6 +67,30 @@ class MonduClient
         }
     }
 
+    public function getPaymentMethods(): ?array
+    {
+        try {
+            $paymentMethods = $this->client->get('payment_methods', []);
+
+            return $paymentMethods;
+        }
+        catch (InvalidRequestException $e) {
+            return ['error' => true];
+        }
+    }
+
+    public function getNetTerms(): ?array
+    {
+        try {
+            $paymentTerms = $this->client->get('payment_terms', []);
+
+            return $paymentTerms;
+        }
+        catch (InvalidRequestException $e) {
+            return ['error' => true];
+        }
+    }
+
     public function updateExternalInfo(array $data = []): ?array
     {
         try {

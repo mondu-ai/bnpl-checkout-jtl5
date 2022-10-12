@@ -5,6 +5,7 @@ namespace Plugin\MonduPayment\Src\Support\Http;
 use Plugin\MonduPayment\Src\Exceptions\InvalidRequestException;
 use Plugin\MonduPayment\Src\Exceptions\UnsupportedAuthenticationType;
 use Plugin\MonduPayment\Src\Exceptions\UnsupportedRequestType;
+use Plugin\MonduPayment\Src\Support\Debug\Debugger;
 
 class HttpRequest
 {
@@ -28,12 +29,14 @@ class HttpRequest
      * @var array
      */
     private string $baseUrl;
+    private Debugger $debugger;
 
     public function __construct(string $baseUrl, array $headers = ['Content-type' => 'application/json'])
     {
         $this->curl = curl_init();
         $this->headers = $headers;
         $this->baseUrl = $baseUrl;
+        $this->debugger = new Debugger();
     }
 
     /**
@@ -44,10 +47,10 @@ class HttpRequest
      * @param array $headers
      * @return void
      */
-    public function get(string $url, array $data = [], array $headers = ['Content-type' => 'application/json'])
+    public function get(string $url, array $data = [], array $headers = null)
     {
         $url = $this->baseUrl . $url;
-        $this->headers = $headers;
+        $this->headers = $headers == null ? $this->headers : $headers;
         return $this->send_request($url, $data, 'GET');
     }
 
@@ -120,6 +123,8 @@ class HttpRequest
      */
     public function send_request(string $url, array $data, string $method)
     {
+        $this->curl = curl_init();
+        
         curl_setopt($this->curl, CURLOPT_URL, $url);
         curl_setopt($this->curl, CURLOPT_HTTPHEADER, $this->headers);
 
@@ -129,18 +134,21 @@ class HttpRequest
         }
        
         curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, true);
-       
+        curl_setopt($this->curl, CURLOPT_CONNECTTIMEOUT, 0); 
+        curl_setopt($this->curl, CURLOPT_TIMEOUT, 10);
+
         $response = curl_exec($this->curl);
 
         curl_close($this->curl);
+
         if (!$response) {
+            $this->debugger->log('[REQUEST FAIL]: No response at ' . $url . ' with data: ' . print_r($data, true));
             throw new InvalidRequestException();
         }
         $response = json_decode($response, true);
-
-        // print_r($response);
         
         if (@$response['errors'] != null) {
+            $this->debugger->log('[REQUEST FAIL]: Error ocurred at ' . $url . ' with data: ' . print_r($data, true));
             throw new InvalidRequestException($response);
         }
 
