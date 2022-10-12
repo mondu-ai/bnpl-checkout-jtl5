@@ -24,9 +24,7 @@ class OrdersController
     }
 
     public function cancel()
-    {
-        # TODO: Add middleware to check webhooks secret sent from JTL Wawi
-        
+    {        
         $requestData = $_REQUEST;
 
         $orderNumber = $requestData['order_number'];

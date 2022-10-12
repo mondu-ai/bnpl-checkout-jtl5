@@ -105,6 +105,8 @@ class Route
             return;
         }
 
+        print_r(self::$routes);
+
         if (stripos($fetch, 'return') === 0) {
             $fetch = explode('=', $fetch)[1];
             $route = explode('&', $fetch)[0];
@@ -153,5 +155,13 @@ class Route
     public static function  routes_list(): array
     {
         return self::$routes;
+    }
+
+    public static function group(array $middlewares, callable $callback)
+    {
+        foreach ($middlewares as $middleware) {
+            MiddlewareHandler::call($middleware);
+        };
+        return call_user_func($callback);
     }
 }
