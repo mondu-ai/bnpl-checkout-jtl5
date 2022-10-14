@@ -77,10 +77,10 @@ class CheckoutController
 
         $buyerPhone = $customer->cTel ?? $customer->cMobil;
 
-        return [
+        $data = [
             'currency' => 'EUR',
             'payment_method' => $this->getPaymentMethod(),
-            'net_term' => $this->getNetTerm(),
+            'source' => 'widget',
             'external_reference_id' => uniqid('M_JTL_'),
             'buyer' => [
                 'email' => $customer->cMail,
@@ -114,6 +114,12 @@ class CheckoutController
                 ]
             ]
         ];
+
+        $netTerm = $this->getNetTerm();
+        if ($netTerm != null)
+            $data['net_term'] = $netTerm;
+
+        return $data;
     }
 
     public function getLineItems()
@@ -164,16 +170,16 @@ class CheckoutController
     {
         try { 
             $paymentMethodModul = $_SESSION['Zahlungsart']->cModulId;
-            $paymentMethod = $this->configService->getNetTermByKPlugin($paymentMethodModul);
+            $netTerm = $this->configService->getNetTermByKPlugin($paymentMethodModul);
 
-            if (isset($paymentMethod)) {
-                return $paymentMethod;
+            if (isset($netTerm)) {
+                return (int) $netTerm;
             }
 
-            return '';
+            return null;
         } catch (Exception $e) 
         {
-            return '';
+            return null;
         } 
     }
 
