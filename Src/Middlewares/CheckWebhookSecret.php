@@ -16,19 +16,32 @@ class CheckWebhookSecret
 
         $data = $request->all();
         
-        if (isset($data['webhooks_secret']))
-        {
-            $ws = $data['webhooks_secret'];
-
-            if ($ws != $configService->getWebhooksSecret()){
-                return Response::json([
-                    'message' => 'Webhooks secret is wrong.',
-                ], 422);
+        if (self::isAllowed($data)) {
+            if (isset($data['webhooks_secret']))
+            {
+                $ws = $data['webhooks_secret'];
+    
+                if ($ws != $configService->getWebhooksSecret()){
+                    return Response::json([
+                        'message' => 'Webhooks secret is wrong.',
+                    ], 422);
+                }
+            } else {
+              return Response::json([
+                  'message' => 'Webhooks secret is missing.',
+              ], 422);
             }
-        } else {
-          return Response::json([
-              'message' => 'Webhooks secret is missing.',
-          ], 422);
         }
+    }
+
+    public static function isAllowed($data) 
+    {
+
+        if (isset($data['return'])){
+            if (in_array($data['return'], ['invoice-create', 'cancel-invoice', 'cancel-order']))
+                return true;    
+        }
+
+        return false;
     }
 }
