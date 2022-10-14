@@ -105,8 +105,6 @@ class Route
             return;
         }
 
-        print_r(self::$routes);
-
         if (stripos($fetch, 'return') === 0) {
             $fetch = explode('=', $fetch)[1];
             $route = explode('&', $fetch)[0];
