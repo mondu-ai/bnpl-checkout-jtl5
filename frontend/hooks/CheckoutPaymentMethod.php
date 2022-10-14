@@ -161,7 +161,9 @@ class CheckoutPaymentMethod
           } 
 
           $netTerms = array_map(function ($paymentMethod) {
-            return $paymentMethod['net_term'];
+            if ($this->getBuyerCountryCode() == $paymentMethod['country_code']){
+                return $paymentMethod['net_term'];
+            }
           }, $allowedNetTerms['payment_terms']);
 
           $this->setMonduNetTermsCache($netTerms);
@@ -174,6 +176,13 @@ class CheckoutPaymentMethod
           $this->setMonduNetTermsCache([]);
           return [];
       }
+    }
+
+    public function getBuyerCountryCode()
+    {
+        $customer = Frontend::getCustomer();
+
+        return $customer->cLand;
     }
 
     public function setMonduPaymentMethodsCache($methods)

@@ -154,4 +154,12 @@ class Route
     {
         return self::$routes;
     }
+
+    public static function group(array $middlewares, callable $callback)
+    {
+        foreach ($middlewares as $middleware) {
+            MiddlewareHandler::call($middleware);
+        };
+        return call_user_func($callback);
+    }
 }

@@ -11,6 +11,9 @@ use JTL\Session\Frontend;
 use Plugin\MonduPayment\Src\Support\Debug\Debugger;
 use JTL\Plugin\Helper;
 use Plugin\MonduPayment\Src\Services\ConfigService;
+use JTL\Helpers\Tax;
+use JTL\Catalog\Product\Preise;
+use JTL\Cart\CartItem;
 
 class CheckoutController
 {
@@ -62,6 +65,11 @@ class CheckoutController
           $taxAmount -= $cartTotals->shipping[1] - $cartTotals->shipping[0];
         }
 
+        // Remove surcharge tax from taxAmount
+        if ($cartTotals->surcharge[1] != 0) {
+            $taxAmount -= $cartTotals->surcharge[1] - $cartTotals->surcharge[0];
+          }
+
         // Add discount tax from taxAmount
         if ($cartTotals->discount[1] != 0) {
           $taxAmount += $cartTotals->discount[1] - $cartTotals->discount[0];
@@ -98,6 +106,7 @@ class CheckoutController
             ],
             'lines' => [
                 [
+                    'buyer_fee_cents' => round($cartTotals->surcharge[1] * 100),
                     'discount_cents' => round($cartTotals->discount[1] * 100),
                     'shipping_price_cents' => round($cartTotals->shipping[1] * 100),
                     'tax_cents' => round($taxAmount * 100),
@@ -111,9 +120,11 @@ class CheckoutController
     {
         $lineItems = [];
 
-        $cartLineItems = Frontend::getCart()->PositionenArr;
+        $this->fixSummationRounding();
 
-
+        $cart = Frontend::getCart();
+        $cartLineItems = $cart->PositionenArr;
+        
         foreach ($cartLineItems as $lineItem) {
             if ($lineItem->Artikel == null)
             {
@@ -164,5 +175,48 @@ class CheckoutController
         {
             return '';
         } 
+    }
+
+    /**
+     * use summation rounding to even out discrepancies between total basket sum and sum of basket position totals
+     * Note: This is JTL 5 native function found in Cart.php
+     * Note: JTL 5 by default does not fix summation rounding until totals are calculated
+     * @param int $precision
+     */
+
+    public function fixSummationRounding(int $precision = 2): void
+    {
+        $cart = Frontend::getCart();
+
+        $cumulatedDelta    = 0;
+        $cumulatedDeltaNet = 0;
+        foreach (Frontend::getCurrencies() as $currency) {
+            $currencyName = $currency->getName();
+            foreach ($cart->PositionenArr as $i => $item) {
+                $grossAmount        = Tax::getGross(
+                    $item->fPreis * $item->nAnzahl,
+                    CartItem::getTaxRate($item),
+                    12
+                );
+                $netAmount          = $item->fPreis * $item->nAnzahl;
+                $roundedGrossAmount = Tax::getGross(
+                    $item->fPreis * $item->nAnzahl + $cumulatedDelta,
+                    CartItem::getTaxRate($item),
+                    $precision
+                );
+                $roundedNetAmount   = \round($item->fPreis * $item->nAnzahl + $cumulatedDeltaNet, $precision);
+
+                if ($i !== 0 && $item->nPosTyp === \C_WARENKORBPOS_TYP_ARTIKEL) {
+                    if ($grossAmount != 0) {
+                        $item->fPreis = $roundedGrossAmount;
+                    }
+                    if ($netAmount != 0) {
+                        $item->fPreis = $roundedNetAmount;
+                    }
+                }
+                $cumulatedDelta    += ($grossAmount - $roundedGrossAmount);
+                $cumulatedDeltaNet += ($netAmount - $roundedNetAmount);
+            }
+        }
     }
 }
