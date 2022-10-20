@@ -160,11 +160,11 @@ class CheckoutPaymentMethod
               return [];
           } 
 
-          $netTerms = array_map(function ($paymentMethod) {
+          $netTerms = array_unique(array_filter(array_map(function ($paymentMethod) {
             if ($this->getBuyerCountryCode() == $paymentMethod['country_code']){
                 return $paymentMethod['net_term'];
             }
-          }, $allowedNetTerms['payment_terms']);
+          }, $allowedNetTerms['payment_terms'])));
 
           $this->setMonduNetTermsCache($netTerms);
           
