@@ -7,7 +7,7 @@
     <PluginID>MonduPayment</PluginID>
     <XMLVersion>100</XMLVersion>
     <ShopVersion>5.0.0</ShopVersion>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
     <CreateDate>2022-06-07</CreateDate>
     <Install>
         <Hooks>
@@ -199,6 +199,40 @@
                     </SelectboxOptions>
                 </Setting>
             </Method>
+            <Method>
+                <Name>Mondu Rechnungskauf 90 Tagen</Name>
+                <PictureURL>images/plugin.png</PictureURL>
+                <Sort>4</Sort>
+                <SendMail>1</SendMail>
+                <Provider>Mondu</Provider>
+                <TSCode>OTHER</TSCode>
+                <PreOrder>0</PreOrder>
+                <Soap>0</Soap>
+                <Curl>1</Curl>
+                <Sockets>0</Sockets>
+                <ClassFile>MonduPayment.php</ClassFile>
+                <ClassName>MonduPayment</ClassName>
+                <TemplateFile>template/mondu_payment.tpl</TemplateFile>
+                <MethodLanguage iso="GER">
+                    <Name>90 Tagen BNPL mit Mondu Rechnungskauf</Name>
+                    <ChargeName>Mondu</ChargeName>
+                    <InfoText>Mondu Rechnungskauf, Jetzt kaufen und später bezahlen.</InfoText>
+                </MethodLanguage>
+                <Setting type="selectbox" initialValue="90" sort="50" conf="Y">
+                    <Name>Net Term</Name>
+                    <ValueName>net_term</ValueName>
+                    <SelectboxOptions>
+                        <Option sort="1" value="90">90 Tagen</Option>
+                    </SelectboxOptions>
+                </Setting>
+                <Setting type="selectbox" initialValue="invoice" sort="50" conf="Y">
+                    <Name>Payment Method</Name>
+                    <ValueName>payment_method</ValueName>
+                    <SelectboxOptions>
+                        <Option sort="1" value="invoice">Mondu Rechnungskauf</Option>
+                    </SelectboxOptions>
+                </Setting>
+            </Method>
 
             <!-- Mondu SEPA-Lastschrift -->
             <Method>
@@ -327,6 +361,40 @@
                     <ValueName>net_term</ValueName>
                     <SelectboxOptions>
                         <Option sort="1" value="60">60 Tagen</Option>
+                    </SelectboxOptions>
+                </Setting>
+                <Setting type="selectbox" initialValue="direct_debit" sort="50" conf="Y">
+                    <Name>Payment Method</Name>
+                    <ValueName>payment_method</ValueName>
+                    <SelectboxOptions>
+                        <Option sort="1" value="direct_debit">Mondu SEPA-Lastschrift</Option>
+                    </SelectboxOptions>
+                </Setting>
+            </Method>
+            <Method>
+                <Name>Mondu SEPA-Lastschrift 90 Tagen</Name>
+                <PictureURL>images/plugin.png</PictureURL>
+                <Sort>8</Sort>
+                <SendMail>1</SendMail>
+                <Provider>Mondu</Provider>
+                <TSCode>OTHER</TSCode>
+                <PreOrder>0</PreOrder>
+                <Soap>0</Soap>
+                <Curl>1</Curl>
+                <Sockets>0</Sockets>
+                <ClassFile>MonduPayment.php</ClassFile>
+                <ClassName>MonduPayment</ClassName>
+                <TemplateFile>template/mondu_payment.tpl</TemplateFile>
+                <MethodLanguage iso="GER">
+                    <Name>90 Tagen BNPL mit Mondu SEPA Lastschrift</Name>
+                    <ChargeName>Mondu</ChargeName>
+                    <InfoText>Mondu SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen</InfoText>
+                </MethodLanguage>
+                <Setting type="selectbox" initialValue="90" sort="50" conf="Y">
+                    <Name>Net Term</Name>
+                    <ValueName>net_term</ValueName>
+                    <SelectboxOptions>
+                        <Option sort="1" value="90">90 Tagen</Option>
                     </SelectboxOptions>
                 </Setting>
                 <Setting type="selectbox" initialValue="direct_debit" sort="50" conf="Y">
