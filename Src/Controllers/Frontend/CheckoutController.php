@@ -80,6 +80,7 @@ class CheckoutController
         $data = [
             'currency' => 'EUR',
             'payment_method' => $this->getPaymentMethod(),
+            'gross_amount_cents' => round($cart->gibGesamtsummeWaren(true) * 100),
             'source' => 'widget',
             'external_reference_id' => uniqid('M_JTL_'),
             'buyer' => [
