@@ -40,7 +40,7 @@ JTL 5 integration plugin for Mondu Payment.
    1. Web-Request POST:
       1. URL:
          ```
-         http://{SHOP-URL}/mondu-api?return=invoice-create
+         http://{SHOP-URL}/mondu-api?return=invoice-create&webhooks_secret={WEBHOOK SECRET}
          ```
       2. Parameter:
          ```
@@ -59,7 +59,7 @@ JTL 5 integration plugin for Mondu Payment.
    1. Web-Request POST:
       1. URL:
          ```
-         http://{SHOP-URL}/mondu-api?return=cancel-invoice
+         http://{SHOP-URL}/mondu-api?return=cancel-invoice&webhooks_secret={WEBHOOK SECRET}
          ```
       2. Parameter:
          ```
@@ -77,13 +77,12 @@ JTL 5 integration plugin for Mondu Payment.
    1. Web-Request POST:
       1. URL:
          ```
-         http://{SHOP-URL}/mondu-api?return=cancel-invoice
+         http://{SHOP-URL}/mondu-api?return=cancel-invoice&webhooks_secret={WEBHOOK SECRET}
          ```
       2. Parameter:
          ```
          order_number={{ Vorgang.Stammdaten.ExterneAuftragsnummer }}
          ```
-
 
 <img width="1007" alt="image" src="https://user-images.githubusercontent.com/97665980/174281478-7d96ed59-67d9-42dc-8355-486ebb9f1cca.png">
 

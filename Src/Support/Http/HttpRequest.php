@@ -149,6 +149,7 @@ class HttpRequest
         
         if (@$response['errors'] != null) {
             $this->debugger->log('[REQUEST FAIL]: Error ocurred at ' . $url . ' with data: ' . print_r($data, true));
+            $this->debugger->log('[REQUEST FAIL]: Response: ' . print_r($response, true));
             throw new InvalidRequestException($response);
         }
 
