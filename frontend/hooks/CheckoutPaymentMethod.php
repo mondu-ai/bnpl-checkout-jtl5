@@ -120,10 +120,6 @@ class CheckoutPaymentMethod
           return $method->cAnbieter != 'Mondu';
         }));
 
-        echo '<pre>';
-        print_r($this->smarty->getTemplateVars('Zahlungsarten'));
-        echo '</pre>';
-
         $this->smarty->assign('monduGroups', $monduGroups);
     }
     
