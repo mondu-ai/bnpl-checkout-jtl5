@@ -59,6 +59,13 @@
                   </div>
                 </div>
         {/foreach}
+
+        {foreach $Zahlungsarten as $zahlungsart}
+            {if $zahlungsart->cAnbieter == 'Mondu'}
+                {$Zahlungsarten[$zahlungsart@key] = null}
+                {$Zahlungsarten = $Zahlungsarten|array_filter}
+            {/if}
+        {/foreach}
     {/if}
  {/block}
 
