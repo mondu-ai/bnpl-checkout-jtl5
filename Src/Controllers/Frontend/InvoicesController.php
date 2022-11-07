@@ -26,7 +26,7 @@ class InvoicesController
     }
 
     public function create()
-    {        
+    {   
         $requestData = $_REQUEST;
 
         $orderId = $requestData['order_id'];
@@ -48,16 +48,16 @@ class InvoicesController
             }
             
             $invoiceLineItems[] = [
-                'external_reference_id' => strval($lineItem->kArtikel),
+                'external_reference_id' => (string) $lineItem->kArtikel,
                 'quantity' => $lineItem->nAnzahl,
             ];
         }
 
         $invoiceData = [
             'order_uuid' => $monduOrder->order_uuid,
-            'external_reference_id' => $invoiceId,
+            'external_reference_id' => (string) $invoiceId,
             'invoice_url' => 'http://localhost',
-            'gross_amount_cents' => round($bestellung->fGesamtsummeKundenwaehrung, 2) * 100,
+            'gross_amount_cents' => round(round(floatval($bestellung->fGesamtsumme), 2) * 100),
             'line_items' => $invoiceLineItems
         ];
 

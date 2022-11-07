@@ -24,10 +24,46 @@ class MonduCheckoutPlugin {
     }
 
     _registerPaymentMethodEvents() {
+        var submittedForm = false;
+
         jQuery('html').on('click', '.mondu-payment-method-card-body', function () {
 
             var siblingMonduPaymentMethods = $(this).siblings('.mondu-payment-methods');
             siblingMonduPaymentMethods.slideToggle();
+        });
+
+        jQuery('html').on('change', '[name="Zahlungsart"]', function () {
+            if (typeof ppp !== 'undefined') {
+                ppp.deselectPaymentMethod();
+                ppp.setPaymentMethod(null);
+            }
+        });
+
+        jQuery('html').on('submit', 'form', function (e) {
+            if (!submittedForm && typeof ppp !== 'undefined') {
+                e.preventDefault();
+
+                var pppMethod = ppp.getPaymentMethod();
+
+                if (pppMethod == null) {
+                    $('#pp-plus').remove();
+                    submittedForm = true;
+                    $(this).submit();
+                } else {
+                    $('.mondu-payment-method-card').remove();
+                    ppp.doContinue();
+                }
+            }
+        });
+
+        jQuery('html').on('click', '.paymentMethodRow', function () {
+            $('[name="Zahlungsart"]').filter(':checked').prop('checked', false);
+        });
+
+        $('.ppp-container iframe').on('load', function () {
+            $('.ppp-container frame').contents().find('.paymentMethodRow').click(function () {
+                $('[name="Zahlungsart"]').filter(':checked').prop('checked', false);
+            });
         });
     }
 

@@ -116,6 +116,10 @@ class CheckoutPaymentMethod
           }
         }
 
+        $this->smarty->assign('Zahlungsarten', array_filter($availablePaymentMethods, function ($method) {
+          return $method->cAnbieter != 'Mondu';
+        }));
+
         $this->smarty->assign('monduGroups', $monduGroups);
     }
     

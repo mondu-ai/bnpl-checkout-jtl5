@@ -27,7 +27,16 @@ JTL 5 integration plugin for Mondu Payment.
 2. Select desired Shipping method and click on edit icon
 3. Enable Mondu Payment in the **ACCEPTED PAYMENT METHODS** section
 
-**Configure JTL Wawi Workflows**
+**Configure JTL Wawi**
+
+##### Add Payment Methods
+1. Navigate to the Payment Methods in JTL Wawi
+2. Add following payment methods:
+```
+Mondu Rechnungskauf - jetzt kaufen, später bezahlen
+Mondu SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen
+Mondu Ratenzahlung - Bequem in Raten per Bankeinzug zahlen
+```
 
 ###### Create Invoice Workflow
 
@@ -35,12 +44,12 @@ JTL 5 integration plugin for Mondu Payment.
 2. Select **Rechnungen** tab
 3. Select Rechnungen -> Erstellt -> Rechnungen_Erstellt workflow
 4. Configure condition
-   1. Rechnungen\Auftrag\Zahlungsart\Name **Gleich** Mondu Payment
+   1. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Mondu
 5. Configure action
    1. Web-Request POST:
       1. URL:
          ```
-         http://{SHOP-URL}/mondu-api?return=invoice-create
+         http://{SHOP-URL}/mondu-api?return=invoice-create&webhooks_secret={WEBHOOK SECRET}
          ```
       2. Parameter:
          ```
@@ -54,12 +63,12 @@ JTL 5 integration plugin for Mondu Payment.
 3. Select Rechnungen - Manuell, create new Event with "Ereignis anlegen" button
 4. Create new event
 5. Configure condition
-   1. Auftrag\Zahlungsart\Name **Gleich** Mondu Payment
+   1. Auftrag\Zahlungsart\Name **Enthalt** Mondu
 6. Configure action
    1. Web-Request POST:
       1. URL:
          ```
-         http://{SHOP-URL}/mondu-api?return=cancel-invoice
+         http://{SHOP-URL}/mondu-api?return=cancel-invoice&webhooks_secret={WEBHOOK SECRET}
          ```
       2. Parameter:
          ```
@@ -72,18 +81,17 @@ JTL 5 integration plugin for Mondu Payment.
 2. Select **Auftrage** tab
 3. Select Auftrag -> Storniert and create a workflow
 4. Configure condition
-   1. Zahlungen\Zahlungsart\Name **Gleich** Mondu Payment
+   1. Zahlungen\Zahlungsart\Name **Enthalt** Mondu
 5. Configure action
    1. Web-Request POST:
       1. URL:
          ```
-         http://{SHOP-URL}/mondu-api?return=cancel-invoice
+         http://{SHOP-URL}/mondu-api?return=cancel-invoice&webhooks_secret={WEBHOOK SECRET}
          ```
       2. Parameter:
          ```
          order_number={{ Vorgang.Stammdaten.ExterneAuftragsnummer }}
          ```
-
 
 <img width="1007" alt="image" src="https://user-images.githubusercontent.com/97665980/174281478-7d96ed59-67d9-42dc-8355-486ebb9f1cca.png">
 

@@ -1,6 +1,7 @@
- extends file="{$parent_template_path}/checkout/inc_payment_methods.tpl"}
- {block name='checkout-inc-payment-methods' prepend}
+ extends file="{$parent_template_path}/checkout/step3_shipping_options.tpl"}
 
+ {block name='checkout-step3-shipping-options-legend-payment' append}
+  <hr />
     {if $paymentMethodGroupEnabled}
         {foreach $monduGroups as $group}
           {$paymentMethod = reset($group['payment_methods'])}
