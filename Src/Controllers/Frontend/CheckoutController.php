@@ -77,22 +77,38 @@ class CheckoutController
 
         $buyerPhone = $customer->cTel ?? $customer->cMobil;
 
+        $buyer = [];
+
+        if (!empty($customer->cMail))
+            $buyer['email'] = $customer->cMail;
+        
+        if (!empty($customer->cVorname))
+            $buyer['first_name'] = $customer->cVorname;
+        
+        if (!empty($customer->cNachname))
+            $buyer['last_name'] = $customer->cNachname;
+        
+        if (!empty($customer->cFirma))
+            $buyer['company_name'] = $customer->cFirma;
+
+        if (!empty($buyerPhone))
+            $buyer['phone'] = $buyerPhone;
+
+        if (!empty($customer->cStrasse))
+            $buyer['address_line1'] = $customer->cStrasse;
+        
+        if (!empty($customer->cPLZ))
+            $buyer['zip_code'] = $customer->cPLZ;
+
+        $buyer['is_registered'] = $customer->kKunde != null;
+        
         $data = [
             'currency' => 'EUR',
             'payment_method' => $this->getPaymentMethod(),
             'gross_amount_cents' => round($cart->gibGesamtsummeWaren(true) * 100),
             'source' => 'widget',
             'external_reference_id' => uniqid('M_JTL_'),
-            'buyer' => [
-                'email' => $customer->cMail,
-                'first_name' => $customer->cVorname,
-                'last_name' => $customer-> cNachname,
-                'company_name' => $customer->cFirma,
-                'phone' => $buyerPhone == '' ? null : $buyerPhone,
-                'address_line1' => $customer->cStrasse,
-                'zip_code' => $customer->cPLZ,
-                'is_registered' => $customer->kKunde != null
-            ],
+            'buyer' => $buyer,
             'billing_address' => [
                 'address_line1' => $customer->cStrasse,
                 'city' => $customer->cOrt,
