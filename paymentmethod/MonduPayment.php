@@ -39,6 +39,17 @@ class MonduPayment extends Method
             'order_uuid' => $_SESSION['monduOrderUuid']
         ]);
 
+        $payValue  = $order->fGesamtsumme;
+        $hash = $this->generateHash($order);
+
+        $this->deletePaymentHash($hash);
+        $this->addIncomingPayment($order, (object)[
+            'fBetrag'  => $payValue,
+            'cZahler'  => 'Mondu',
+            'cHinweis' => $_SESSION['monduOrderUuid'],
+        ]);
+
+        $this->setOrderStatusToPaid($order);
 
         unset($_SESSION['monduOrderUuid']);
     }
