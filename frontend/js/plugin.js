@@ -27,6 +27,8 @@ class MonduCheckoutPlugin {
         var submittedForm = false;
 
         jQuery('html').on('click', '.mondu-payment-method-card-body', function () {
+            $(this).parent().find('input[type="radio"]').first().prop('checked', true);
+            $(this).parent().find('input[type="radio"]').first().trigger('change');
 
             var siblingMonduPaymentMethods = $(this).siblings('.mondu-payment-methods');
             siblingMonduPaymentMethods.slideToggle();
