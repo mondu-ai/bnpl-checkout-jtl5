@@ -85,7 +85,6 @@ class MonduCheckoutPlugin {
     checkPPP() {
         if (typeof ppp !== 'undefined') {
             if (ppp.getPaymentMethod() != null) {
-                $('.active-mondu-method .mondu-payment-methods').css('display', 'none')
                 $('.active-mondu-method').removeClass('active-mondu-method');
 
                 $('[name="Zahlungsart"]').filter(':checked').prop('checked', false);
