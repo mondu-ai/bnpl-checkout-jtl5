@@ -7,7 +7,7 @@
     <PluginID>MonduPayment</PluginID>
     <XMLVersion>100</XMLVersion>
     <ShopVersion>5.0.0</ShopVersion>
-    <Version>1.0.8</Version>
+    <Version>1.0.9</Version>
     <CreateDate>2022-06-07</CreateDate>
     <Install>
         <Hooks>
@@ -37,6 +37,23 @@
                       <Description>Please enter your Mondu Webhooks Secret.</Description>
                       <ValueName>webhooks_secret</ValueName>
                   </Setting>
+                  <Setting type="textarea" initialValue="" sort="1" conf="Y">
+                      <Name>Invoice Payment Method Benefits</Name>
+                      <Description>Sie haben die Kontrolle! Sie können den Betrag jederzeit innerhalb von 30 Tagen überweisen.|Datenschutz ist uns wichtig - Ihre Daten werden nur zur Identifizierung verwendet.|Keine versteckten Gebühren! Mit Mondu ist Ihr Zahlungsabwicklung kostenlos.</Description>
+                      <ValueName>invoice_benefits</ValueName>
+                  </Setting>
+
+                  <Setting type="textarea" initialValue="" sort="1" conf="Y">
+                      <Name>SEPA Payment Method Benefits</Name>
+                      <Description>Sie müssen nichts tun! Wir nutzen Ihre IBAN zur Ausführung der Lastschrift.|Bevor wir den Betrag abbuchen, informieren wir Sie per E-Mail.|Gebührenfrei! Es fallen für Sie keine zusätzlichen Kosten für Ihre SEPA-Zahlung an.</Description>
+                      <ValueName>sepa_benefits</ValueName>
+                  </Setting>
+
+                  <Setting type="textarea" initialValue="" sort="1" conf="Y">
+                      <Name>Installments Payment Method Benefits</Name>
+                      <Description>Kostenfrei! Sie zahlen keine versteckten Gebühren oder Zinsen.|Automatische Zahlung alle 30 Tage nach Versand der Ware.|Jederzeit die Kontrolle! Wir informieren Sie über anstehende Ratenzahlungen per E-Mail.</Description>
+                      <ValueName>installments_benefits</ValueName>
+                  </Setting>
                </Settingslink>
                <Settingslink sort="2">
                     <Name>Net Term Configuration</Name>
@@ -49,12 +66,12 @@
                             <Option value="1" sort="2">Yes</Option>
                         </RadioOptions>
                     </Setting>
-                    <Setting type="text" initialValue="Buy Now, Pay Later {net_term} days with Mondu" sort="2" conf="Y">
+                    <Setting type="text" initialValue="Jetzt kaufen, in {net_term} Tagen bezahlen" sort="2" conf="Y">
                         <Name>Net Term Group Title</Name>
                         <Description>Title for the net term group. Use {net_term} symbol to replace with net term in the frontend.</Description>
                         <ValueName>net_term_title</ValueName>
                     </Setting>
-                    <Setting type="text" initialValue="{net_term} days net term." sort="3" conf="Y">
+                    <Setting type="text" initialValue="" sort="3" conf="Y">
                         <Name>Net Term Group Description</Name>
                         <Description>Description for the net term group. Use {net_term} symbol to replace with net term in the frontend.</Description>
                         <ValueName>net_term_description</ValueName>

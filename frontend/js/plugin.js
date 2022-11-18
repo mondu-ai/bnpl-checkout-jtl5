@@ -25,13 +25,20 @@ class MonduCheckoutPlugin {
 
     _registerPaymentMethodEvents() {
         var submittedForm = false;
+        var that = this;
 
-        jQuery('html').on('click', '.mondu-payment-method-card-body', function () {
-            $(this).parent().find('input[type="radio"]').first().prop('checked', true);
-            $(this).parent().find('input[type="radio"]').first().trigger('change');
+        jQuery("html").on('click', '.mondu-payment-methods', function (e) {
+            e.stopPropagation();
+        });
 
-            var siblingMonduPaymentMethods = $(this).siblings('.mondu-payment-methods');
-            siblingMonduPaymentMethods.slideToggle();
+        jQuery('html').on('click', '.mondu-payment-method-card', function () {
+            if ($('.mondu-payment-methods', this).css('display') == 'none') {
+                $(this).find('input[type="radio"]').first().prop('checked', true);
+                $(this).find('input[type="radio"]').first().trigger('change');
+            }
+
+            var monduPaymentMethods = $('.mondu-payment-methods', this);
+            monduPaymentMethods.slideToggle(0);
         });
 
         jQuery('html').on('change', '[name="Zahlungsart"]', function () {
@@ -39,6 +46,14 @@ class MonduCheckoutPlugin {
                 ppp.deselectPaymentMethod();
                 ppp.setPaymentMethod(null);
             }
+
+            that.checkPPP();
+
+            $('.active-mondu-method').removeClass('active-mondu-method');
+            $(this).closest('.mondu-payment-method-card').addClass('active-mondu-method');
+
+            $('.active-mondu-payment-method-box').removeClass('active-mondu-payment-method-box');
+            $(this).closest('.mondu-payment-method-box').addClass('active-mondu-payment-method-box');
         });
 
         jQuery('html').on('submit', 'form', function (e) {
@@ -58,15 +73,25 @@ class MonduCheckoutPlugin {
             }
         });
 
-        jQuery('html').on('click', '.paymentMethodRow', function () {
-            $('[name="Zahlungsart"]').filter(':checked').prop('checked', false);
-        });
 
-        $('.ppp-container iframe').on('load', function () {
-            $('.ppp-container frame').contents().find('.paymentMethodRow').click(function () {
-                $('[name="Zahlungsart"]').filter(':checked').prop('checked', false);
-            });
+        jQuery(document).ready(function () {
+            window.addEventListener("message", (event) => {
+                if (event.origin.includes('paypal') && JSON.parse(event.data)?.action == 'resizeHeightOfTheIframe')
+                    that.checkPPP();
+            }, false);
         });
+    }
+
+    checkPPP() {
+        if (typeof ppp !== 'undefined') {
+            if (ppp.getPaymentMethod() != null) {
+                $('.active-mondu-method .mondu-payment-methods').css('display', 'none')
+                $('.active-mondu-method').removeClass('active-mondu-method');
+
+                $('[name="Zahlungsart"]').filter(':checked').prop('checked', false);
+                $('[name="Zahlungsart"]').filter(':checked').trigger('change');
+            }
+        }
     }
 
     async _handleSubmit(e) {
@@ -92,8 +117,6 @@ class MonduCheckoutPlugin {
                 that.state.isSuccess = true;
             }
         });
-
-        console.log('submitted!')
     }
 
     async _getMonduToken() {

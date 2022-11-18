@@ -196,51 +196,129 @@
     left: 0;
   }
 
-.mondu-payment-method-card {
-  border-radius: 8px;
-  border: solid 1px #d9d9d9;
-  padding: 15px 20px;
-  margin-bottom: 10px;
-  width: 100%;
-  max-width: 500px;
+.mondu-payment-method-card:first-child {
+  border-top: solid 1px #d9d9d9;
 }
 
-.mondu-payment-method-card-body {
-  display: inline-flex;
+.mondu-payment-method-card {
+  border-bottom: solid 1px #d9d9d9;
+  padding: 15px 12px 15px 20px;
   width: 100%;
   cursor: pointer;
 }
 
-.mondu-payment-method-card:hover {
-  border: solid 1px #886f9a;
+.active-mondu-payment-method-box .mondu-active-payment-method-description {
+  display: block;
 }
 
-.mondu-payment-method-image {
-  float: right;
-  width: 128px;
+.mondu-active-payment-method-description {
+  background: #E9E2EE;
+  border-radius: 6px;
+  padding: 12px;
+  margin-top: 16px;
+  margin-left: 10px !important;
+  font-size: 13px;
+  font-weight: normal !important;
+  display: none;
+}
+
+.mondu-active-payment-method-description ul {
+  margin: 0;
+  padding: 0 0 0 20px;
+}
+.mondu-active-payment-method-description ul li {
+  line-height: 24px;
+}
+.mondu-payment-method-card.active-mondu-method {
+  background: #F9F9F9;
+}
+
+.mondu-payment-method-card-body .mondu-checkmark {
+  display: none;
+}
+
+.active-mondu-method .mondu-checkmark {
+  display: block !important;
+}
+
+.mondu-payment-method-card-body {
+  width: 100%;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  align-content: flex-start;
+  overflow: auto;
+  flex-direction: row;
+  gap: 45px;
+}
+
+.mondu-payment-method-card:hover {
+  background: #F9F9F9;
 }
 
 .mondu-payment-method-title {
-  font-weight: bolder;
-  font-size: 16px;
-  margin-bottom: 6px;
+  font-weight: normal;
+    font-size: 12px;
+    color: black;
+    margin-bottom: 6px;
 }
 
+.active-mondu-method .mondu-payment-method-title {
+  font-weight: bold;
+}
 .mondu-payment-method-description {
-  color: grey;
-  font-size: 12px;
+  color: #3f3f3f;
+  font-size: 11px;
   margin-bottom: 0px;
 }
 
 .mondu-payment-method-image {
-  float: right;
-  margin-top: 15px;
-  width: 90px;
+  width: 75px;
 }
 
 .mondu-payment-method-box {
-  background: #e9e2ed;
-  border-radius: 8px;
-  padding: 10px 15px;
-  margin-top: 18px;
+  background: #FFFFFF;
+  border-radius: 6px;
+  border: 1px solid #C9D1D7;
+  padding: 16px;
+  margin-top: 10px;
+}
+
+.mondu-payment-method-box .title, .mondu-payment-method-box .checkout-payment-method-note {
+  cursor: pointer;
+}
+
+.mondu-payment-method-box:first-child {
+  margin-top: 20px;
+}
+
+.mondu-payment-method-card-body div:last-child {
+  margin-left: auto;
+}
+
+.mondu-payment-method-box .custom-control-input:checked ~ .custom-control-label::before {
+  color: #FFF;
+  border-color: #46086D;
+  background-color: #46086D;
+}
+
+.mondu-payment-method-box .custom-control-label::before {
+  margin-top: 10px;
+}
+
+.mondu-payment-method-box .custom-control-label::after {
+  margin-top: 10px;
+}
+
+.mondu-payment-method-box .custom-control-label span {
+  margin-left: 10px;
+}
+
+.container {
+  max-width: 90% !important;
+}
+
+.active-mondu-payment-method-box {
+  border: 1px solid #6B398A;
 }

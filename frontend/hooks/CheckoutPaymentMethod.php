@@ -1,6 +1,7 @@
 <?php
 
 namespace Plugin\MonduPayment\Hooks;
+use JTL\Plugin\Helper;
 
 use Exception;
 use JTL\Shop;
@@ -18,6 +19,8 @@ class CheckoutPaymentMethod
     private $cache;
     private Debugger $debugger;
     private MonduClient $monduClient;
+    private $plugin;
+
 
     public function __construct() {
         $this->linkHelper = Shop::Container()->getLinkService();
@@ -26,6 +29,7 @@ class CheckoutPaymentMethod
         $this->cache = Shop::Container()->getCache();
         $this->monduClient = new MonduClient();
         $this->debugger = new Debugger();
+        $this->plugin = Helper::getPluginById('MonduPayment');
     }
     /**
      * @param array $args_arr
@@ -81,6 +85,7 @@ class CheckoutPaymentMethod
         $monduGroups = [];
 
         // Config
+        $benefits = $this->configService->getBenefitsText();
         $netTermTitle = $this->configService->getNetTermTitle();
         $netTermDescription = $this->configService->getNetTermDescription();
 
@@ -89,6 +94,11 @@ class CheckoutPaymentMethod
           $paymentMethods = array_filter($availablePaymentMethods, function ($method) use ($netTerm) {
             return $method->cAnbieter == 'Mondu' && strpos($method->cModulId, $netTerm . 'tagen') !== false;
           });
+
+          foreach ($paymentMethods as $key => $method) {
+            $paymentMethodType = $this->configService->getPaymentMethodByKPlugin($method->cModulId);
+            $paymentMethods[$key]->monduBenefits = $benefits[$paymentMethodType];
+          }
 
           if (count($paymentMethods) != 0) {
               $monduGroups[] = [
@@ -103,6 +113,11 @@ class CheckoutPaymentMethod
         $installmentPaymentMethods = array_filter($availablePaymentMethods, function ($method) {
           return $method->cAnbieter == 'Mondu' && strpos($method->cModulId, 'monduratenzahlung') !== false;
         });
+
+        foreach ($installmentPaymentMethods as $key => $method) {
+          $paymentMethodType = $this->configService->getPaymentMethodByKPlugin($method->cModulId);
+          $installmentPaymentMethods[$key]->monduBenefits = $benefits[$paymentMethodType];
+        }
 
         if (count($installmentPaymentMethods) > 0) {
           $installment = reset($installmentPaymentMethods);
@@ -120,6 +135,7 @@ class CheckoutPaymentMethod
           return $method->cAnbieter != 'Mondu';
         }));
 
+        $this->smarty->assign('monduFrontendUrl', $this->plugin->getPaths()->getFrontendURL());
         $this->smarty->assign('monduGroups', $monduGroups);
     }
     
