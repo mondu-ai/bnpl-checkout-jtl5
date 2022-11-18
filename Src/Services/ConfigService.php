@@ -83,4 +83,19 @@ class ConfigService
 
         return self::WIDGET_PRODUCTION_URL;
     }
+
+    public function getBenefitsText()
+    {
+        return [
+            'invoice' => $this->getConfigurationDescription('invoice_benefits'),
+            'direct_debit' => $this->getConfigurationDescription('sepa_benefits'),
+            'installment' => $this->getConfigurationDescription('installments_benefits')
+        ];
+
+    }
+
+    public function getConfigurationDescription($key)
+    {
+        return $this->config->getOption($key)->description;
+    }
 }
