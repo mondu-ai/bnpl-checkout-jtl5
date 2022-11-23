@@ -37,19 +37,19 @@
                       <Description>Please enter your Mondu Webhooks Secret.</Description>
                       <ValueName>webhooks_secret</ValueName>
                   </Setting>
-                  <Setting type="textarea" initialValue="" sort="1" conf="Y">
+                  <Setting type="none" initialValue="" sort="1" conf="Y">
                       <Name>Invoice Payment Method Benefits</Name>
                       <Description>Sie haben die Kontrolle! Sie können den Betrag jederzeit innerhalb von 30 Tagen überweisen.|Datenschutz ist uns wichtig - Ihre Daten werden nur zur Identifizierung verwendet.|Keine versteckten Gebühren! Mit Mondu ist Ihr Zahlungsabwicklung kostenlos.</Description>
                       <ValueName>invoice_benefits</ValueName>
                   </Setting>
 
-                  <Setting type="textarea" initialValue="" sort="1" conf="Y">
+                  <Setting type="none" initialValue="" sort="1" conf="Y">
                       <Name>SEPA Payment Method Benefits</Name>
                       <Description>Sie müssen nichts tun! Wir nutzen Ihre IBAN zur Ausführung der Lastschrift.|Bevor wir den Betrag abbuchen, informieren wir Sie per E-Mail.|Gebührenfrei! Es fallen für Sie keine zusätzlichen Kosten für Ihre SEPA-Zahlung an.</Description>
                       <ValueName>sepa_benefits</ValueName>
                   </Setting>
 
-                  <Setting type="textarea" initialValue="" sort="1" conf="Y">
+                  <Setting type="none" initialValue="" sort="1" conf="Y">
                       <Name>Installments Payment Method Benefits</Name>
                       <Description>Kostenfrei! Sie zahlen keine versteckten Gebühren oder Zinsen.|Automatische Zahlung alle 30 Tage nach Versand der Ware.|Jederzeit die Kontrolle! Wir informieren Sie über anstehende Ratenzahlungen per E-Mail.</Description>
                       <ValueName>installments_benefits</ValueName>
