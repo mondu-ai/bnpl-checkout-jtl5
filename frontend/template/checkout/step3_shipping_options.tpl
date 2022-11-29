@@ -35,9 +35,14 @@
                                             {block name='checkout-inc-payment-methods-badge'}
                                                 <strong class="checkout-payment-method-badge">
                                                 {if $zahlungsart->cGebuehrname|has_trans}
-                                                    <span>{$zahlungsart->cGebuehrname|trans} </span>
+                                                    <!--<span>{$zahlungsart->cGebuehrname|trans} </span>-->
                                                 {/if}
-                                                    {$zahlungsart->cPreisLocalized}
+
+                                                {if $zahlungsart->cPreisLocalized[0] == '+'}
+                                                  {$zahlungsart->cPreisLocalized}
+                                                {else}
+                                                  + {$zahlungsart->cPreisLocalized}
+                                                {/if}
                                                 </strong>
                                             {/block}
                                         {/if}
