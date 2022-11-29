@@ -347,3 +347,7 @@
 .mondu-card {
   border-bottom: 0px;
 }
+
+.row.checkout-payment-options.form-group {
+  margin-top: 30px;
+}
