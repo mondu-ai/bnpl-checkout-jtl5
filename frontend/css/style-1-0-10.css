@@ -322,3 +322,28 @@
 .active-mondu-payment-method-box {
   border: 1px solid #6B398A;
 }
+
+#fieldset-payment hr {
+  display: none;
+}
+
+#fieldset-payment .row .col .card .card-body {
+  padding-top: 0px;
+}
+
+#fieldset-payment .row .col .card .card-body #pp-plus {
+  margin-top: -27px;
+}
+
+#fieldset-payment .row .col .card {
+  border-top: 0px;
+}
+
+.mondu-card .card-body {
+  border-bottom: 0px;
+  padding-bottom: 0;
+}
+
+.mondu-card {
+  border-bottom: 0px;
+}
