@@ -11,9 +11,9 @@ class Migration20221130105300 extends Migration implements IMigration
     {
         $this->execute("
           UPDATE `tzahlungsartsprache` zs
-          inner join tzahlungsart z ON z.kZahlungsart = zs.kZahlungsart
-          SET zs.cHinweisText = 'Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie [url=https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/]hier[/url].'
-          WHERE z.cAnbieter = 'Mondu';
+            SET zs.cHinweisText = 'Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie [url=https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/]hier[/url].',       
+                zs.`cHinweisTextShop` = 'Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie [url=https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/]hier[/url].'
+            WHERE zs.`cGebuehrname` = 'Mondu';
         ");
     }
 
