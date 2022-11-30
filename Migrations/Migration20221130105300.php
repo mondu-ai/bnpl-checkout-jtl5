@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Plugin\jtl_test\Migrations;
+namespace Plugin\MonduPayment\Migrations;
 
 use JTL\Plugin\Migration;
 use JTL\Update\IMigration;
