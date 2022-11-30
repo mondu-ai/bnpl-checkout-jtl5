@@ -97,7 +97,7 @@ class CheckoutPaymentMethod
 
           foreach ($paymentMethods as $key => $method) {
             $paymentMethodType = $this->configService->getPaymentMethodByKPlugin($method->cModulId);
-            $paymentMethods[$key]->monduBenefits = $benefits[$paymentMethodType];
+            $paymentMethods[$key]->monduBenefits = str_replace('{net_term}', $netTerm, $benefits[$paymentMethodType]);
           }
 
           if (count($paymentMethods) != 0) {

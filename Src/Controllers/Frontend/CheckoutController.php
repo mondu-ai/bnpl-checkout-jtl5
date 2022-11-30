@@ -80,22 +80,22 @@ class CheckoutController
         $buyer = [];
 
         if (!empty($customer->cMail))
-            $buyer['email'] = $customer->cMail;
+            $buyer['email'] = html_entity_decode($customer->cMail);
         
         if (!empty($customer->cVorname))
-            $buyer['first_name'] = $customer->cVorname;
+            $buyer['first_name'] = html_entity_decode($customer->cVorname);
         
         if (!empty($customer->cNachname))
-            $buyer['last_name'] = $customer->cNachname;
+            $buyer['last_name'] = html_entity_decode($customer->cNachname);
         
         if (!empty($customer->cFirma))
-            $buyer['company_name'] = $customer->cFirma;
+            $buyer['company_name'] = html_entity_decode($customer->cFirma);
 
         if (!empty($buyerPhone))
-            $buyer['phone'] = $buyerPhone;
+            $buyer['phone'] = html_entity_decode($buyerPhone);
 
         if (!empty($customer->cStrasse))
-            $buyer['address_line1'] = $customer->cStrasse;
+            $buyer['address_line1'] = html_entity_decode($customer->cStrasse);
         
         if (!empty($customer->cPLZ))
             $buyer['zip_code'] = $customer->cPLZ;
@@ -110,14 +110,14 @@ class CheckoutController
             'external_reference_id' => uniqid('M_JTL_'),
             'buyer' => $buyer,
             'billing_address' => [
-                'address_line1' => $customer->cStrasse,
-                'city' => $customer->cOrt,
+                'address_line1' => html_entity_decode($customer->cStrasse),
+                'city' => html_entity_decode($customer->cOrt),
                 'country_code' => $customer->cLand,
                 'zip_code' => $customer->cPLZ
             ],
             'shipping_address' => [
-                'address_line1' => $shippingAddress->cStrasse,
-                'city' => $shippingAddress->cOrt,
+                'address_line1' => html_entity_decode($shippingAddress->cStrasse),
+                'city' => html_entity_decode($shippingAddress->cOrt),
                 'country_code' => $shippingAddress->cLand,
                 'zip_code' => $shippingAddress->cPLZ
             ],
@@ -157,7 +157,7 @@ class CheckoutController
             $lineItems[] = [
                 'external_reference_id' => strval($lineItem->kArtikel),
                 'quantity' => $lineItem->nAnzahl,
-                'title' => $lineItem->Artikel->cName,
+                'title' => html_entity_decode($lineItem->Artikel->cName),
                 'net_price_cents' => round(round($lineItem->fPreis, 2) * $lineItem->nAnzahl * 100),
                 'net_price_per_item_cents' => round($lineItem->fPreis * 100)
             ];

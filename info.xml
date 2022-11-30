@@ -7,7 +7,7 @@
     <PluginID>MonduPayment</PluginID>
     <XMLVersion>100</XMLVersion>
     <ShopVersion>5.0.0</ShopVersion>
-    <Version>1.0.9</Version>
+    <Version>1.0.10</Version>
     <CreateDate>2022-06-07</CreateDate>
     <Install>
         <Hooks>
@@ -39,7 +39,7 @@
                   </Setting>
                   <Setting type="none" initialValue="" sort="1" conf="Y">
                       <Name>Invoice Payment Method Benefits</Name>
-                      <Description>Sie haben die Kontrolle! Sie können den Betrag jederzeit innerhalb von 30 Tagen überweisen.|Datenschutz ist uns wichtig - Ihre Daten werden nur zur Identifizierung verwendet.|Keine versteckten Gebühren! Mit Mondu ist Ihr Zahlungsabwicklung kostenlos.</Description>
+                      <Description>Sie haben die volle Kontrolle. Sie können den Betrag jederzeit innerhalb von {net_term} Tagen überweisen.|Datenschutz ist uns wichtig - Ihre Daten werden lediglich zur Identifizierung verwendet.</Description>
                       <ValueName>invoice_benefits</ValueName>
                   </Setting>
 
@@ -95,7 +95,7 @@
                 <ClassName>MonduPayment</ClassName>
                 <TemplateFile>template/mondu_payment.tpl</TemplateFile>
                 <MethodLanguage iso="GER">
-                    <Name>Mondu Rechnungskauf - jetzt kaufen, später bezahlen</Name>
+                    <Name>Rechnungskauf - jetzt kaufen, später bezahlen</Name>
                     <ChargeName>Mondu</ChargeName>
                     <InfoText><![CDATA[Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie <a href="https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/" target="_blank">hier</a>.]]></InfoText>
                 </MethodLanguage>
@@ -129,7 +129,7 @@
                 <ClassName>MonduPayment</ClassName>
                 <TemplateFile>template/mondu_payment.tpl</TemplateFile>
                 <MethodLanguage iso="GER">
-                    <Name>Mondu Rechnungskauf - jetzt kaufen, später bezahlen</Name>
+                    <Name>Rechnungskauf - jetzt kaufen, später bezahlen</Name>
                     <ChargeName>Mondu</ChargeName>
                     <InfoText><![CDATA[Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie <a href="https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/" target="_blank">hier</a>.]]></InfoText>
                 </MethodLanguage>
@@ -163,7 +163,7 @@
                 <ClassName>MonduPayment</ClassName>
                 <TemplateFile>template/mondu_payment.tpl</TemplateFile>
                 <MethodLanguage iso="GER">
-                    <Name>Mondu Rechnungskauf - jetzt kaufen, später bezahlen</Name>
+                    <Name>Rechnungskauf - jetzt kaufen, später bezahlen</Name>
                     <ChargeName>Mondu</ChargeName>
                     <InfoText><![CDATA[Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie <a href="https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/" target="_blank">hier</a>.]]></InfoText>
                 </MethodLanguage>
@@ -197,7 +197,7 @@
                 <ClassName>MonduPayment</ClassName>
                 <TemplateFile>template/mondu_payment.tpl</TemplateFile>
                 <MethodLanguage iso="GER">
-                    <Name>Mondu Rechnungskauf - jetzt kaufen, später bezahlen</Name>
+                    <Name>Rechnungskauf - jetzt kaufen, später bezahlen</Name>
                     <ChargeName>Mondu</ChargeName>
                     <InfoText><![CDATA[Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie <a href="https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/" target="_blank">hier</a>.]]></InfoText>
                 </MethodLanguage>
@@ -231,7 +231,7 @@
                 <ClassName>MonduPayment</ClassName>
                 <TemplateFile>template/mondu_payment.tpl</TemplateFile>
                 <MethodLanguage iso="GER">
-                    <Name>Mondu Rechnungskauf - jetzt kaufen, später bezahlen</Name>
+                    <Name>Rechnungskauf - jetzt kaufen, später bezahlen</Name>
                     <ChargeName>Mondu</ChargeName>
                     <InfoText><![CDATA[Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie <a href="https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/" target="_blank">hier</a>.]]></InfoText>
                 </MethodLanguage>
@@ -267,7 +267,7 @@
                 <ClassName>MonduPayment</ClassName>
                 <TemplateFile>template/mondu_payment.tpl</TemplateFile>
                 <MethodLanguage iso="GER">
-                    <Name>Mondu SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen</Name>
+                    <Name>SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen</Name>
                     <ChargeName>Mondu</ChargeName>
                     <InfoText><![CDATA[Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie <a href="https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/" target="_blank">hier</a>.]]></InfoText>
                 </MethodLanguage>
@@ -301,7 +301,7 @@
                 <ClassName>MonduPayment</ClassName>
                 <TemplateFile>template/mondu_payment.tpl</TemplateFile>
                 <MethodLanguage iso="GER">
-                    <Name>Mondu SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen</Name>
+                    <Name>SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen</Name>
                     <ChargeName>Mondu</ChargeName>
                     <InfoText><![CDATA[Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie <a href="https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/" target="_blank">hier</a>.]]></InfoText>
                 </MethodLanguage>
@@ -335,7 +335,7 @@
                 <ClassName>MonduPayment</ClassName>
                 <TemplateFile>template/mondu_payment.tpl</TemplateFile>
                 <MethodLanguage iso="GER">
-                    <Name>Mondu SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen</Name>
+                    <Name>SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen</Name>
                     <ChargeName>Mondu</ChargeName>
                     <InfoText><![CDATA[Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie <a href="https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/" target="_blank">hier</a>.]]></InfoText>
                 </MethodLanguage>
@@ -369,7 +369,7 @@
                 <ClassName>MonduPayment</ClassName>
                 <TemplateFile>template/mondu_payment.tpl</TemplateFile>
                 <MethodLanguage iso="GER">
-                    <Name>Mondu SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen</Name>
+                    <Name>SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen</Name>
                     <ChargeName>Mondu</ChargeName>
                     <InfoText><![CDATA[Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie <a href="https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/" target="_blank">hier</a>.]]></InfoText>
                 </MethodLanguage>
@@ -403,7 +403,7 @@
                 <ClassName>MonduPayment</ClassName>
                 <TemplateFile>template/mondu_payment.tpl</TemplateFile>
                 <MethodLanguage iso="GER">
-                    <Name>Mondu SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen</Name>
+                    <Name>SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen</Name>
                     <ChargeName>Mondu</ChargeName>
                     <InfoText><![CDATA[Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie <a href="https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/" target="_blank">hier</a>.]]></InfoText>
                 </MethodLanguage>
@@ -437,7 +437,7 @@
                 <ClassName>MonduPayment</ClassName>
                 <TemplateFile>template/mondu_payment.tpl</TemplateFile>
                 <MethodLanguage iso="GER">
-                    <Name>Mondu Ratenzahlung - Bequem in Raten per Bankeinzug zahlen</Name>
+                    <Name>Ratenzahlung - Bequem in Raten per Bankeinzug zahlen</Name>
                     <ChargeName>Mondu</ChargeName>
                     <InfoText><![CDATA[Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie <a href="https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/" target="_blank">hier</a>.]]></InfoText>
                 </MethodLanguage>
@@ -476,7 +476,7 @@
                 <position>body</position>
             </file>
             <file>
-                <name>plugin.js</name>
+                <name>plugin-1-0-10.js</name>
                 <priority>1</priority>
                 <position>body</position>
             </file>
@@ -489,7 +489,7 @@
 
         <CSS>
             <file>
-                <name>style.css</name>
+                <name>style-1-0-10.css</name>
                 <priority>4</priority>
             </file>
         </CSS>

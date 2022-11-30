@@ -1,7 +1,7 @@
  extends file="{$parent_template_path}/checkout/step3_shipping_options.tpl"}
 
  {block name='checkout-step3-shipping-options-legend-payment' append}
-  <div class="card bg-wrap">
+  <div class="card bg-wrap mondu-card">
   <div class="card-body">
     {if $paymentMethodGroupEnabled}
         <div id="mondu-payment-methods-list">
@@ -34,10 +34,11 @@
                                         {if $zahlungsart->fAufpreis != 0}
                                             {block name='checkout-inc-payment-methods-badge'}
                                                 <strong class="checkout-payment-method-badge">
-                                                {if $zahlungsart->cGebuehrname|has_trans}
-                                                    <span>{$zahlungsart->cGebuehrname|trans} </span>
+                                                {if $zahlungsart->cPreisLocalized[0] == '+'}
+                                                  {$zahlungsart->cPreisLocalized}
+                                                {else}
+                                                  + {$zahlungsart->cPreisLocalized}
                                                 {/if}
-                                                    {$zahlungsart->cPreisLocalized}
                                                 </strong>
                                             {/block}
                                         {/if}
