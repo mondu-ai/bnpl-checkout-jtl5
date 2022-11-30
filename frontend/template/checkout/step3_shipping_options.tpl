@@ -14,7 +14,7 @@
                           </div>
                           <div>
                             <p class="mondu-payment-method-title">{$group['title']}</p>
-                            <p class="mondu-payment-method-description">{$group['description']}</p>
+                            <p class="mondu-payment-method-description">{$group['description']|replace:"[url=": "<a target=\"_blank\" href=\""|replace:"[/url]":"</a>"|replace:"]":"\" >"}</p>
                           
                             <div class="mondu-payment-methods" style="display: none">
                               {foreach $group['payment_methods'] as $zahlungsart}
@@ -47,7 +47,7 @@
                                               {block name='checkout-inc-payment-methods-note'}
                                                   <br />
                                                   <span class="checkout-payment-method-note">
-                                                      <small>{$zahlungsart->cHinweisText|trans}</small>
+                                                      <small>{$zahlungsart->cHinweisText|trans|replace:"[url=": "<a target=\"_blank\" href=\""|replace:"[/url]":"</a>"|replace:"]":"\" >"}</small>
                                                   </span>
                                               {/block}
                                           {/if}

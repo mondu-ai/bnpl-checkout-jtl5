@@ -97,7 +97,7 @@
                 <MethodLanguage iso="GER">
                     <Name>Rechnungskauf - jetzt kaufen, später bezahlen</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText><![CDATA[Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie <a href="https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/" target="_blank">hier</a>.]]></InfoText>
+                    <InfoText>Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie [url=https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/]hier[/url].</InfoText>
                 </MethodLanguage>
                 <Setting type="selectbox" initialValue="14" sort="50" conf="Y">
                     <Name>Net Term</Name>
@@ -131,7 +131,7 @@
                 <MethodLanguage iso="GER">
                     <Name>Rechnungskauf - jetzt kaufen, später bezahlen</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText><![CDATA[Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie <a href="https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/" target="_blank">hier</a>.]]></InfoText>
+                    <InfoText>Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie [url=https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/]hier[/url].</InfoText>
                 </MethodLanguage>
                 <Setting type="selectbox" initialValue="30" sort="50" conf="Y">
                     <Name>Net Term</Name>
@@ -165,7 +165,7 @@
                 <MethodLanguage iso="GER">
                     <Name>Rechnungskauf - jetzt kaufen, später bezahlen</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText><![CDATA[Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie <a href="https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/" target="_blank">hier</a>.]]></InfoText>
+                    <InfoText>Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie [url=https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/]hier[/url].</InfoText>
                 </MethodLanguage>
                 <Setting type="selectbox" initialValue="45" sort="50" conf="Y">
                     <Name>Net Term</Name>
@@ -199,7 +199,7 @@
                 <MethodLanguage iso="GER">
                     <Name>Rechnungskauf - jetzt kaufen, später bezahlen</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText><![CDATA[Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie <a href="https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/" target="_blank">hier</a>.]]></InfoText>
+                    <InfoText>Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie [url=https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/]hier[/url].</InfoText>
                 </MethodLanguage>
                 <Setting type="selectbox" initialValue="60" sort="50" conf="Y">
                     <Name>Net Term</Name>
@@ -233,7 +233,7 @@
                 <MethodLanguage iso="GER">
                     <Name>Rechnungskauf - jetzt kaufen, später bezahlen</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText><![CDATA[Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie <a href="https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/" target="_blank">hier</a>.]]></InfoText>
+                    <InfoText>Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie [url=https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/]hier[/url].</InfoText>
                 </MethodLanguage>
                 <Setting type="selectbox" initialValue="90" sort="50" conf="Y">
                     <Name>Net Term</Name>
@@ -269,7 +269,7 @@
                 <MethodLanguage iso="GER">
                     <Name>SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText><![CDATA[Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie <a href="https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/" target="_blank">hier</a>.]]></InfoText>
+                    <InfoText>Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie [url=https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/]hier[/url].</InfoText>
                 </MethodLanguage>
                 <Setting type="selectbox" initialValue="14" sort="50" conf="Y">
                     <Name>Net Term</Name>
@@ -303,7 +303,7 @@
                 <MethodLanguage iso="GER">
                     <Name>SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText><![CDATA[Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie <a href="https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/" target="_blank">hier</a>.]]></InfoText>
+                    <InfoText>Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie [url=https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/]hier[/url].</InfoText>
                 </MethodLanguage>
                 <Setting type="selectbox" initialValue="30" sort="50" conf="Y">
                     <Name>Net Term</Name>
@@ -337,7 +337,7 @@
                 <MethodLanguage iso="GER">
                     <Name>SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText><![CDATA[Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie <a href="https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/" target="_blank">hier</a>.]]></InfoText>
+                    <InfoText>Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie [url=https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/]hier[/url].</InfoText>
                 </MethodLanguage>
                 <Setting type="selectbox" initialValue="45" sort="50" conf="Y">
                     <Name>Net Term</Name>
@@ -371,7 +371,7 @@
                 <MethodLanguage iso="GER">
                     <Name>SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText><![CDATA[Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie <a href="https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/" target="_blank">hier</a>.]]></InfoText>
+                    <InfoText>Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie [url=https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/]hier[/url].</InfoText>
                 </MethodLanguage>
                 <Setting type="selectbox" initialValue="60" sort="50" conf="Y">
                     <Name>Net Term</Name>
@@ -405,7 +405,7 @@
                 <MethodLanguage iso="GER">
                     <Name>SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText><![CDATA[Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie <a href="https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/" target="_blank">hier</a>.]]></InfoText>
+                    <InfoText>Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie [url=https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/]hier[/url].</InfoText>
                 </MethodLanguage>
                 <Setting type="selectbox" initialValue="90" sort="50" conf="Y">
                     <Name>Net Term</Name>
@@ -439,7 +439,7 @@
                 <MethodLanguage iso="GER">
                     <Name>Ratenzahlung - Bequem in Raten per Bankeinzug zahlen</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText><![CDATA[Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie <a href="https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/" target="_blank">hier</a>.]]></InfoText>
+                    <InfoText>Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie [url=https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/]hier[/url].</InfoText>
                 </MethodLanguage>
                 <Setting type="selectbox" initialValue="installment" sort="50" conf="Y">
                     <Name>Payment Method</Name>
