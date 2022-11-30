@@ -28,7 +28,7 @@
                                     }
                                     
                                         {block name='checkout-inc-payment-methods-image-title'}
-                                          <span class="title">{$zahlungsart->angezeigterName|trans|replace:"Mondu ":""}</span>
+                                          <span class="title">{$zahlungsart->angezeigterName|trans}</span>
                                         {/block}
 
                                         {if $zahlungsart->fAufpreis != 0}
