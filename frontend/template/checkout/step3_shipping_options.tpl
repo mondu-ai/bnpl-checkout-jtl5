@@ -34,10 +34,6 @@
                                         {if $zahlungsart->fAufpreis != 0}
                                             {block name='checkout-inc-payment-methods-badge'}
                                                 <strong class="checkout-payment-method-badge">
-                                                {if $zahlungsart->cGebuehrname|has_trans}
-                                                    <!--<span>{$zahlungsart->cGebuehrname|trans} </span>-->
-                                                {/if}
-
                                                 {if $zahlungsart->cPreisLocalized[0] == '+'}
                                                   {$zahlungsart->cPreisLocalized}
                                                 {else}
