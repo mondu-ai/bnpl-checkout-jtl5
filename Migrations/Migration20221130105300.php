@@ -14,10 +14,6 @@ class Migration20221130105300 extends Migration implements IMigration
           inner join tzahlungsart z ON z.kZahlungsart = zs.kZahlungsart
           SET zs.cHinweisText = 'Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie [url=https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/]hier[/url].'
           WHERE z.cAnbieter = 'Mondu';
-
-          UPDATE `tzahlungsartsprache` zs
-          SET zs.cName = REPLACE(zs.cName, 'Mondu ', '')
-          WHERE zs.`cGebuehrname` = 'Mondu';
         ");
     }
 
