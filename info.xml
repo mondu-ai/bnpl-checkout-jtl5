@@ -7,7 +7,7 @@
     <PluginID>MonduPayment</PluginID>
     <XMLVersion>100</XMLVersion>
     <ShopVersion>5.0.0</ShopVersion>
-    <Version>1.0.10</Version>
+    <Version>1.0.11</Version>
     <CreateDate>2022-06-07</CreateDate>
     <Install>
         <Hooks>
@@ -476,7 +476,7 @@
                 <position>body</position>
             </file>
             <file>
-                <name>plugin-1-0-10.js</name>
+                <name>plugin-1-0-11.js</name>
                 <priority>1</priority>
                 <position>body</position>
             </file>
@@ -489,7 +489,7 @@
 
         <CSS>
             <file>
-                <name>style-1-0-10.css</name>
+                <name>style-1-0-11.css</name>
                 <priority>4</priority>
             </file>
         </CSS>

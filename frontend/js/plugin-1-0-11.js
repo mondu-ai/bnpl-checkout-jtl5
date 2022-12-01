@@ -86,9 +86,6 @@ class MonduCheckoutPlugin {
         if (typeof ppp !== 'undefined') {
             if (ppp.getPaymentMethod() != null) {
                 $('.active-mondu-method').removeClass('active-mondu-method');
-
-                $('[name="Zahlungsart"]').filter(':checked').prop('checked', false);
-                $('[name="Zahlungsart"]').filter(':checked').trigger('change');
             }
         }
     }
