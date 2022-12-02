@@ -42,6 +42,11 @@ class ConfigService
         return $this->config->getValue('webhooks_secret');
     }
 
+    public function shouldMarkOrderAsPaid()
+    {
+        return $this->config->getValue('mark_order_as_paid') == '1';
+    }
+
     public function getPaymentMethodGroupEnabled()
     {
         return $this->config->getValue('payment_method_group_enabled');
