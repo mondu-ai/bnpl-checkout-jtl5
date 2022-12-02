@@ -37,6 +37,15 @@
                       <Description>Please enter your Mondu Webhooks Secret.</Description>
                       <ValueName>webhooks_secret</ValueName>
                   </Setting>
+                  <Setting type="selectbox" initialValue="1" sort="1" conf="Y">
+                      <Name>Mark order status as "Paid"?</Name>
+                      <Description>If set to "Yes" in JTL Wawi, column "Is Paid" will be set to Yes.</Description>
+                      <ValueName>mark_order_as_paid</ValueName>
+                      <SelectboxOptions>
+                          <Option value="1" sort="0">Yes</Option>
+                          <Option value="0" sort="1">No</Option>
+                      </SelectboxOptions>
+                  </Setting>
                   <Setting type="none" initialValue="" sort="1" conf="Y">
                       <Name>Invoice Payment Method Benefits</Name>
                       <Description>Sie haben die volle Kontrolle. Sie können den Betrag jederzeit innerhalb von {net_term} Tagen überweisen.|Datenschutz ist uns wichtig - Ihre Daten werden lediglich zur Identifizierung verwendet.</Description>
@@ -56,7 +65,7 @@
                   </Setting>
                </Settingslink>
                <Settingslink sort="2">
-                    <Name>Net Term Configuration</Name>
+                    <Name>Layout Configuration</Name>
                     <Setting type="radio" initialValue="1" sort="1" conf="Y">
                         <Name>Enable Payment Method Group</Name>
                         <Description>When enabled, payment methods will be grouped by net terms.</Description>
