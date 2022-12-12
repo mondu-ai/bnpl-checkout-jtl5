@@ -16,15 +16,25 @@ class ConfigService
     const WIDGET_PRODUCTION_URL = 'https://checkout.mondu.ai/widget.js';
 
     private $config;
+    private $plugin;
 
     public function __construct()
     {
-        $this->config = Helper::getPluginById('MonduPayment')->getConfig();
+        $this->plugin = Helper::getPluginById('MonduPayment');
+        $this->config = $this->plugin->getConfig();
     }
 
     public function getConfig()
     {
         return $this->config;
+    }
+
+    public function getPluginVersion() {
+        return $this->plugin->getCurrentVersion()->getOriginalVersion();
+    }
+
+    public function getPluginName() {
+        return $this->plugin->getMeta()->getName() . " " . "JTL5";
     }
 
     public function getSandboxMode()

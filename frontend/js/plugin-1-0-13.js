@@ -25,6 +25,7 @@ class MonduCheckoutPlugin {
 
     _registerPaymentMethodEvents() {
         var submittedForm = false;
+        var clearedInitially = false;
         var that = this;
 
         jQuery("html").on('click', '.mondu-payment-methods', function (e) {
@@ -36,9 +37,6 @@ class MonduCheckoutPlugin {
                 $(this).find('input[type="radio"]').first().prop('checked', true);
                 $(this).find('input[type="radio"]').first().trigger('change');
             }
-
-            var monduPaymentMethods = $('.mondu-payment-methods', this);
-            monduPaymentMethods.slideToggle(0);
         });
 
         jQuery('html').on('change', '[name="Zahlungsart"]', function () {
@@ -72,14 +70,54 @@ class MonduCheckoutPlugin {
                 }
             }
         });
-
-
         jQuery(document).ready(function () {
             window.addEventListener("message", (event) => {
-                if (event.origin.includes('paypal') && JSON.parse(event.data)?.action == 'resizeHeightOfTheIframe')
+
+                if (!clearedInitially) {
+                    clearedInitially = true;
+                    that.clearSelection();
+                }
+
+                if (event.origin.includes('paypal') && JSON.parse(event.data)?.action == 'resizeHeightOfTheIframe') {
                     that.checkPPP();
+                }
+
             }, false);
+
         });
+    }
+
+    clearSelection() {
+        if (typeof ppp !== 'undefined') {
+
+            if (ppp.getPaymentMethod() != null) {
+                ppp.deselectPaymentMethod();
+                ppp.setPaymentMethod(null);
+
+                this.setMonduDefaultPaymentMethod();
+                this.clearSpinner();
+            }
+        }
+
+        if (typeof ppConfig === 'undefined') {
+            this.clearSpinner();
+        }
+    }
+
+    setMonduDefaultPaymentMethod() {
+        var $paymentMethod = $('[name="Zahlungsart"]').first();
+
+        $paymentMethod.prop('checked', true);
+        $paymentMethod.trigger('change');
+    }
+
+    clearSpinner() {
+        setTimeout(() => {
+            $('#fieldset-payment').css({ height: '100%', overflow: 'initial' });
+            $('.mondu-loader .card-body').css('display', 'block');
+            $('.mondu-loader').removeClass('mondu-loader');
+            $('#pp-plus').css('visibility', 'visible');
+        }, 300);
     }
 
     checkPPP() {
