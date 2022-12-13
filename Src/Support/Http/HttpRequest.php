@@ -138,21 +138,21 @@ class HttpRequest
         curl_setopt($this->curl, CURLOPT_TIMEOUT, 10);
 
         $response = curl_exec($this->curl);
+        $info = curl_getinfo($this->curl);
 
         curl_close($this->curl);
 
-        if (!$response) {
-            $this->debugger->log('[REQUEST FAIL]: No response at ' . $url . ' with data: ' . print_r($data, true));
-            throw new InvalidRequestException();
-        }
-        $response = json_decode($response, true);
-        
-        if (@$response['errors'] != null) {
-            $this->debugger->log('[REQUEST FAIL]: Error ocurred at ' . $url . ' with data: ' . print_r($data, true));
-            $this->debugger->log('[REQUEST FAIL]: Response: ' . print_r($response, true));
-            throw new InvalidRequestException($response);
+        if (!$response || !($info['http_code'] >= 200 && $info['http_code'] <= 299)) {
+            $exception = new \stdClass();
+            $exception->method = $method;
+            $exception->request_url = $url;
+            $exception->request_body = $data;
+            $exception->response_body = $response;
+            $exception->response_code = $info['http_code'];
+
+            throw new InvalidRequestException($exception);
         }
 
-        return $response;
+        return json_decode($response, true);
     }
 }

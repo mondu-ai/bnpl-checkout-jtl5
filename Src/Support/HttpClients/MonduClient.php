@@ -16,8 +16,30 @@ class MonduClient
         $this->config = new ConfigService();
         $this->client = new HttpRequest(
             $this->config->getApiUrl(),
-            ['Content-Type: application/json', 'Api-Token: '. $this->config->getApiSecret()]
+            [
+                'Content-Type: application/json',
+                'Api-Token: '. $this->config->getApiSecret(),
+                'x-plugin-name: '. $this->config->getPluginName(),
+                'x-plugin-version: '.$this->config->getPluginVersion()
+            ]
         );
+    }
+
+    public function logEvent($object)
+    {
+        try {
+            $data = $object->getExceptionData();
+
+            $this->client->post('plugin/events', [
+                'plugin' => $this->config->getPluginName(),
+                'version' => $this->config->getPluginVersion(),
+                'response_status' => strval($data->response_code),
+                'response_body' => json_decode($data->response_body) ?: null,
+                'request_body' => $data->request_body ?: null,
+                'origin_event' => $data->request_url
+            ]);
+        }
+        catch (\Exception $e) { }
     }
 
     public function createOrder(array $data = []): ?array
@@ -27,6 +49,7 @@ class MonduClient
             return $order;
         }
         catch (InvalidRequestException $e) {
+            $this->logEvent($e);
             return ['error' => true];
         }
     }
@@ -39,6 +62,7 @@ class MonduClient
             return $order;
         }
         catch (InvalidRequestException $e) {
+            $this->logEvent($e);
             return ['error' => true];
         }
     }
@@ -51,6 +75,7 @@ class MonduClient
             return $order;
         }
         catch (InvalidRequestException $e) {
+            $this->logEvent($e);
             return ['error' => true];
         }
     }
@@ -63,6 +88,7 @@ class MonduClient
             return $invoice;
         }
         catch (InvalidRequestException $e) {
+            $this->logEvent($e);
             return ['error' => true];
         }
     }
@@ -75,6 +101,7 @@ class MonduClient
             return $paymentMethods;
         }
         catch (InvalidRequestException $e) {
+            $this->logEvent($e);
             return ['error' => true];
         }
     }
@@ -87,6 +114,7 @@ class MonduClient
             return $paymentTerms;
         }
         catch (InvalidRequestException $e) {
+            $this->logEvent($e);
             return ['error' => true];
         }
     }
@@ -99,6 +127,7 @@ class MonduClient
             return $order;
         }
         catch (InvalidRequestException $e) {
+            $this->logEvent($e);
             return ['error' => true];
         }
     }

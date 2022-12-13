@@ -1,7 +1,10 @@
  extends file="{$parent_template_path}/checkout/step3_shipping_options.tpl"}
 
  {block name='checkout-step3-shipping-options-legend-payment' append}
-  <div class="card bg-wrap mondu-card">
+  {if !$paymentMethodGroupEnabled}
+    <hr style="display: block" />
+  {/if}
+ <div class="card bg-wrap mondu-card {if $paymentMethodGroupEnabled}mondu-loader{else}mondu-standard-layout{/if}">
   <div class="card-body">
     {if $paymentMethodGroupEnabled}
         <div id="mondu-payment-methods-list">

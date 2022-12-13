@@ -95,7 +95,7 @@ class CheckoutController
             $buyer['phone'] = html_entity_decode($buyerPhone);
 
         if (!empty($customer->cStrasse))
-            $buyer['address_line1'] = html_entity_decode($customer->cStrasse);
+            $buyer['address_line1'] = html_entity_decode($customer->cStrasse . " " . $customer->cHausnummer);
         
         if (!empty($customer->cPLZ))
             $buyer['zip_code'] = $customer->cPLZ;
@@ -110,13 +110,13 @@ class CheckoutController
             'external_reference_id' => uniqid('M_JTL_'),
             'buyer' => $buyer,
             'billing_address' => [
-                'address_line1' => html_entity_decode($customer->cStrasse),
+                'address_line1' => html_entity_decode($customer->cStrasse . " " . $customer->cHausnummer),
                 'city' => html_entity_decode($customer->cOrt),
                 'country_code' => $customer->cLand,
                 'zip_code' => $customer->cPLZ
             ],
             'shipping_address' => [
-                'address_line1' => html_entity_decode($shippingAddress->cStrasse),
+                'address_line1' => html_entity_decode($shippingAddress->cStrasse . " " . $shippingAddress->cHausnummer),
                 'city' => html_entity_decode($shippingAddress->cOrt),
                 'country_code' => $shippingAddress->cLand,
                 'zip_code' => $shippingAddress->cPLZ
