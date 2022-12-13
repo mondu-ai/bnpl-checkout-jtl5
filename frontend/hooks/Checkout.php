@@ -26,7 +26,7 @@ class Checkout
         try {
             if ($this->isMonduPaymentSelected()) {
                 pq('head')->append('<script src="' . $this->configService->getWidgetUrl() . '"></script>');
-                pq('head')->append("<script>window.MONDU_CONFIG = { selected: true, token_url: 'mondu-api_1?fetch=token' };</script>");
+                pq('head')->append("<script>window.MONDU_CONFIG = { selected: true, token_url: 'mondu-api?fetch=token' };</script>");
                 pq('body')->append('<div id="mondu-checkout-widget"></div>');
             }
         } catch (Exception $e) { 
