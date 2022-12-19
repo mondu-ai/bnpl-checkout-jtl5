@@ -10,6 +10,7 @@ use JTL\Session\Frontend;
 use Plugin\MonduPayment\Src\Services\ConfigService;
 use Plugin\MonduPayment\Src\Support\HttpClients\MonduClient;
 use Plugin\MonduPayment\Src\Support\Debug\Debugger;
+use Plugin\MonduPayment\PaymentMethod\Helper as MonduHelper;
 
 class CheckoutPaymentMethod
 {
@@ -77,6 +78,18 @@ class CheckoutPaymentMethod
         return $groupEnabled;
     }
 
+    private function __translate($original) {
+      $getText   = Shop::Container()->getGetText();
+      $oldLocale = $getText->getLanguage();
+      $locale    = MonduHelper::getLocaleFromISO(Shop::Lang()->getIso());
+      
+      $getText->setLanguage($locale);
+      $translation = \__($original);
+      $getText->setLanguage($oldLocale);
+
+      return $translation;
+    }
+
     private function createMonduGroups()
     {
         $availablePaymentMethods = $this->smarty->getTemplateVars('Zahlungsarten');
@@ -99,7 +112,7 @@ class CheckoutPaymentMethod
 
           foreach ($paymentMethods as $key => $method) {
             $paymentMethodType = $this->configService->getPaymentMethodByKPlugin($method->cModulId);
-            $paymentMethods[$key]->monduBenefits = str_replace('{net_term}', $netTerm, $benefits[$paymentMethodType]);
+            $paymentMethods[$key]->monduBenefits = str_replace('{net_term}', $netTerm, $this->__translate($benefits[$paymentMethodType]));
           }
 
           if (count($paymentMethods) != 0) {
@@ -118,7 +131,7 @@ class CheckoutPaymentMethod
 
         foreach ($installmentPaymentMethods as $key => $method) {
           $paymentMethodType = $this->configService->getPaymentMethodByKPlugin($method->cModulId);
-          $installmentPaymentMethods[$key]->monduBenefits = $benefits[$paymentMethodType];
+          $installmentPaymentMethods[$key]->monduBenefits = $this->__translate($benefits[$paymentMethodType]);
         }
 
         if (count($installmentPaymentMethods) > 0) {
