@@ -1,7 +1,7 @@
 class MonduCheckoutPlugin {
     init() {
         this._registerPaymentMethodEvents();
-
+        this.interval = null;
         if (!this._isMonduPaymentSelected())
             return;
 
@@ -39,6 +39,12 @@ class MonduCheckoutPlugin {
             }
         });
 
+        jQuery('html').on('change', '[name="Versandart"]', function() {
+            clearedInitially = false;
+            const tryClearSpinner = that.getTryClearSpinner();
+            tryClearSpinner();
+        });
+
         jQuery('html').on('change', '[name="Zahlungsart"]', function () {
             if (typeof ppp !== 'undefined') {
                 ppp.deselectPaymentMethod();
@@ -71,9 +77,10 @@ class MonduCheckoutPlugin {
             }
         });
         jQuery(document).ready(function () {
+            that.clearSelection();
             window.addEventListener("message", (event) => {
-
-                if (!clearedInitially) {
+                if(!event.origin.includes('paypal')) return;
+                if (!clearedInitially && JSON.parse(event.data)?.action == 'loaded') {
                     clearedInitially = true;
                     that.clearSelection();
                 }
@@ -88,36 +95,48 @@ class MonduCheckoutPlugin {
     }
 
     clearSelection() {
-        if (typeof ppp !== 'undefined') {
+        if (typeof ppp !== 'undefined' && $('[name="Zahlungsart"]').length) {
 
             if (ppp.getPaymentMethod() != null) {
                 ppp.deselectPaymentMethod();
                 ppp.setPaymentMethod(null);
-
                 this.setMonduDefaultPaymentMethod();
-                this.clearSpinner();
             }
         }
-
-        if (typeof ppConfig === 'undefined') {
-            this.clearSpinner();
-        }
+        this.clearSpinner();
     }
 
     setMonduDefaultPaymentMethod() {
         var $paymentMethod = $('[name="Zahlungsart"]').first();
-
         $paymentMethod.prop('checked', true);
         $paymentMethod.trigger('change');
     }
 
-    clearSpinner() {
-        setTimeout(() => {
+    clearSpinner(timeoutDuration = 300) {
+        if(this.interval) return;
+
+        this.interval = setTimeout(() => {
             $('#fieldset-payment').css({ height: '100%', overflow: 'initial' });
             $('.mondu-loader .card-body').css('display', 'block');
             $('.mondu-loader').removeClass('mondu-loader');
             $('#pp-plus').css('visibility', 'visible');
-        }, 300);
+            this.interval = null;
+        }, timeoutDuration);
+    }
+
+    getTryClearSpinner(intervalDuration = 1500, maxTries = 10) {
+        let interval = null;
+        let tries = 0;
+        var that = this;
+        return () => {
+            setInterval(() => {
+                tries += 1;
+                if(tries >= maxTries) clearInterval(interval);
+                if(!$('.mondu-loader').length) return;
+                that.clearSpinner(0);
+                clearInterval(interval);
+            }, intervalDuration)
+        }
     }
 
     checkPPP() {

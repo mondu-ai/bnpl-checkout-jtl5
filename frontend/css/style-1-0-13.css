@@ -74,6 +74,10 @@
   gap: 45px
 }
 
+.mondu-payment-method-card-body > div:first-child {
+  flex-shrink: 0;
+}
+
 .mondu-payment-method-card:hover {
   background: #f9f9f9
 }
@@ -134,7 +138,9 @@
 }
 
 .mondu-payment-method-box .custom-control-label span {
-  margin-left: 10px
+  margin-left: 10px;
+  display: inline-block;
+  margin-bottom: 0 !important;
 }
 
 .active-mondu-payment-method-box {
@@ -164,7 +170,7 @@
 
 .mondu-card {
   border-bottom: 0;
-  z-index: 1500;
+  z-index: 1;
 }
 
 .row.checkout-payment-options.form-group {
@@ -180,7 +186,7 @@
 }
 
 .mondu-loader:before {
-  z-index: 1000;
+  z-index: 2;
   margin-top: 30px;
   text-align: center;
   padding-top: 15px;
