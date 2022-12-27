@@ -104,22 +104,6 @@ class MonduCheckoutPlugin {
         }
     }
 
-    _clearSelection() {
-        if (this._paypalEnabled()) {
-            if (ppp.getPaymentMethod() != null) {
-                ppp.deselectPaymentMethod();
-                ppp.setPaymentMethod(null);
-
-                $('[name="Zahlungsart"]').first().closest('.mondu-card').addClass('mondu-card-active');
-                $('.mondu-loader').remove();
-            }
-        }
-
-        if (typeof ppConfig === 'undefined') {
-            $('.mondu-loader').remove();
-        }
-    }
-
     async _handleSubmit(e) {
         e.preventDefault();
         e.stopPropagation();
