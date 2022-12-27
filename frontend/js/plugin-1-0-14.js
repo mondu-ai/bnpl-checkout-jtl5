@@ -1,12 +1,12 @@
 class MonduCheckoutPlugin {
     init() {
+        this._registerState();
         this._registerPaymentMethodEvents();
 
         if (!this._isMonduPaymentSelected())
             return;
 
         this._registerEvents();
-        this._registerState();
     }
 
     _registerEvents() {
@@ -23,108 +23,100 @@ class MonduCheckoutPlugin {
         };
     }
 
+    _monduPresent() {
+        $('.mondu-payment-method-groups').length > 0;
+    }
+
+    _paypalEnabled() {
+        return typeof ppp !== 'undefined';
+    }
+
     _registerPaymentMethodEvents() {
+        var that = this;
         var submittedForm = false;
         var clearedInitially = false;
-        var that = this;
-
-        jQuery("html").on('click', '.mondu-payment-methods', function (e) {
-            e.stopPropagation();
-        });
-
-        jQuery('html').on('click', '.mondu-payment-method-card', function () {
-            if ($('.mondu-payment-methods', this).css('display') == 'none') {
-                $(this).find('input[type="radio"]').first().prop('checked', true);
-                $(this).find('input[type="radio"]').first().trigger('change');
-            }
-        });
 
         jQuery('html').on('change', '[name="Zahlungsart"]', function () {
-            if (typeof ppp !== 'undefined') {
-                ppp.deselectPaymentMethod();
-                ppp.setPaymentMethod(null);
+            if (that._paypalEnabled()) {
+
+                try {
+                    ppp.deselectPaymentMethod();
+                    ppp.setPaymentMethod(null);
+                } catch (e) {
+                    if ($(this).closest('.mondu-card').length == 0) {
+                        $('.mondu-card-active').removeClass('mondu-card-active');
+                    }
+                }
+
+                $(this).closest('.mondu-card').addClass('mondu-card-active');
+            } else {
+                if ($(this).closest('.mondu-card').length == 0) {
+                    $('.mondu-card-active').removeClass('mondu-card-active');
+                }
             }
-
-            that.checkPPP();
-
-            $('.active-mondu-method').removeClass('active-mondu-method');
-            $(this).closest('.mondu-payment-method-card').addClass('active-mondu-method');
-
-            $('.active-mondu-payment-method-box').removeClass('active-mondu-payment-method-box');
-            $(this).closest('.mondu-payment-method-box').addClass('active-mondu-payment-method-box');
         });
 
-        jQuery('html').on('submit', 'form', function (e) {
-            if (!submittedForm && typeof ppp !== 'undefined') {
+        jQuery('html').on('click', '.mondu-card', function () {
+            if (!$(this).hasClass('mondu-card-active')) {
+                $(this).find('input[type="radio"]').first().prop('checked', true);
+                $(this).find('input[type="radio"]').first().trigger('change');
+
+                $('.mondu-card-active').removeClass('mondu-card-active');
+                $(this).closest('.mondu-card').addClass('mondu-card-active');
+            }
+        });
+
+        jQuery('html').on('submit', '.checkout-shipping-form', function (e) {
+            if (!submittedForm && that._paypalEnabled()) {
                 e.preventDefault();
 
                 var pppMethod = ppp.getPaymentMethod();
 
-                if (pppMethod == null) {
+                if (pppMethod == null || $('#pp-plus').length == 0) {
                     $('#pp-plus').remove();
                     submittedForm = true;
                     $(this).submit();
                 } else {
-                    $('.mondu-payment-method-card').remove();
+                    $('.mondu-payment-method-groups').remove();
                     ppp.doContinue();
                 }
             }
         });
-        jQuery(document).ready(function () {
-            window.addEventListener("message", (event) => {
 
-                if (!clearedInitially) {
-                    clearedInitially = true;
-                    that.clearSelection();
+        window.addEventListener("message", (event) => {
+            var isPaypal = event.origin.includes('paypal');
+
+            if (isPaypal) {
+                console.log(event)
+
+                var action = JSON.parse(event?.data)?.action;
+
+                if (isPaypal && (action == 'enableContinueButton')) {
+                    that._deselectMondu();
                 }
-
-                if (event.origin.includes('paypal') && JSON.parse(event.data)?.action == 'resizeHeightOfTheIframe') {
-                    that.checkPPP();
-                }
-
-            }, false);
-
-        });
+            }
+        }, false);
     }
 
-    clearSelection() {
-        if (typeof ppp !== 'undefined') {
+    _deselectMondu() {
+        if (this._paypalEnabled()) {
+            $('.mondu-card-active').removeClass('mondu-card-active');
+        }
+    }
 
+    _clearSelection() {
+        if (this._paypalEnabled()) {
             if (ppp.getPaymentMethod() != null) {
                 ppp.deselectPaymentMethod();
                 ppp.setPaymentMethod(null);
 
-                this.setMonduDefaultPaymentMethod();
-                this.clearSpinner();
+                $('[name="Zahlungsart"]').first().closest('.mondu-card').addClass('mondu-card-active');
+                $('.mondu-loader').remove();
             }
         }
 
         if (typeof ppConfig === 'undefined') {
-            this.clearSpinner();
-        }
-    }
-
-    setMonduDefaultPaymentMethod() {
-        var $paymentMethod = $('[name="Zahlungsart"]').first();
-
-        $paymentMethod.prop('checked', true);
-        $paymentMethod.trigger('change');
-    }
-
-    clearSpinner() {
-        setTimeout(() => {
-            $('#fieldset-payment').css({ height: '100%', overflow: 'initial' });
-            $('.mondu-loader .card-body').css('display', 'block');
-            $('.mondu-loader').removeClass('mondu-loader');
-            $('#pp-plus').css('visibility', 'visible');
-        }, 300);
-    }
-
-    checkPPP() {
-        if (typeof ppp !== 'undefined') {
-            if (ppp.getPaymentMethod() != null) {
-                $('.active-mondu-method').removeClass('active-mondu-method');
-            }
+            $('.mondu-loader').remove();
         }
     }
 
