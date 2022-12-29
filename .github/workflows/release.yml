@@ -14,6 +14,7 @@ jobs:
     name: auto_release
     if: github.event.pull_request.merged == true
     uses: mondu-ai/release-action/.github/workflows/release-update.yml@master
+    secrets: inherit
     with:
       asset_creation_script: |
         OLD_TAG_SED_DOT="${OLD_TAG//./\\.}" 
