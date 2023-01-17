@@ -28,7 +28,8 @@ class CheckoutController
 
     public function token(Request $request, int $pluginId)
     {
-        $order = $this->monduClient->createOrder($this->getOrderData());
+        $paymentMethod = $request->all()['payment_method'] ?? null;
+        $order = $this->monduClient->createOrder($this->getOrderData($paymentMethod));
 
         $monduOrderUuid = @$order['order']['uuid'];
 
@@ -44,7 +45,7 @@ class CheckoutController
         );
     }
 
-    public function getOrderData()
+    public function getOrderData($paymentMethod = null)
     {
         $cart = Frontend::getCart();
         $cartHelper = new CartHelper();
@@ -105,7 +106,7 @@ class CheckoutController
         $data = [
             'currency' => 'EUR',
             'state_flow' => $this->configService->getOrderFlow(),
-            'payment_method' => $this->getPaymentMethod(),
+            'payment_method' => $this->getPaymentMethod($paymentMethod),
             'gross_amount_cents' => round($cart->gibGesamtsummeWaren(true) * 100),
             'source' => 'widget',
             'external_reference_id' => uniqid('M_JTL_'),
@@ -133,7 +134,7 @@ class CheckoutController
             ]
         ];
 
-        $netTerm = $this->getNetTerm();
+        $netTerm = $this->getNetTerm($paymentMethod);
         if ($netTerm != null)
             $data['net_term'] = $netTerm;
 
