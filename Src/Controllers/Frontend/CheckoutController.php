@@ -167,10 +167,10 @@ class CheckoutController
         return $lineItems;
     }
 
-    public function getPaymentMethod()
+    public function getPaymentMethod($cModulId = null)
     {
         try { 
-            $paymentMethodModul = $_SESSION['Zahlungsart']->cModulId;
+            $paymentMethodModul = $cModulId ?? $_SESSION['Zahlungsart']->cModulId;
             $paymentMethod = $this->configService->getPaymentMethodByKPlugin($paymentMethodModul);
 
             if (isset($paymentMethod)) {
