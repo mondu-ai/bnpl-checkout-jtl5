@@ -12,10 +12,12 @@ class Checkout
 {
     private $linkHelper;
     private $configService;
+    private $smarty;
 
     public function __construct() {
         $this->linkHelper = Shop::Container()->getLinkService();
-        $this->configService = new ConfigService(); 
+        $this->configService = new ConfigService();
+        $this->smarty = Shop::Smarty();
     }
     /**
      * @param array $args_arr
@@ -24,9 +26,18 @@ class Checkout
     public function execute($args_arr = []): void
     {
         try {
-            if ($this->isMonduPaymentSelected()) {
+            if ($this->configService->getOrderFlow() === ConfigService::AUTHORIZATION_FLOW) {
+                $monduConfig = [
+                    'state_flow' => $this->configService->getOrderFlow(),
+                    'token_url' => 'mondu-api?fetch=token',
+                    'payment_methods' => $this->smarty->getTemplateVars('MonduPaymentMethods')
+                ];
+                pq('body')->append('<div id="mondu-checkout-widget"></div>');
                 pq('head')->append('<script src="' . $this->configService->getWidgetUrl() . '"></script>');
+                pq('head')->append('<script>window.MONDU_CONFIG = '.json_encode($monduConfig).'</script>');
+            } elseif ($this->isMonduPaymentSelected()) {
                 pq('head')->append("<script>window.MONDU_CONFIG = { selected: true, token_url: 'mondu-api?fetch=token' };</script>");
+                pq('head')->append('<script src="' . $this->configService->getWidgetUrl() . '"></script>');
                 pq('body')->append('<div id="mondu-checkout-widget"></div>');
             }
         } catch (Exception $e) { 

@@ -24,8 +24,29 @@ class MonduPayment extends Method
     public function preparePaymentProcess($order): void
     {
         parent::preparePaymentProcess($order);
-        
-        $configService = new ConfigService();
+
+        $configService = ConfigService::getInstance();
+
+        if ($configService->isAuthorizationFlow()) {
+            $this->confirmOrder($order);
+        } else {
+            $this->updateExternalInfo($order);
+        }
+    }
+
+    public function createInvoice(int $orderID, int $languageID): object
+    {
+       parent::createInvoice($orderID, $languageID);
+    }
+
+    private function confirmOrder($order)
+    {
+        $this->updateExternalInfo($order);
+    }
+
+    private function updateExternalInfo($order)
+    {
+        $configService = ConfigService::getInstance();
         $monduClient = new MonduClient();
         
         $monduClient->updateExternalInfo([
@@ -57,10 +78,5 @@ class MonduPayment extends Method
         }
 
         unset($_SESSION['monduOrderUuid']);
-    }
-
-    public function createInvoice(int $orderID, int $languageID): object
-    {
-       parent::createInvoice($orderID, $languageID);
     }
 }

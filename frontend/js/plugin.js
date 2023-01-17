@@ -3,18 +3,45 @@ class MonduCheckoutPlugin {
         this._registerState();
         this._registerPaymentMethodEvents();
 
-        if (!this._isMonduPaymentSelected())
+        if (this._isMonduPaymentSelected() && !this._isAuthorizationFlow()) {
+            this._registerEvents();
             return;
+        }
 
-        this._registerEvents();
+        if (this._isAuthorizationFlow()) {
+            this._registerAuthorizationFlow();
+        }
+    }
+
+    _registerAuthorizationFlow() {
+        function submitForm() {
+            document.getElementsByClassName('checkout-shipping-form')[0].submit();
+        }
+
+        function submitFormCallback(e) {
+            const value = jQuery('input[name="Zahlungsart"]:checked').val();
+            const monduPaymentMethods = window.MONDU_CONFIG.payment_methods;
+            const isMondu = Object.keys(monduPaymentMethods).includes(value);
+
+            if(!isMondu) return;
+            
+            // const tokenUrl = window.MONDU_CONFIG.token_url + '&payment_mean=' + monduPaymentMethods[value];
+            this._handleSubmit.call(this, e, submitForm)
+        }
+
+        const completeOrderForm = document.getElementsByClassName('checkout-shipping-form')[0];
+
+        if (!completeOrderForm) return;
+
+        completeOrderForm.addEventListener('submit', submitFormCallback.bind(this));
     }
 
     _registerEvents() {
         const completeOrderForm = document.getElementById('complete_order');
 
-        if (completeOrderForm != undefined) {
-            completeOrderForm.addEventListener('submit', this._handleSubmit.bind(this));
-        }
+        if(!completeOrderForm) return;
+
+        completeOrderForm.addEventListener('submit', (e) => this._handleSubmit.call(this, e, this._submitForm));
     }
 
     _registerState() {
@@ -104,12 +131,11 @@ class MonduCheckoutPlugin {
         }
     }
 
-    async _handleSubmit(e) {
+    async _handleSubmit(e, callback, tokenUrl = null) {
         e.preventDefault();
         e.stopPropagation();
-
         const that = this;
-        const token = await this._getMonduToken();
+        const token = await this._getMonduToken(tokenUrl);
         const removeWidgetContainer = this._removeWidgetContainer.bind(this);
 
         window.monduCheckout.render({
@@ -118,7 +144,7 @@ class MonduCheckoutPlugin {
                 removeWidgetContainer();
 
                 if (that.state.isSuccess) {
-                    that._submitForm();
+                    callback()
                 } else {
                     window.location.href.reload();
                 }
@@ -129,10 +155,10 @@ class MonduCheckoutPlugin {
         });
     }
 
-    async _getMonduToken() {
+    async _getMonduToken(url = null) {
         const client = new HttpRequest();
-
-        var tokenObject = await client.get('/' + window.MONDU_CONFIG.token_url);
+        const tokenUrl = url || window.MONDU_CONFIG.token_url;
+        var tokenObject = await client.get('/' + tokenUrl);
 
         if (!tokenObject.data.error) {
             return tokenObject.data.token;
@@ -156,8 +182,11 @@ class MonduCheckoutPlugin {
         return window.MONDU_CONFIG != undefined && window.MONDU_CONFIG.selected;
     }
 
+    _isAuthorizationFlow() {
+        return window.MONDU_CONFIG?.state_flow === 'authorization_flow';
+    }
+
     _submitForm() {
         document.getElementById('complete_order').submit();
     }
-
 }

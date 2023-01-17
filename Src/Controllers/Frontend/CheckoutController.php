@@ -104,6 +104,7 @@ class CheckoutController
         
         $data = [
             'currency' => 'EUR',
+            'state_flow' => $this->configService->getOrderFlow(),
             'payment_method' => $this->getPaymentMethod(),
             'gross_amount_cents' => round($cart->gibGesamtsummeWaren(true) * 100),
             'source' => 'widget',
@@ -183,10 +184,10 @@ class CheckoutController
         } 
     }
 
-    public function getNetTerm()
+    public function getNetTerm($cModulId = null)
     {
         try { 
-            $paymentMethodModul = $_SESSION['Zahlungsart']->cModulId;
+            $paymentMethodModul = $cModulId ?? $_SESSION['Zahlungsart']->cModulId;
             $netTerm = $this->configService->getNetTermByKPlugin($paymentMethodModul);
 
             if (isset($netTerm)) {
