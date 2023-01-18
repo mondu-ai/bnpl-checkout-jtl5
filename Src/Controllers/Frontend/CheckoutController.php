@@ -158,8 +158,8 @@ class CheckoutController
                 'external_reference_id' => strval($lineItem->kArtikel),
                 'quantity' => $lineItem->nAnzahl,
                 'title' => html_entity_decode($lineItem->Artikel->cName),
-                'net_price_cents' => round(round($lineItem->fPreis, 2) * $lineItem->nAnzahl * 100),
-                'net_price_per_item_cents' => round($lineItem->fPreis * 100)
+                'net_price_cents' => round(round($lineItem->fPreis, 2) * 100),
+                'net_price_per_item_cents' => round($lineItem->fPreisEinzelNetto * 100)
             ];
         }
 
