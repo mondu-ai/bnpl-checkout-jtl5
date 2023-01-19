@@ -131,4 +131,17 @@ class MonduClient
             return ['error' => true];
         }
     }
+
+    public function confirmOrder(array $data = []): ?array
+    {
+        try {
+            $order = $this->client->post('orders/' . $data['uuid'] . '/confirm', $data);
+
+            return $order;
+        }
+        catch (InvalidRequestException $e) {
+            $this->logEvent($e);
+            return ['error' => true];
+        }
+    }
 }

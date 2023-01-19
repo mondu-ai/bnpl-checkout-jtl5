@@ -41,7 +41,15 @@ class MonduPayment extends Method
 
     private function confirmOrder($order)
     {
-        $this->updateExternalInfo($order);
+        $configService = ConfigService::getInstance();
+        $monduClient = new MonduClient();
+
+        $monduClient->confirmOrder([
+            'uuid' => $_SESSION['monduOrderUuid'],
+            'external_reference_id' => $order->cBestellNr
+        ]);
+
+        $this->afterApiRequest($order);
     }
 
     private function updateExternalInfo($order)
@@ -54,7 +62,13 @@ class MonduPayment extends Method
             'external_reference_id' => $order->cBestellNr
         ]);
 
+        $this->afterApiRequest($order);
+    }
+
+    private function afterApiRequest($order) {
         $monduOrder = new MonduOrder();
+        $configService = ConfigService::getInstance();
+
         $monduOrder->create([
             'order_id' => $order->kBestellung,
             'state' => 'created',
