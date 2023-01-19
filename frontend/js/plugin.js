@@ -3,37 +3,18 @@ class MonduCheckoutPlugin {
         this._registerState();
         this._registerPaymentMethodEvents();
 
-        if (this._isMonduConfigPresent()) {
-            this._registerAuthorizationFlow();
-        }
-    }
-
-    _registerAuthorizationFlow() {
-        function submitForm() {
-            document.getElementsByClassName('checkout-shipping-form')[0].submit();
-        }
-
-        function submitFormCallback(e) {
-            const value = jQuery('input[name="Zahlungsart"]:checked').val(); //110
-            const monduPaymentMethods = window.MONDU_CONFIG.payment_methods;
-            const isMondu = Object.keys(monduPaymentMethods).includes(value);
-
-            if(!isMondu) return;
-            
-            this._handleSubmit.call(this, e, submitForm, monduPaymentMethods[value])
-        }
-
-        const completeOrderForm = document.getElementsByClassName('checkout-shipping-form')[0];
-
-        if (!completeOrderForm) return;
-
-        completeOrderForm.addEventListener('submit', submitFormCallback.bind(this));
+        if (!this._isMonduPaymentSelected())
+            return;
     }
 
     _registerState() {
         this.state = {
             isSuccess: false
         };
+    }
+
+    _monduPresent() {
+        $('.mondu-payment-method-groups').length > 0;
     }
 
     _paypalEnabled() {
@@ -76,19 +57,34 @@ class MonduCheckoutPlugin {
         });
 
         jQuery('html').on('submit', '.checkout-shipping-form', function (e) {
+            const value = jQuery('input[name="Zahlungsart"]:checked').val(); //110
+            const monduPaymentMethods = window.MONDU_CONFIG.payment_methods;
+            const isMondu = Object.keys(monduPaymentMethods).includes(value);
+
             if (!submittedForm && that._paypalEnabled()) {
                 e.preventDefault();
 
                 var pppMethod = ppp.getPaymentMethod();
 
                 if (pppMethod == null || $('#pp-plus').length == 0) {
-                    $('#pp-plus').remove();
                     submittedForm = true;
-                    $(this).submit();
+
+                    if (!isMondu) return this.submit();
+
+                    that._handleSubmit(monduPaymentMethods[value]);
                 } else {
                     $('.mondu-payment-method-groups').remove();
                     ppp.doContinue();
                 }
+            }
+
+            if (!submittedForm && !that._paypalEnabled()) {
+                e.preventDefault();
+
+                submittedForm = true;
+                if (!isMondu) return this.submit();
+
+                that._handleSubmit(monduPaymentMethods[value]);
             }
         });
 
@@ -96,8 +92,6 @@ class MonduCheckoutPlugin {
             var isPaypal = event.origin.includes('paypal');
 
             if (isPaypal) {
-                console.log(event)
-
                 var action = JSON.parse(event?.data)?.action;
 
                 if (isPaypal && (action == 'enableContinueButton')) {
@@ -113,9 +107,7 @@ class MonduCheckoutPlugin {
         }
     }
 
-    async _handleSubmit(e, callback, paymentMethod = null) {
-        e.preventDefault();
-        e.stopPropagation();
+    async _handleSubmit(paymentMethod = null) {
         const that = this;
         const token = await this._getMonduToken(paymentMethod);
         const removeWidgetContainer = this._removeWidgetContainer.bind(this);
@@ -126,7 +118,7 @@ class MonduCheckoutPlugin {
                 removeWidgetContainer();
 
                 if (that.state.isSuccess) {
-                    callback()
+                    that._submitForm();
                 } else {
                     window.location.href.reload();
                 }
@@ -144,8 +136,6 @@ class MonduCheckoutPlugin {
 
         if (!tokenObject.data.error) {
             return tokenObject.data.token;
-        } else {
-            return null;
         }
     }
 
@@ -160,7 +150,12 @@ class MonduCheckoutPlugin {
         }
     }
 
-    _isMonduConfigPresent() {
-        return !!window.MONDU_CONFIG;
+    _isMonduPaymentSelected() {
+        return window.MONDU_CONFIG != undefined && window.MONDU_CONFIG.selected;
     }
+
+    _submitForm() {
+        document.getElementsByClassName('checkout-shipping-form')[0].submit();
+    }
+
 }
