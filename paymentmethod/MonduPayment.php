@@ -27,11 +27,7 @@ class MonduPayment extends Method
 
         $configService = ConfigService::getInstance();
 
-        if ($configService->isAuthorizationFlow()) {
-            $this->confirmOrder($order);
-        } else {
-            $this->updateExternalInfo($order);
-        }
+        $this->confirmOrder($order);
     }
 
     public function createInvoice(int $orderID, int $languageID): object
@@ -45,19 +41,6 @@ class MonduPayment extends Method
         $monduClient = new MonduClient();
 
         $monduClient->confirmOrder([
-            'uuid' => $_SESSION['monduOrderUuid'],
-            'external_reference_id' => $order->cBestellNr
-        ]);
-
-        $this->afterApiRequest($order);
-    }
-
-    private function updateExternalInfo($order)
-    {
-        $configService = ConfigService::getInstance();
-        $monduClient = new MonduClient();
-        
-        $monduClient->updateExternalInfo([
             'uuid' => $_SESSION['monduOrderUuid'],
             'external_reference_id' => $order->cBestellNr
         ]);

@@ -46,15 +46,6 @@
                           <Option value="0" sort="1">No</Option>
                       </SelectboxOptions>
                   </Setting>
-                  <Setting type="selectbox" initialValue="authorization_flow" sort="1" conf="Y">
-                    <Name>Order State Flow</Name>
-                    <Description>Description here</Description>
-                    <ValueName>state_flow</ValueName>
-                    <SelectboxOptions>
-                        <Option value="authorization_flow" sort="0">Authorization Flow</Option>
-                        <Option value="confirmation_flow" sort="1">Confirmation Flow</Option>
-                    </SelectboxOptions>
-                  </Setting>
                   <Setting type="none" initialValue="" sort="1" conf="Y">
                       <Name>Invoice Payment Method Benefits</Name>
                       <Description>Sie haben die volle Kontrolle. Sie können den Betrag jederzeit innerhalb von {net_term} Tagen überweisen.|Datenschutz ist uns wichtig - Ihre Daten werden lediglich zur Identifizierung verwendet.</Description>

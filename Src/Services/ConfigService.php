@@ -121,12 +121,7 @@ class ConfigService
 
     public function getOrderFlow()
     {
-        return $this->config->getValue('state_flow') ?? 'authorization_flow';
-    }
-
-    public function isAuthorizationFlow()
-    {
-        return $this->getOrderFLow() === self::AUTHORIZATION_FLOW;
+        return self::AUTHORIZATION_FLOW;
     }
 
     public static function getInstance() {

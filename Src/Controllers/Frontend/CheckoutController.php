@@ -45,7 +45,7 @@ class CheckoutController
         );
     }
 
-    public function getOrderData($paymentMethod = null)
+    public function getOrderData($paymentMethod)
     {
         $cart = Frontend::getCart();
         $cartHelper = new CartHelper();
@@ -168,10 +168,10 @@ class CheckoutController
         return $lineItems;
     }
 
-    public function getPaymentMethod($cModulId = null)
+    public function getPaymentMethod($cModulId)
     {
         try { 
-            $paymentMethodModul = $cModulId ?? $_SESSION['Zahlungsart']->cModulId;
+            $paymentMethodModul = $cModulId;
             $paymentMethod = $this->configService->getPaymentMethodByKPlugin($paymentMethodModul);
 
             if (isset($paymentMethod)) {
@@ -185,10 +185,10 @@ class CheckoutController
         } 
     }
 
-    public function getNetTerm($cModulId = null)
+    public function getNetTerm($cModulId)
     {
         try { 
-            $paymentMethodModul = $cModulId ?? $_SESSION['Zahlungsart']->cModulId;
+            $paymentMethodModul = $cModulId;
             $netTerm = $this->configService->getNetTermByKPlugin($paymentMethodModul);
 
             if (isset($netTerm)) {

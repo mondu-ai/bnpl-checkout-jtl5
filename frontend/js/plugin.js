@@ -3,12 +3,7 @@ class MonduCheckoutPlugin {
         this._registerState();
         this._registerPaymentMethodEvents();
 
-        if (this._isMonduPaymentSelected() && !this._isAuthorizationFlow()) {
-            this._registerEvents();
-            return;
-        }
-
-        if (this._isAuthorizationFlow()) {
+        if (this._isMonduConfigPresent()) {
             this._registerAuthorizationFlow();
         }
     }
@@ -35,22 +30,10 @@ class MonduCheckoutPlugin {
         completeOrderForm.addEventListener('submit', submitFormCallback.bind(this));
     }
 
-    _registerEvents() {
-        const completeOrderForm = document.getElementById('complete_order');
-
-        if(!completeOrderForm) return;
-
-        completeOrderForm.addEventListener('submit', (e) => this._handleSubmit.call(this, e, this._submitForm));
-    }
-
     _registerState() {
         this.state = {
             isSuccess: false
         };
-    }
-
-    _monduPresent() {
-        $('.mondu-payment-method-groups').length > 0;
     }
 
     _paypalEnabled() {
@@ -177,15 +160,7 @@ class MonduCheckoutPlugin {
         }
     }
 
-    _isMonduPaymentSelected() {
-        return window.MONDU_CONFIG != undefined && window.MONDU_CONFIG.selected;
-    }
-
-    _isAuthorizationFlow() {
-        return window.MONDU_CONFIG?.state_flow === 'authorization_flow';
-    }
-
-    _submitForm() {
-        document.getElementById('complete_order').submit();
+    _isMonduConfigPresent() {
+        return !!window.MONDU_CONFIG;
     }
 }

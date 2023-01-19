@@ -26,30 +26,16 @@ class Checkout
     public function execute($args_arr = []): void
     {
         try {
-            if ($this->configService->getOrderFlow() === ConfigService::AUTHORIZATION_FLOW) {
-                $monduConfig = [
-                    'state_flow' => $this->configService->getOrderFlow(),
-                    'token_url' => 'mondu-api?fetch=token',
-                    'payment_methods' => $this->smarty->getTemplateVars('MonduPaymentMethods')
-                ];
-                pq('body')->append('<div id="mondu-checkout-widget"></div>');
-                pq('head')->append('<script src="' . $this->configService->getWidgetUrl() . '"></script>');
-                pq('head')->append('<script>window.MONDU_CONFIG = '.json_encode($monduConfig).'</script>');
-            } elseif ($this->isMonduPaymentSelected()) {
-                pq('head')->append("<script>window.MONDU_CONFIG = { selected: true, token_url: 'mondu-api?fetch=token' };</script>");
-                pq('head')->append('<script src="' . $this->configService->getWidgetUrl() . '"></script>');
-                pq('body')->append('<div id="mondu-checkout-widget"></div>');
-            }
+            $monduConfig = [
+                'state_flow' => $this->configService->getOrderFlow(),
+                'token_url' => 'mondu-api?fetch=token',
+                'payment_methods' => $this->smarty->getTemplateVars('MonduPaymentMethods')
+            ];
+            pq('body')->append('<div id="mondu-checkout-widget"></div>');
+            pq('head')->append('<script src="' . $this->configService->getWidgetUrl() . '"></script>');
+            pq('head')->append('<script>window.MONDU_CONFIG = '.json_encode($monduConfig).'</script>');
         } catch (Exception $e) { 
         }
-    }
-
-    /**
-     * @return bool
-     */
-    public function isMonduPaymentSelected(): bool
-    {
-        return array_key_exists('Zahlungsart', $_SESSION) && $_SESSION['Zahlungsart']->cAnbieter == 'Mondu';
     }
 
     public function getMonduTokenUrl(): string {
