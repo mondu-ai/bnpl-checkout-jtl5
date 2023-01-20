@@ -5,17 +5,20 @@ namespace Plugin\MonduPayment\Src\Support\Http;
 class Request
 {
     private static array $data = [];
+    private static array $rawData = [];
 
     public function __construct()
     {
         if (!!$_GET) {
             foreach ($_GET as $key => $item) {
                 self::$data[$key] = filter_input(INPUT_GET, $key,  FILTER_SANITIZE_SPECIAL_CHARS);
+                self::$rawData[$key] = $item;
             }
         }
         if (!!$_POST) {
             foreach ($_POST as $key => $item) {
                 self::$data[$key] = filter_input(INPUT_POST, $key, FILTER_SANITIZE_SPECIAL_CHARS);
+                self::$rawData[$key] = $item;
             }
         }
         $data = file_get_contents('php://input');
@@ -24,6 +27,7 @@ class Request
             if ((is_array($data)) && (count($data) > 0)) {
                 foreach ($data as $key => $item) {
                     self::$data[$key] = filter_var($item,  FILTER_SANITIZE_SPECIAL_CHARS);
+                    self::$rawData[$key] = $item;
                 }
             }
         }
@@ -51,6 +55,11 @@ class Request
     public function all()
     {
         return self::$data;
+    }
+
+    public function allRaw()
+    {
+        return self::$rawData;
     }
 
     public function unset(...$elements)

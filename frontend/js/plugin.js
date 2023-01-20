@@ -60,6 +60,7 @@ class MonduCheckoutPlugin {
             const value = jQuery('input[name="Zahlungsart"]:checked').val(); //110
             const monduPaymentMethods = window.MONDU_CONFIG.payment_methods;
             const isMondu = Object.keys(monduPaymentMethods).includes(value);
+            const formParams = $(this).serialize();
 
             if (!submittedForm && that._paypalEnabled()) {
                 e.preventDefault();
@@ -71,7 +72,7 @@ class MonduCheckoutPlugin {
 
                     if (!isMondu) return this.submit();
 
-                    that._handleSubmit(monduPaymentMethods[value]);
+                    that._handleSubmit(monduPaymentMethods[value], formParams);
                 } else {
                     $('.mondu-payment-method-groups').remove();
                     ppp.doContinue();
@@ -107,9 +108,9 @@ class MonduCheckoutPlugin {
         }
     }
 
-    async _handleSubmit(paymentMethod = null) {
+    async _handleSubmit(paymentMethod = null, formParams = '') {
         const that = this;
-        const token = await this._getMonduToken(paymentMethod);
+        const token = await this._getMonduToken(paymentMethod, formParams);
         const removeWidgetContainer = this._removeWidgetContainer.bind(this);
 
         window.monduCheckout.render({
@@ -129,10 +130,10 @@ class MonduCheckoutPlugin {
         });
     }
 
-    async _getMonduToken(paymentMethod) {
+    async _getMonduToken(paymentMethod, formParams) {
         const client = new HttpRequest();
         const tokenUrl = window.MONDU_CONFIG.token_url;
-        var tokenObject = await client.post('/' + tokenUrl, { payment_method: paymentMethod });
+        var tokenObject = await client.post('/' + tokenUrl, { payment_method: paymentMethod, form_params: formParams });
 
         if (!tokenObject.data.error) {
             return tokenObject.data.token;
