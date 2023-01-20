@@ -13,6 +13,9 @@ use JTL\Checkout\Bestellung;
 use Plugin\MonduPayment\Src\Support\HttpClients\MonduClient;
 use Plugin\MonduPayment\Src\Models\MonduOrder;
 use Plugin\MonduPayment\Src\Services\ConfigService;
+use JTL\Cart\Cart;
+use Plugin\MonduPayment\Src\Helpers\OrderHashHelper;
+use Plugin\MonduPayment\Src\Controllers\Frontend\CheckoutController;
 
 
 /**
@@ -20,6 +23,14 @@ use Plugin\MonduPayment\Src\Services\ConfigService;
 */
 class MonduPayment extends Method
 {
+    public function isValidIntern($args_arr = []): bool
+    {
+      if ($this->duringCheckout) {
+          return false;
+      }
+    
+      return parent::isValidIntern($args_arr);
+    }
 
     public function preparePaymentProcess($order): void
     {
@@ -37,13 +48,26 @@ class MonduPayment extends Method
 
     private function confirmOrder($order)
     {
+        $checkoutController = new CheckoutController();
+        $orderData = $checkoutController->getOrderData($order->Zahlungsart->cModulId);
+
+        if(OrderHashHelper::getOrderHash($orderData) !== $_SESSION['monduCartHash']) {
+            $this->handleFail($order->kBestellung);
+            return;
+        }
+
         $configService = ConfigService::getInstance();
         $monduClient = new MonduClient();
 
-        $monduClient->confirmOrder([
+        $monduOrder = $monduClient->confirmOrder([
             'uuid' => $_SESSION['monduOrderUuid'],
             'external_reference_id' => $order->cBestellNr
         ]);
+
+        if(!empty($monduOrder['error'])) {
+            $this->handleFail($order->kBestellung);
+            return;
+        }
 
         $this->afterApiRequest($order);
     }
@@ -75,5 +99,17 @@ class MonduPayment extends Method
         }
 
         unset($_SESSION['monduOrderUuid']);
+        unset($_SESSION['monduCartHash']);
+    }
+
+    private function handleFail($orderId) {
+        Shop::Container()->getAlertService()->addAlert(
+            Alert::TYPE_ERROR,
+            'Mondu wasnt able to confirm the order, please try again',
+            'paymentFailed'
+        );
+        $this->cancelOrder($orderId);
+        unset($_SESSION['monduOrderUuid']);
+        unset($_SESSION['monduCartHash']);
     }
 }

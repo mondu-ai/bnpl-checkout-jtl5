@@ -11,7 +11,10 @@ use JTL\Shop;
 use JTL\Session\Frontend;
 use Plugin\MonduPayment\Src\Services\ConfigService;
 use JTL\DB\ReturnType;
-
+use JTL\Helpers\Tax;
+use JTL\Catalog\Product\Preise;
+use JTL\Cart\CartItem;
+use Plugin\MonduPayment\Src\Helpers\OrderHashHelper;
 
 class CheckoutController
 {
@@ -29,12 +32,14 @@ class CheckoutController
         $paymentMethod = $request->all()['payment_method'] ?? null;
         $formParams = $request->allRaw()['form_params'] ?? null;
 
-        $order = $this->monduClient->createOrder($this->getOrderData($paymentMethod, $formParams));
+        $orderData = $this->getOrderData($paymentMethod, $formParams);
+        $order = $this->monduClient->createOrder($orderData);
 
         $monduOrderUuid = @$order['order']['uuid'];
 
         if ($monduOrderUuid != null) {
             $_SESSION['monduOrderUuid'] = $monduOrderUuid;
+            $_SESSION['monduCartHash'] = OrderHashHelper::getOrderHash($orderData);
         }
 
         return Response::json(
@@ -45,12 +50,14 @@ class CheckoutController
         );
     }
 
-    public function getOrderData($paymentMethod, $formParams)
+    public function getOrderData($paymentMethod, $formParams = null)
     {
-        \parse_str($formParams, $params);
-        $params = Text::filterXSS($params);
+        if($formParams) {
+            \parse_str($formParams, $params);
+            $params = Text::filterXSS($params);
 
-        BasketHelper::addSurcharge($this->getPaymentId($paymentMethod), $params);
+            BasketHelper::addSurcharge($this->getPaymentId($paymentMethod), $params);
+        }
 
         $basket = BasketHelper::getBasket();
 
