@@ -108,6 +108,10 @@ class MonduPayment extends Method
             $this->getErrorMessage(),
             'paymentFailed'
         );
+
+        $monduClient = new MonduClient();
+        $monduClient->cancelOrder(['order_uuid' => $_SESSION['monduOrderUuid']]);
+
         $this->cancelOrder($orderId);
         unset($_SESSION['monduOrderUuid']);
         unset($_SESSION['monduCartHash']);
