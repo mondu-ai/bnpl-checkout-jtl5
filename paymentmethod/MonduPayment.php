@@ -105,11 +105,25 @@ class MonduPayment extends Method
     private function handleFail($orderId) {
         Shop::Container()->getAlertService()->addAlert(
             Alert::TYPE_ERROR,
-            'Mondu wasnt able to confirm the order, please try again',
+            $this->getErrorMessage(),
             'paymentFailed'
         );
         $this->cancelOrder($orderId);
         unset($_SESSION['monduOrderUuid']);
         unset($_SESSION['monduCartHash']);
+    }
+
+    private function getErrorMessage()
+    {
+        $lang = Shop::Lang()->getIso();
+
+        switch($lang) {
+            case 'eng':
+                return 'There was an error processing your request with Mondu. Please try again.';
+            case 'ger':
+                return 'Bei der Bearbeitung Ihrer Anfrage an Mondu ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.';
+            default:
+                return 'There was an error processing your request with Mondu. Please try again.';
+        }
     }
 }
