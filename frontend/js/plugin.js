@@ -85,7 +85,7 @@ class MonduCheckoutPlugin {
                 submittedForm = true;
                 if (!isMondu) return this.submit();
 
-                that._handleSubmit(monduPaymentMethods[value]);
+                that._handleSubmit(monduPaymentMethods[value], formParams);
             }
         });
 
