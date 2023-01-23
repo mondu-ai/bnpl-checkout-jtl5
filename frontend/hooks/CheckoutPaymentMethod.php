@@ -50,19 +50,21 @@ class CheckoutPaymentMethod
     { 
         $allowedPaymentMethodsCache = $this->cache->get('mondu_payment_methods');
         $allowedPaymentMethods = $allowedPaymentMethodsCache ? $allowedPaymentMethodsCache : $this->getAllowedPaymentMethods();
-
+      
         $paymentMethods = $this->smarty->getTemplateVars('Zahlungsarten');
+        $monduPaymentMethods = [];
 
         foreach ($paymentMethods as $key => $method) {
             if ($method->cAnbieter == 'Mondu') {
                 $paymentMethodType = $this->configService->getPaymentMethodByKPlugin($method->cModulId);
-                
+                $monduPaymentMethods[$method->kZahlungsart] = $method->cModulId;
                 if (!in_array($paymentMethodType, $allowedPaymentMethods)){
                   unset($paymentMethods[$key]);
                 }
             }
         }
 
+        $this->smarty->assign('MonduPaymentMethods', $monduPaymentMethods);
         $this->smarty->assign('Zahlungsarten', $paymentMethods);
     }
 

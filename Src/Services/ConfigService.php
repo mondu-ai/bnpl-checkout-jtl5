@@ -15,8 +15,13 @@ class ConfigService
     const WIDGET_SANDBOX_URL = 'https://checkout.demo.mondu.ai/widget.js';
     const WIDGET_PRODUCTION_URL = 'https://checkout.mondu.ai/widget.js';
 
+    const AUTHORIZATION_FLOW = 'authorization_flow';
+    const CONFIRMATION_FLOW = 'confirmation_flow';
+
     private $config;
     private $plugin;
+
+    private static $instances = [];
 
     public function __construct()
     {
@@ -112,5 +117,19 @@ class ConfigService
     public function getConfigurationDescription($key)
     {
         return $this->config->getOption($key)->description;
+    }
+
+    public function getOrderFlow()
+    {
+        return self::AUTHORIZATION_FLOW;
+    }
+
+    public static function getInstance() {
+        $cls = static::class;
+        if (!isset(self::$instances[$cls])) {
+            self::$instances[$cls] = new static();
+        }
+
+        return self::$instances[$cls];
     }
 }

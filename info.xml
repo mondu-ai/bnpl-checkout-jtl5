@@ -485,7 +485,7 @@
                 <position>body</position>
             </file>
             <file>
-                <name>plugin-1.0.15.js</name>
+                <name>plugin.js</name>
                 <priority>1</priority>
                 <position>body</position>
             </file>
@@ -498,7 +498,7 @@
 
         <CSS>
             <file>
-                <name>style-1.0.15.css</name>
+                <name>style.css</name>
                 <priority>4</priority>
             </file>
         </CSS>

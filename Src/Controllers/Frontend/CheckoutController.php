@@ -2,18 +2,19 @@
 
 namespace Plugin\MonduPayment\Src\Controllers\Frontend;
 
+use Plugin\MonduPayment\Src\Helpers\BasketHelper;
+use Plugin\MonduPayment\Src\Helpers\Text;
 use Plugin\MonduPayment\Src\Support\Http\Request;
 use Plugin\MonduPayment\Src\Helpers\Response;
 use Plugin\MonduPayment\Src\Support\HttpClients\MonduClient;
 use JTL\Shop;
-use JTL\Cart\CartHelper;
 use JTL\Session\Frontend;
-use Plugin\MonduPayment\Src\Support\Debug\Debugger;
-use JTL\Plugin\Helper;
 use Plugin\MonduPayment\Src\Services\ConfigService;
+use JTL\DB\ReturnType;
 use JTL\Helpers\Tax;
 use JTL\Catalog\Product\Preise;
 use JTL\Cart\CartItem;
+use Plugin\MonduPayment\Src\Helpers\OrderHashHelper;
 
 class CheckoutController
 {
@@ -28,12 +29,17 @@ class CheckoutController
 
     public function token(Request $request, int $pluginId)
     {
-        $order = $this->monduClient->createOrder($this->getOrderData());
+        $paymentMethod = $request->all()['payment_method'] ?? null;
+        $formParams = $request->allRaw()['form_params'] ?? null;
+
+        $orderData = $this->getOrderData($paymentMethod, $formParams);
+        $order = $this->monduClient->createOrder($orderData);
 
         $monduOrderUuid = @$order['order']['uuid'];
 
         if ($monduOrderUuid != null) {
             $_SESSION['monduOrderUuid'] = $monduOrderUuid;
+            $_SESSION['monduCartHash'] = OrderHashHelper::getOrderHash($orderData);
         }
 
         return Response::json(
@@ -44,36 +50,19 @@ class CheckoutController
         );
     }
 
-    public function getOrderData()
+    public function getOrderData($paymentMethod, $formParams = null)
     {
-        $cart = Frontend::getCart();
-        $cartHelper = new CartHelper();
-        $cartTotals = $cartHelper->getTotal();
+        if($formParams) {
+            \parse_str($formParams, $params);
+            $params = Text::filterXSS($params);
+
+            BasketHelper::addSurcharge($this->getPaymentId($paymentMethod), $params);
+        }
+
+        $basket = BasketHelper::getBasket();
 
         $customer = Frontend::getCustomer();
         $shippingAddress = $_SESSION['Lieferadresse'];
-
-        $taxAmount = 0;
-        $taxPositions = $cart->gibSteuerpositionen();
-
-        foreach ($taxPositions as $taxPosition) {
-            $taxAmount += $taxPosition->fBetrag;
-        }
-
-        // Remove shipping tax from taxAmount
-        if ($cartTotals->shipping[1] != 0) {
-          $taxAmount -= $cartTotals->shipping[1] - $cartTotals->shipping[0];
-        }
-
-        // Remove surcharge tax from taxAmount
-        if ($cartTotals->surcharge[1] != 0) {
-            $taxAmount -= $cartTotals->surcharge[1] - $cartTotals->surcharge[0];
-          }
-
-        // Add discount tax from taxAmount
-        if ($cartTotals->discount[1] != 0) {
-          $taxAmount += $cartTotals->discount[1] - $cartTotals->discount[0];
-        }
 
         $buyerPhone = $customer->cTel ?? $customer->cMobil;
 
@@ -104,8 +93,9 @@ class CheckoutController
         
         $data = [
             'currency' => 'EUR',
-            'payment_method' => $this->getPaymentMethod(),
-            'gross_amount_cents' => round($cart->gibGesamtsummeWaren(true) * 100),
+            'state_flow' => $this->configService->getOrderFlow(),
+            'payment_method' => $this->getPaymentMethod($paymentMethod),
+            'gross_amount_cents' => round($basket->total[1] * 100),
             'source' => 'widget',
             'external_reference_id' => uniqid('M_JTL_'),
             'buyer' => $buyer,
@@ -123,16 +113,16 @@ class CheckoutController
             ],
             'lines' => [
                 [
-                    'buyer_fee_cents' => round($cartTotals->surcharge[1] * 100),
-                    'discount_cents' => round($cartTotals->discount[1] * 100),
-                    'shipping_price_cents' => round($cartTotals->shipping[1] * 100),
-                    'tax_cents' => round($taxAmount * 100),
+                    'buyer_fee_cents' => round($basket->surcharge[0] * 100),
+                    'discount_cents' => round($basket->discount[0] * 100),
+                    'shipping_price_cents' => round($basket->shipping[0] * 100),
+                    'tax_cents' => round(($basket->total[1] - $basket->total[0]) * 100),
                     'line_items' => $this->getLineItems()
                 ]
             ]
         ];
 
-        $netTerm = $this->getNetTerm();
+        $netTerm = $this->getNetTerm($paymentMethod);
         if ($netTerm != null)
             $data['net_term'] = $netTerm;
 
@@ -143,12 +133,13 @@ class CheckoutController
     {
         $lineItems = [];
 
-        $this->fixSummationRounding();
-
+        $basket = BasketHelper::getBasket();
         $cart = Frontend::getCart();
         $cartLineItems = $cart->PositionenArr;
         
-        foreach ($cartLineItems as $lineItem) {
+        foreach ($basket->items as $key => $basketLineItem) {
+            $lineItem = $cartLineItems[$key];
+
             if ($lineItem->Artikel == null)
             {
                 continue;
@@ -158,18 +149,18 @@ class CheckoutController
                 'external_reference_id' => strval($lineItem->kArtikel),
                 'quantity' => $lineItem->nAnzahl,
                 'title' => html_entity_decode($lineItem->Artikel->cName),
-                'net_price_cents' => round(round($lineItem->fPreis, 2) * $lineItem->nAnzahl * 100),
-                'net_price_per_item_cents' => round($lineItem->fPreis * 100)
+                'net_price_cents' => round(round($basketLineItem->amount[0] * $basketLineItem->quantity, 2) * 100),
+                'net_price_per_item_cents' => round($lineItem->fPreisEinzelNetto * 100)
             ];
         }
 
         return $lineItems;
     }
 
-    public function getPaymentMethod()
+    public function getPaymentMethod($cModulId)
     {
         try { 
-            $paymentMethodModul = $_SESSION['Zahlungsart']->cModulId;
+            $paymentMethodModul = $cModulId;
             $paymentMethod = $this->configService->getPaymentMethodByKPlugin($paymentMethodModul);
 
             if (isset($paymentMethod)) {
@@ -183,10 +174,10 @@ class CheckoutController
         } 
     }
 
-    public function getNetTerm()
+    public function getNetTerm($cModulId)
     {
         try { 
-            $paymentMethodModul = $_SESSION['Zahlungsart']->cModulId;
+            $paymentMethodModul = $cModulId;
             $netTerm = $this->configService->getNetTermByKPlugin($paymentMethodModul);
 
             if (isset($netTerm)) {
@@ -200,46 +191,21 @@ class CheckoutController
         } 
     }
 
-    /**
-     * use summation rounding to even out discrepancies between total basket sum and sum of basket position totals
-     * Note: This is JTL 5 native function found in Cart.php
-     * Note: JTL 5 by default does not fix summation rounding until totals are calculated
-     * @param int $precision
-     */
-
-    public function fixSummationRounding(int $precision = 2): void
+    public function getPayment($cModulId)
     {
-        $cart = Frontend::getCart();
+        return Shop::Container()->getDB()->queryPrepared(
+            'SELECT cName, kZahlungsart
+                FROM tzahlungsart
+                WHERE cModulId = :moduleID',
+            ['moduleID' => $cModulId],
+            ReturnType::SINGLE_OBJECT
+        );
+    }
 
-        $cumulatedDelta    = 0;
-        $cumulatedDeltaNet = 0;
-        foreach (Frontend::getCurrencies() as $currency) {
-            $currencyName = $currency->getName();
-            foreach ($cart->PositionenArr as $i => $item) {
-                $grossAmount        = Tax::getGross(
-                    $item->fPreis * $item->nAnzahl,
-                    CartItem::getTaxRate($item),
-                    12
-                );
-                $netAmount          = $item->fPreis * $item->nAnzahl;
-                $roundedGrossAmount = Tax::getGross(
-                    $item->fPreis * $item->nAnzahl + $cumulatedDelta,
-                    CartItem::getTaxRate($item),
-                    $precision
-                );
-                $roundedNetAmount   = \round($item->fPreis * $item->nAnzahl + $cumulatedDeltaNet, $precision);
+    public function getPaymentId($cModulId): int
+    {
+        $payment = $this->getPayment($cModulId);
 
-                if ($i !== 0 && $item->nPosTyp === \C_WARENKORBPOS_TYP_ARTIKEL) {
-                    if ($grossAmount != 0) {
-                        $item->fPreis = $roundedGrossAmount;
-                    }
-                    if ($netAmount != 0) {
-                        $item->fPreis = $roundedNetAmount;
-                    }
-                }
-                $cumulatedDelta    += ($grossAmount - $roundedGrossAmount);
-                $cumulatedDeltaNet += ($netAmount - $roundedNetAmount);
-            }
-        }
+        return (int)($payment->kZahlungsart ?? 0);
     }
 }
