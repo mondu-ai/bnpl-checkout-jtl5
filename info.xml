@@ -13,6 +13,7 @@
         <Hooks>
             <Hook id="140">hooks/Checkout.php</Hook>
             <Hook id="8">hooks/CheckoutPaymentMethod.php</Hook>
+            <Hook id="10">hooks/CheckoutConfirmPage.php</Hook>
         </Hooks>
         <FlushTags>CACHING_GROUP_CATEGORY, CACHING_GROUP_ARTICLE</FlushTags>
         <Adminmenu>
