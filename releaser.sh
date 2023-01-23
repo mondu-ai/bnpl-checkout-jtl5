@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 helpFunction() {
     echo ""
@@ -44,8 +44,10 @@ files_to_rename="frontend/js/plugin.js frontend/css/style.css"
 
 for file in $files_to_update; do
     echo "Updating semver occurrences in $file"
-    sed -i'' "s/${OLD_TAG_SED_DOT}/${NEW_TAG_SED_DOT}/g" $file
-    sed -i'' "s/${OLD_TAG_SED_DASH}/${NEW_TAG_SED_DASH}/g" $file
+    sed -i "s/${OLD_TAG_SED_DOT}/${NEW_TAG_SED_DOT}/g" $file
+    sed -i "s/${OLD_TAG_SED_DASH}/${NEW_TAG_SED_DASH}/g" $file
+    sed -i "s/plugin\.js/plugin-${NEW_TAG_SED_DASH}\.js/g" $file
+    sed -i "s/style\.css/plugin-${NEW_TAG_SED_DASH}\.css/g" $file
     if [[ $changes == "keep" ]]; then
         echo "Adding ${file} for new commit"
         git add $file
