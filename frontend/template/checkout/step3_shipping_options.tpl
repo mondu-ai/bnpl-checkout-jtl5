@@ -1,7 +1,7 @@
  extends file="{$parent_template_path}/checkout/step3_shipping_options.tpl"}
 
 {block name='checkout-step3-shipping-options-legend-payment' append}
-    {if $paymentMethodGroupEnabled}
+    {if $paymentMethodGroupEnabled && count($monduGroups) > 0}
 
         <div class="mondu-payment-method-groups {if isset($payPalPlus)}mondu-paypal-plus-enabled{else}mondu-paypal-plus-disabled{/if}">
             {foreach $monduGroups as $group}
