@@ -12,7 +12,7 @@ class Migration20221130105300 extends Migration implements IMigration
         $this->execute("
           UPDATE `tzahlungsartsprache` zs
             SET zs.`cHinweisTextShop` = 'Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie [url=https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/]hier[/url].'
-            WHERE zs.`cGebuehrname` = 'Mondu';
+            WHERE zs.`cGebuehrname` = 'Mondu' and zs.`cISOSprache` IN ('ger', 'eng');
         ");
     }
 
