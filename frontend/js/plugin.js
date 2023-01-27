@@ -72,6 +72,7 @@ class MonduCheckoutPlugin {
 
                     if (!isMondu) return this.submit();
 
+                    $('.checkout-shipping-form .submit_once').attr('disabled', 'disabled');
                     that._handleSubmit(monduPaymentMethods[value], formParams);
                 } else {
                     $('.mondu-payment-method-groups').remove();
@@ -85,6 +86,7 @@ class MonduCheckoutPlugin {
                 submittedForm = true;
                 if (!isMondu) return this.submit();
 
+                $('.checkout-shipping-form .submit_once').attr('disabled', 'disabled');
                 that._handleSubmit(monduPaymentMethods[value], formParams);
             }
         });
