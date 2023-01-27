@@ -108,4 +108,4 @@ Mondu Ratenzahlung - Bequem in Raten per Bankeinzug zahlen
 1. [Download JTL Wawi](https://www.jtl-software.de/jtl-wawi-download)
 2. Use Parallels Desktop with Windows 10, 11 or similar alternatives to install JTL Wawi on MacOS environment
 3. Connect the JTL Wawi with JTL Shop
-4. Configure the JTL-Workflows
+4. Configure the JTL-Workflow
