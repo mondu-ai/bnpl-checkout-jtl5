@@ -39,7 +39,7 @@ class ConfigService
     }
 
     public function getPluginName() {
-        return $this->plugin->getMeta()->getName() . " " . "JTL5";
+        return "mondu_payment_jtl5";
     }
 
     public function getSandboxMode()
