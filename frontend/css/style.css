@@ -42,7 +42,7 @@
 }
 
 .mondu-benefits-text {
-    background: #e9e2ee;
+    background: #F4EDFF;
     border-radius: 6px;
     font-size: 13px;
     font-weight: 400!important;
@@ -50,8 +50,8 @@
 
   .mondu-payment-method-box .custom-control-input:checked~.custom-control-label::before {
     color: #fff;
-    border-color: #46086d;
-    background-color: #46086d
+    border-color: #692CCF;
+    background-color: #692CCF
   }
   
   .mondu-payment-method-box .custom-control-label::before {
@@ -81,7 +81,7 @@
 }
 
 .mondu-payment-method-box:has(input:checked) {
-    border: 1px solid #6b398a;
+    border: 1px solid #692CCF;
 }
 
 .mondu-card:hover {
