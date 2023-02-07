@@ -1,0 +1,27 @@
+FROM php:7.4.16-apache
+
+ARG SHOP_VERSION=5-0-5
+ENV USER="www-data"
+
+RUN apt-get update && apt-get install -y libzip-dev zip libicu-dev libxml2-dev libmagickwand-dev --no-install-recommends && rm -rf /var/lib/apt/lists/*
+RUN printf "\n" | pecl install imagick
+RUN docker-php-ext-install intl bcmath soap opcache pdo_mysql zip \
+    && docker-php-ext-enable imagick
+
+COPY php.ini "$PHP_INI_DIR/php.ini"
+
+COPY entrypoint.sh /tmp
+COPY activate.php /var/www/html
+
+RUN apt-get update && apt-get install wget unzip zip -y
+
+RUN wget "https://build.jtl-shop.de/get/shop-v${SHOP_VERSION}.zip"
+
+RUN unzip "shop-v${SHOP_VERSION}.zip" -d /var/www/html
+RUN chmod -R 777 ./*
+
+RUN echo "ServerName host.docker.internal" >> /etc/apache2/apache2.conf
+RUN a2enmod rewrite
+
+RUN chmod 755 /tmp/entrypoint.sh
+ENTRYPOINT ["/tmp/entrypoint.sh"]
