@@ -10,7 +10,7 @@ use JTL\Session\Frontend;
 use Plugin\MonduPayment\Src\Services\ConfigService;
 use Plugin\MonduPayment\Src\Support\HttpClients\MonduClient;
 use Plugin\MonduPayment\Src\Support\Debug\Debugger;
-use Plugin\MonduPayment\PaymentMethod\Helper as MonduHelper;
+use Plugin\MonduPayment\Src\Helpers\TranslationHelper;
 
 class CheckoutPaymentMethod
 {
@@ -81,7 +81,7 @@ class CheckoutPaymentMethod
     private function __translate($original) {
       $getText   = Shop::Container()->getGetText();
       $oldLocale = $getText->getLanguage();
-      $locale    = MonduHelper::getLocaleFromISO(Shop::Lang()->getIso());
+      $locale    = TranslationHelper::getLocaleFromISO(Shop::Lang()->getIso());
       
       $getText->setLanguage($locale);
       $translation = \__($original);
