@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Plugin\MonduPayment\PaymentMethod;
+namespace Plugin\MonduPayment\Src\Helpers;
 
-final class Helper
+final class TranslationHelper
 {
   public static function getLocaleFromISO(string $isoCode): string
     {
