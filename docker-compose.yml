@@ -5,10 +5,12 @@ services:
         image: mariadb:10.6.0
         ports:
             - "3306:3306"
+        env_file:
+            - ".env"
         environment:
             MARIADB_MYSQL_LOCALHOST_USER: true
-            MYSQL_ROOT_PASSWORD: adminadmin
-            MYSQL_DATABASE: jtl-db
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+            MYSQL_DATABASE: ${DB_NAME}
         volumes:
             - mariadb_data:/var/lib/mysql
         healthcheck:
