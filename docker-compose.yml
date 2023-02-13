@@ -1,0 +1,52 @@
+version: "3.8"
+
+services:
+    jtl-db:
+        image: mariadb:10.6.0
+        ports:
+            - "3306:3306"
+        env_file:
+            - ".env"
+        environment:
+            MARIADB_MYSQL_LOCALHOST_USER: true
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+            MYSQL_DATABASE: ${DB_NAME}
+        volumes:
+            - mariadb_data:/var/lib/mysql
+        healthcheck:
+            test:
+                [
+                    "CMD-SHELL",
+                    "mysqladmin ping -P 3306 -p$$(echo $$MYSQL_ROOT_PASSWORD) | grep 'mysqld is alive' || exit 1"
+                ]
+            interval: 2s
+            retries: 15
+
+    jtl-shop:
+        links:
+            - "jtl-db"
+        image: jtl-shop
+        build:
+            context: ./docker
+            args:
+                SHOP_VERSION: "5-0-5"
+        env_file:
+            - ".env"
+        ports:
+            - "80:80"
+        volumes:
+            - jtl5_shop:/var/www/html
+            - .:/var/www/html/plugins/MonduPayment
+        command: |
+            nohup /bin/bash -c "chmod +x /var/www/html/plugins/MonduPayment/activate.sh
+            /var/www/html/plugins/MonduPayment/./activate.sh
+            tail -F /dev/null"
+        depends_on:
+            jtl-db:
+                condition: service_healthy
+
+volumes:
+    mariadb_data:
+        driver: local
+    jtl5_shop:
+        driver: local
