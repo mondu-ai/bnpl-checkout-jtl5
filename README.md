@@ -103,7 +103,8 @@ Ratenzahlung - Bequem in Raten per Bankeinzug zahlen
          order_number={{ Vorgang.Stammdaten.ExterneAuftragsnummer }}
          ```
 
-<img width="1007" alt="image" src="https://user-images.githubusercontent.com/97665980/174281478-7d96ed59-67d9-42dc-8355-486ebb9f1cca.png">
+![image](https://user-images.githubusercontent.com/97665980/228544382-e569bf31-2122-4777-bbf1-8616fea082f5.png)
+
 
 # Development
 
