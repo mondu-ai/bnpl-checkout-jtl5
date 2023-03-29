@@ -61,6 +61,10 @@ Ratenzahlung - Bequem in Raten per Bankeinzug zahlen
          ```
          gross_amount_cents={{ Vorgang.Auftrag.Positionen.BruttopreisGesamt2 }}&net_amount_cents={{ Vorgang.Auftrag.Positionen.NettopreisGesamt2 }}&invoice_id={{ Vorgang.Auftrag.Rechnung.InterneRechnungsnummer }}&order_id={{ Vorgang.Auftrag.ExterneAuftragsnummer }}
          ```
+      3. Header:
+         ```
+         Content-Type: application/x-www-form-urlencoded
+         ```
 
 ### Cancel Invoice Workflow
 
@@ -82,6 +86,10 @@ Ratenzahlung - Bequem in Raten per Bankeinzug zahlen
          ```
          invoice_number={{ Vorgang.Rechnungsnummer }}
          ```
+      3. Header:
+         ```
+         Content-Type: application/x-www-form-urlencoded
+         ```
 
 ### Cancel Order Workflow
 
@@ -101,6 +109,10 @@ Ratenzahlung - Bequem in Raten per Bankeinzug zahlen
       2. Parameter:
          ```
          order_number={{ Vorgang.Stammdaten.ExterneAuftragsnummer }}
+         ```
+      3. Header:
+         ```
+         Content-Type: application/x-www-form-urlencoded
          ```
 
 ![image](https://user-images.githubusercontent.com/97665980/228544382-e569bf31-2122-4777-bbf1-8616fea082f5.png)
