@@ -2,7 +2,7 @@
 
 JTL 5 integration plugin for Mondu Payment.
 
-#### Installation
+## Installation
 
 1. Download .zip folder from the **main** branch on Github repository
 2. Navigate to the JTL Shop administration dashboard
@@ -10,7 +10,7 @@ JTL 5 integration plugin for Mondu Payment.
 4. Choose **Upload** tab and upload the downloaded plugin file
 5. Navigate to the **Available** tab and install the *Mondu Payments* plugin
 
-#### Configuration
+## JTL Shop Configuration
 
 **Configure API**
 
@@ -21,30 +21,36 @@ JTL 5 integration plugin for Mondu Payment.
    * Fill in API Secret
    * Fill in Webhooks Secret
 
-**Configure JTL Shop**
+**Configure Payment Methods**
 
 1. Navigate to the Shipments -> Shipping Methods
 2. Select desired Shipping method and click on edit icon
 3. Enable Mondu Payment in the **ACCEPTED PAYMENT METHODS** section
 
-**Configure JTL Wawi**
+## JTL Wawi Configuration
 
-##### Add Payment Methods
-1. Navigate to the Payment Methods in JTL Wawi
+### Add Payment Methods
+1. Navigate to the Payments -> Payment Methods in JTL Wawi
 2. Add following payment methods:
+
 ```
-Mondu Rechnungskauf - jetzt kaufen, später bezahlen
-Mondu SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen
-Mondu Ratenzahlung - Bequem in Raten per Bankeinzug zahlen
+Rechnungskauf - jetzt kaufen, später bezahlen
+SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen
+Ratenzahlung - Bequem in Raten per Bankeinzug zahlen
 ```
 
-###### Create Invoice Workflow
+**Note: In case Payment Method names are changed manually in the JTL Shop, please update accordingly in the JTL Wawi.**
+
+
+### Create Invoice Workflow
 
 1. Navigate to the Admin -> JTL-Workflows
 2. Select **Rechnungen** tab
 3. Select Rechnungen -> Erstellt -> Rechnungen_Erstellt workflow
-4. Configure condition
-   1. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Mondu
+4. Configure condition with "One condition met" (Eine Bedingung erfüllt")
+   1. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Rechnungskauf - jetzt kaufen, später bezahlen
+   2. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen
+   3. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Ratenzahlung - Bequem in Raten per Bankeinzug zahlen
 5. Configure action
    1. Web-Request POST:
       1. URL:
@@ -55,15 +61,21 @@ Mondu Ratenzahlung - Bequem in Raten per Bankeinzug zahlen
          ```
          gross_amount_cents={{ Vorgang.Auftrag.Positionen.BruttopreisGesamt2 }}&net_amount_cents={{ Vorgang.Auftrag.Positionen.NettopreisGesamt2 }}&invoice_id={{ Vorgang.Auftrag.Rechnung.InterneRechnungsnummer }}&order_id={{ Vorgang.Auftrag.ExterneAuftragsnummer }}
          ```
+      3. Header:
+         ```
+         Content-Type: application/x-www-form-urlencoded
+         ```
 
-###### Cancel Invoice Workflow
+### Cancel Invoice Workflow
 
 1. Navigate to the Admin -> JTL-Workflows
 2. Select **Rechnungen** tab
 3. Select Rechnungen - Manuell, create new Event with "Ereignis anlegen" button
 4. Create new event
-5. Configure condition
-   1. Auftrag\Zahlungsart\Name **Enthalt** Mondu
+4. Configure condition with "One condition met" (Eine Bedingung erfüllt")
+   1. Auftrag\Zahlungsart\Name **Enthalt** Rechnungskauf - jetzt kaufen, später bezahlen
+   2. Auftrag\Zahlungsart\Name **Enthalt** SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen
+   3. Auftrag\Zahlungsart\Name **Enthalt** Ratenzahlung - Bequem in Raten per Bankeinzug zahlen
 6. Configure action
    1. Web-Request POST:
       1. URL:
@@ -74,14 +86,20 @@ Mondu Ratenzahlung - Bequem in Raten per Bankeinzug zahlen
          ```
          invoice_number={{ Vorgang.Rechnungsnummer }}
          ```
+      3. Header:
+         ```
+         Content-Type: application/x-www-form-urlencoded
+         ```
 
-###### Cancel Order Workflow
+### Cancel Order Workflow
 
 1. Navigate to the Admin -> JTL-Workflows
 2. Select **Auftrage** tab
 3. Select Auftrag -> Storniert and create a workflow
-4. Configure condition
-   1. Zahlungen\Zahlungsart\Name **Enthalt** Mondu
+4. 4. Configure condition with "One condition met" (Eine Bedingung erfüllt")
+   1. Zahlungen\Zahlungsart\Name **Enthalt** Rechnungskauf - jetzt kaufen, später bezahlen
+   2. Zahlungen\Zahlungsart\Name **Enthalt** SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen
+   3. Zahlungen\Zahlungsart\Name **Enthalt** Ratenzahlung - Bequem in Raten per Bankeinzug zahlen
 5. Configure action
    1. Web-Request POST:
       1. URL:
@@ -92,8 +110,13 @@ Mondu Ratenzahlung - Bequem in Raten per Bankeinzug zahlen
          ```
          order_number={{ Vorgang.Stammdaten.ExterneAuftragsnummer }}
          ```
+      3. Header:
+         ```
+         Content-Type: application/x-www-form-urlencoded
+         ```
 
-<img width="1007" alt="image" src="https://user-images.githubusercontent.com/97665980/174281478-7d96ed59-67d9-42dc-8355-486ebb9f1cca.png">
+![image](https://user-images.githubusercontent.com/97665980/228552408-cf45d35d-9c62-4248-9ee8-fbf5aa6a7aa9.png)
+
 
 # Development
 
