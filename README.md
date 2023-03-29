@@ -115,7 +115,7 @@ Ratenzahlung - Bequem in Raten per Bankeinzug zahlen
          Content-Type: application/x-www-form-urlencoded
          ```
 
-![image](https://user-images.githubusercontent.com/97665980/228544382-e569bf31-2122-4777-bbf1-8616fea082f5.png)
+![image](https://user-images.githubusercontent.com/97665980/228552408-cf45d35d-9c62-4248-9ee8-fbf5aa6a7aa9.png)
 
 
 # Development
