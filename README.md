@@ -59,7 +59,7 @@ Ratenzahlung - Bequem in Raten per Bankeinzug zahlen
          ```
       2. Parameter:
          ```
-         gross_amount_cents={{ Vorgang.Auftrag.Positionen.BruttopreisGesamt2 }}&net_amount_cents={{ Vorgang.Auftrag.Positionen.NettopreisGesamt2 }}&invoice_id={{ Vorgang.Auftrag.Rechnung.InterneRechnungsnummer }}&order_id={{ Vorgang.Auftrag.ExterneAuftragsnummer }}
+         gross_amount_cents={{ Vorgang.Auftrag.Positionen.BruttopreisGesamt2 }}&net_amount_cents={{ Vorgang.Auftrag.Positionen.NettopreisGesamt2 }}&invoice_id={{ Vorgang.Rechnungsnummer }}&order_id={{ Vorgang.Auftrag.ExterneAuftragsnummer }}
          ```
       3. Header:
          ```
@@ -141,7 +141,7 @@ Kontoinhaber: Mondu Capital Sàrl
 
 IBAN:
 " + If(Report.InvoiceBillToAddress.CountryISO= "DE","DE_IBAN","") + " +
-" + If(Report.InvoiceBillToAddress.CountryISO= "AT","AT_IBAN","") + "
+" + If(Report.InvoiceBillToAddress.CountryISO= "NL","NL_IBAN","") + "
 
 BIC: HYVEDEMME40
 
