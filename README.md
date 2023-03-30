@@ -104,7 +104,7 @@ Ratenzahlung - Bequem in Raten per Bankeinzug zahlen
    1. Web-Request POST:
       1. URL:
          ```
-         http://{SHOP-URL}/mondu-api?return=cancel-invoice&webhooks_secret={WEBHOOK SECRET}
+         http://{SHOP-URL}/mondu-api?return=cancel-order&webhooks_secret={WEBHOOK SECRET}
          ```
       2. Parameter:
          ```
