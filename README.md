@@ -139,7 +139,9 @@ Ratenzahlung - Bequem in Raten per Bankeinzug zahlen
 
 Kontoinhaber: Mondu Capital Sàrl
 
-IBAN: Merchant spezifische IBAN
+IBAN:
+" + If(Report.InvoiceBillToAddress.CountryISO= "DE","DE_IBAN","") + " +
+" + If(Report.InvoiceBillToAddress.CountryISO= "AT","AT_IBAN","") + "
 
 BIC: HYVEDEMME40
 
@@ -147,6 +149,7 @@ Verwendungszweck: " + Report.InvoiceNumber + "
 
 Zahlungsziel: [XX] Tage"
 ```
+
 8. Change the display condition for created payment block
 <img src="https://user-images.githubusercontent.com/97665980/228818661-37db896a-c724-40ed-a614-d5a9af462192.png" width="100" />
 
@@ -155,6 +158,8 @@ Report.PaymentMethodName = "Rechnungskauf - jetzt kaufen, später bezahlen"
 ```
 
 9. Repeat all of the steps for other payment methods. Please refer to the `Mondu Invoice Snippets` for text blocks in Mondu Documentation.
+
+
 
 # Development
 
