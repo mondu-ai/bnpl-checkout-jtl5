@@ -117,6 +117,49 @@ Ratenzahlung - Bequem in Raten per Bankeinzug zahlen
 
 ![image](https://user-images.githubusercontent.com/97665980/228552408-cf45d35d-9c62-4248-9ee8-fbf5aa6a7aa9.png)
 
+### Configure Invoice Template
+
+1. Open your JTL-Wawi and navigate to the `Admin -> Druck- / E-Mail- / Exportvorlagen`
+2. Find `Rechnung` item under Root and click `Bearbeiten` to edit invoice template
+<img src="https://user-images.githubusercontent.com/97665980/228816366-a6f06146-1192-41d1-b865-91ed23db7f24.png" width="100" />
+
+3. Under Payment blocks, copy any of the payment block and then paste it under payment blocks table
+<img src="https://user-images.githubusercontent.com/97665980/228816849-19e999a5-411e-4f24-ae3a-fe1ae8487811.png" width="100" />
+
+4. Change the name to Payment with Mondu Invoice
+<img src="https://user-images.githubusercontent.com/97665980/228817059-c6479e6d-f696-40b9-8228-3a7f233888a1.png" width="100" />
+
+5. Right click on this block and choose "Edit element or block" 
+6. Change the block structure to match the one in the screenshot
+<img src="https://user-images.githubusercontent.com/97665980/228817809-ea7b7018-42fc-40d3-8021-38bb8c20716b.png" width="100" />
+
+7. Copy the text below and change the values as needed:
+```
+"Diese Rechnung wurde abgetreten gemäß den Allgemeinen Bedingungen von [MERCHANT] und Mondu GmbH zum Modell Kauf auf Rechnung. Wir bitten um schuldbefreiende Zahlung auf folgendes Konto:
+
+Kontoinhaber: Mondu Capital Sàrl
+
+IBAN:
+" + If(Report.InvoiceBillToAddress.CountryISO= "DE","DE_IBAN","") + " +
+" + If(Report.InvoiceBillToAddress.CountryISO= "AT","AT_IBAN","") + "
+
+BIC: HYVEDEMME40
+
+Verwendungszweck: " + Report.InvoiceNumber + "
+
+Zahlungsziel: [XX] Tage"
+```
+
+8. Change the display condition for created payment block
+<img src="https://user-images.githubusercontent.com/97665980/228818661-37db896a-c724-40ed-a614-d5a9af462192.png" width="100" />
+
+```
+Report.PaymentMethodName = "Rechnungskauf - jetzt kaufen, später bezahlen"
+```
+
+9. Repeat all of the steps for other payment methods. Please refer to the `Mondu Invoice Snippets` for text blocks in Mondu Documentation.
+
+
 
 # Development
 
