@@ -14,7 +14,7 @@
                             </div>
                             <div class="mondu-description">
                                 <p class="mondu-method-title">{$group['title']}</p>
-                                <p class="mondu-method-description">{$group['description']|replace:"[url=": "<a target=\"_blank\" href=\""|replace:"[/url]":"</a>"|replace:"]":"\" >"}</p>
+                                <p class="mondu-method-description">{$group['description']|replace: "[br]":"<br />"|replace:"[b]":"<b>"|replace:"[/b]":"</b>"|replace:"[url=": "<a target=\"_blank\" href=\""|replace:"[/url]":"</a>"|replace:"]":"\" >"}</p>
 
                                 {foreach $group['payment_methods'] as $zahlungsart}
                                     {if $zahlungsart->cAnbieter == 'Mondu'}
@@ -44,7 +44,7 @@
                                                 {block name='checkout-inc-payment-methods-note'}
                                                     <br />
                                                     <span class="checkout-payment-method-note">
-                                                        <small>{$zahlungsart->cHinweisText|trans|replace:"[url=": "<a target=\"_blank\" href=\""|replace:"[/url]":"</a>"|replace:"]":"\" >"}</small>
+                                                        <small>{$zahlungsart->cHinweisText|trans|replace: "[br]":"<br />"|replace:"[b]":"<b>"|replace:"[/b]":"</b>"|replace:"[url=": "<a target=\"_blank\" href=\""|replace:"[/url]":"</a>"|replace:"]":"\" >"}</small>
                                                     </span>
                                                 {/block}
                                             {/if}
