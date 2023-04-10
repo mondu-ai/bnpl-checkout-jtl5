@@ -86,6 +86,15 @@
                         <Description>Description for the net term group. Use {net_term} symbol to replace with net term in the frontend.</Description>
                         <ValueName>net_term_description</ValueName>
                     </Setting>
+                    <Setting type="radio" initialValue="0" sort="4" conf="Y">
+                        <Name>Show Payment Method Name </Name>
+                        <Description>When enabled, in the standard layout, the payment method name will be visible along with the Mondu logo.</Description>
+                        <ValueName>payment_method_name_visible</ValueName>
+                        <RadioOptions>
+                            <Option value="0" sort="1">No</Option>
+                            <Option value="1" sort="2">Yes</Option>
+                        </RadioOptions>
+                    </Setting>
                 </Settingslink>
         </Adminmenu>
         <PaymentMethod>

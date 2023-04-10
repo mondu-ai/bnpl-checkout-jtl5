@@ -67,6 +67,11 @@ class ConfigService
         return $this->config->getValue('payment_method_group_enabled');
     }
 
+    public function getPaymentMethodNameVisible()
+    {
+        return $this->config->getValue('payment_method_name_visible');
+    }
+
     public function getNetTermTitle()
     {
         return $this->config->getValue('net_term_title');
