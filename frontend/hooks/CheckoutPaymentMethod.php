@@ -72,8 +72,10 @@ class CheckoutPaymentMethod
     private function isPaymentGroupingEnabled()
     {
         $groupEnabled = $this->configService->getPaymentMethodGroupEnabled() == '1';
+        $paymentMethodNameVisible = $this->configService->getPaymentMethodNameVisible() == '1';
         
         $this->smarty->assign('paymentMethodGroupEnabled', $groupEnabled);
+        $this->smarty->assign('paymentMethodNameVisible', $paymentMethodNameVisible);
 
         return $groupEnabled;
     }
