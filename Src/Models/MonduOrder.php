@@ -14,6 +14,7 @@ class MonduOrder extends Model
         'order_id',
         'state',
         'external_reference_id',
-        'order_uuid'
+        'order_uuid',
+        'authorized_net_term'
     ];
 }
