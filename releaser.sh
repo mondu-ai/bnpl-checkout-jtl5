@@ -71,7 +71,7 @@ done
 
 mkdir MonduPayment
 echo "Generating zip file"
-rsync -r --exclude 'MonduPayment' --exclude '.git' --exclude '.github' --exclude 'releaser.sh' \ 
+rsync -r --exclude 'MonduPayment' --exclude '.git' --exclude '.github' --exclude 'releaser.sh' \
 --exclude 'docker-compose.yml' --exclude 'activate.sh' --exclude 'shopscripts' --exclude 'docker' \
 --exclude '.env.example' ./ MonduPayment
 zip -r MonduPayment.zip MonduPayment
