@@ -9,7 +9,9 @@ final class TranslationHelper
         static $locales = [
             'ENG' => 'en-GB',
             'GER' => 'de-DE',
-            'DUT' => 'nl-NL'
+            'DUT' => 'nl-NL',
+            'FRE' => 'fr-FR',
+            'FRA' => 'fr-FR'
         ];
 
         return $locales[\strtoupper($isoCode)] ?? 'de-DE';
