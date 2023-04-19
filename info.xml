@@ -126,7 +126,7 @@
                 <MethodLanguage iso="FRE">
                     <Name>Achat sur facture - Payer plus tard par virement bancaire</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Des informations sur la façon dont Mondu GmbH traite vos données personnelles peuvent être trouvées [url=https://mondu.ai/fr/gdpr-notification-for-buyers]ici[/url].</InfoText>
+                    <InfoText>Plus d'informations sur la façon dont Mondu GmbH traite vos données personnelles peuvent être trouvées [url=https://mondu.ai/fr/gdpr-notification-for-buyers]ici[/url].</InfoText>
                 </MethodLanguage>
                 <Setting type="selectbox" initialValue="14" sort="50" conf="Y">
                     <Name>Net Term</Name>
@@ -170,7 +170,7 @@
                 <MethodLanguage iso="FRE">
                     <Name>Achat sur facture - Payer plus tard par virement bancaire</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Des informations sur la façon dont Mondu GmbH traite vos données personnelles peuvent être trouvées [url=https://mondu.ai/fr/gdpr-notification-for-buyers]ici[/url].</InfoText>
+                    <InfoText>Plus d'informations sur la façon dont Mondu GmbH traite vos données personnelles peuvent être trouvées [url=https://mondu.ai/fr/gdpr-notification-for-buyers]ici[/url].</InfoText>
                 </MethodLanguage>
                 <Setting type="selectbox" initialValue="30" sort="50" conf="Y">
                     <Name>Net Term</Name>
@@ -214,7 +214,7 @@
                 <MethodLanguage iso="FRE">
                     <Name>Achat sur facture - Payer plus tard par virement bancaire</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Des informations sur la façon dont Mondu GmbH traite vos données personnelles peuvent être trouvées [url=https://mondu.ai/fr/gdpr-notification-for-buyers]ici[/url].</InfoText>
+                    <InfoText>Plus d'informations sur la façon dont Mondu GmbH traite vos données personnelles peuvent être trouvées [url=https://mondu.ai/fr/gdpr-notification-for-buyers]ici[/url].</InfoText>
                 </MethodLanguage>
                 <Setting type="selectbox" initialValue="45" sort="50" conf="Y">
                     <Name>Net Term</Name>
@@ -258,7 +258,7 @@
                 <MethodLanguage iso="FRE">
                     <Name>Achat sur facture - Payer plus tard par virement bancaire</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Des informations sur la façon dont Mondu GmbH traite vos données personnelles peuvent être trouvées [url=https://mondu.ai/fr/gdpr-notification-for-buyers]ici[/url].</InfoText>
+                    <InfoText>Plus d'informations sur la façon dont Mondu GmbH traite vos données personnelles peuvent être trouvées [url=https://mondu.ai/fr/gdpr-notification-for-buyers]ici[/url].</InfoText>
                 </MethodLanguage>
                 <Setting type="selectbox" initialValue="60" sort="50" conf="Y">
                     <Name>Net Term</Name>
@@ -302,7 +302,7 @@
                 <MethodLanguage iso="FRE">
                     <Name>Achat sur facture - Payer plus tard par virement bancaire</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Des informations sur la façon dont Mondu GmbH traite vos données personnelles peuvent être trouvées [url=https://mondu.ai/fr/gdpr-notification-for-buyers]ici[/url].</InfoText>
+                    <InfoText>Plus d'informations sur la façon dont Mondu GmbH traite vos données personnelles peuvent être trouvées [url=https://mondu.ai/fr/gdpr-notification-for-buyers]ici[/url].</InfoText>
                 </MethodLanguage>
                 <Setting type="selectbox" initialValue="90" sort="50" conf="Y">
                     <Name>Net Term</Name>
@@ -346,9 +346,9 @@
                     <InfoText>Informatie over de verwerking van uw persoonsgegevens door Mondu GmbH vindt u [url=https://mondu.ai/nl/gdpr-notification-for-buyers]hier[/url].</InfoText>
                 </MethodLanguage>
                 <MethodLanguage iso="FRE">
-                    <Name>SEPA - Payer plus tard par prélèvement SEPA</Name>
+                    <Name>SEPA - Payer plus tard par prélèvement automatique SEPA</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Des informations sur la façon dont Mondu GmbH traite vos données personnelles peuvent être trouvées [url=https://mondu.ai/fr/gdpr-notification-for-buyers]ici[/url].</InfoText>
+                    <InfoText>Plus d'informations sur la façon dont Mondu GmbH traite vos données personnelles peuvent être trouvées [url=https://mondu.ai/fr/gdpr-notification-for-buyers]ici[/url].</InfoText>
                 </MethodLanguage>
                 <Setting type="selectbox" initialValue="14" sort="50" conf="Y">
                     <Name>Net Term</Name>
@@ -390,9 +390,9 @@
                     <InfoText>Informatie over de verwerking van uw persoonsgegevens door Mondu GmbH vindt u [url=https://mondu.ai/nl/gdpr-notification-for-buyers]hier[/url].</InfoText>
                 </MethodLanguage>
                 <MethodLanguage iso="FRE">
-                    <Name>SEPA - Payer plus tard par prélèvement SEPA</Name>
+                    <Name>SEPA - Payer plus tard par prélèvement automatique SEPA</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Des informations sur la façon dont Mondu GmbH traite vos données personnelles peuvent être trouvées [url=https://mondu.ai/fr/gdpr-notification-for-buyers]ici[/url].</InfoText>
+                    <InfoText>Plus d'informations sur la façon dont Mondu GmbH traite vos données personnelles peuvent être trouvées [url=https://mondu.ai/fr/gdpr-notification-for-buyers]ici[/url].</InfoText>
                 </MethodLanguage>
                 <Setting type="selectbox" initialValue="30" sort="50" conf="Y">
                     <Name>Net Term</Name>
@@ -434,9 +434,9 @@
                     <InfoText>Informatie over de verwerking van uw persoonsgegevens door Mondu GmbH vindt u [url=https://mondu.ai/nl/gdpr-notification-for-buyers]hier[/url].</InfoText>
                 </MethodLanguage>
                 <MethodLanguage iso="FRE">
-                    <Name>SEPA - Payer plus tard par prélèvement SEPA</Name>
+                    <Name>SEPA - Payer plus tard par prélèvement automatique SEPA</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Des informations sur la façon dont Mondu GmbH traite vos données personnelles peuvent être trouvées [url=https://mondu.ai/fr/gdpr-notification-for-buyers]ici[/url].</InfoText>
+                    <InfoText>Plus d'informations sur la façon dont Mondu GmbH traite vos données personnelles peuvent être trouvées [url=https://mondu.ai/fr/gdpr-notification-for-buyers]ici[/url].</InfoText>
                 </MethodLanguage>
                 <Setting type="selectbox" initialValue="45" sort="50" conf="Y">
                     <Name>Net Term</Name>
@@ -478,9 +478,9 @@
                     <InfoText>Informatie over de verwerking van uw persoonsgegevens door Mondu GmbH vindt u [url=https://mondu.ai/nl/gdpr-notification-for-buyers]hier[/url].</InfoText>
                 </MethodLanguage>
                 <MethodLanguage iso="FRE">
-                    <Name>SEPA - Payer plus tard par prélèvement SEPA</Name>
+                    <Name>SEPA - Payer plus tard par prélèvement automatique SEPA</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Des informations sur la façon dont Mondu GmbH traite vos données personnelles peuvent être trouvées [url=https://mondu.ai/fr/gdpr-notification-for-buyers]ici[/url].</InfoText>
+                    <InfoText>Plus d'informations sur la façon dont Mondu GmbH traite vos données personnelles peuvent être trouvées [url=https://mondu.ai/fr/gdpr-notification-for-buyers]ici[/url].</InfoText>
                 </MethodLanguage>
                 <Setting type="selectbox" initialValue="60" sort="50" conf="Y">
                     <Name>Net Term</Name>
@@ -522,9 +522,9 @@
                     <InfoText>Informatie over de verwerking van uw persoonsgegevens door Mondu GmbH vindt u [url=https://mondu.ai/nl/gdpr-notification-for-buyers]hier[/url].</InfoText>
                 </MethodLanguage>
                 <MethodLanguage iso="FRE">
-                    <Name>SEPA - Payer plus tard par prélèvement SEPA</Name>
+                    <Name>SEPA - Payer plus tard par prélèvement automatique SEPA</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Des informations sur la façon dont Mondu GmbH traite vos données personnelles peuvent être trouvées [url=https://mondu.ai/fr/gdpr-notification-for-buyers]ici[/url].</InfoText>
+                    <InfoText>Plus d'informations sur la façon dont Mondu GmbH traite vos données personnelles peuvent être trouvées [url=https://mondu.ai/fr/gdpr-notification-for-buyers]ici[/url].</InfoText>
                 </MethodLanguage>
                 <Setting type="selectbox" initialValue="90" sort="50" conf="Y">
                     <Name>Net Term</Name>
@@ -566,9 +566,9 @@
                     <InfoText>Informatie over de verwerking van uw persoonsgegevens door Mondu GmbH vindt u [url=https://mondu.ai/nl/gdpr-notification-for-buyers]hier[/url].</InfoText>
                 </MethodLanguage>
                 <MethodLanguage iso="FRE">
-                    <Name>Achat à tempérament - Payer confortablement en plusieurs fois par prélèvement automatique</Name>
+                    <Name>Paiement échelonné - Payer confortablement en plusieurs fois par prélèvement automatique</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Des informations sur la façon dont Mondu GmbH traite vos données personnelles peuvent être trouvées [url=https://mondu.ai/fr/gdpr-notification-for-buyers]ici[/url].</InfoText>
+                    <InfoText>Plus d'informations sur la façon dont Mondu GmbH traite vos données personnelles peuvent être trouvées [url=https://mondu.ai/fr/gdpr-notification-for-buyers]ici[/url].</InfoText>
                 </MethodLanguage>
                 <Setting type="selectbox" initialValue="installment" sort="50" conf="Y">
                     <Name>Payment Method</Name>
