@@ -163,6 +163,7 @@ Report.PaymentMethodName = "Rechnungskauf - jetzt kaufen, später bezahlen"
 
 # Development
 
+
 **JTL Shop**
 
 1. Download and configure MAMP for MacOS or XAMPP for Windows
