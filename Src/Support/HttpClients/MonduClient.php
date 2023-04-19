@@ -106,6 +106,19 @@ class MonduClient
         }
     }
 
+    public function getOrder($uuid): ?array
+    {
+        try {
+            $order = $this->client->get('orders/' . $uuid, []);
+
+            return $order;
+        }
+        catch (InvalidRequestException $e) {
+            $this->logEvent($e);
+            return ['error' => true];
+        }
+    }
+
     public function getNetTerms(): ?array
     {
         try {

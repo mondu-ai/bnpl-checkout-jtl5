@@ -76,11 +76,20 @@ class MonduPayment extends Method
         $monduOrder = new MonduOrder();
         $configService = ConfigService::getInstance();
 
+        $monduClient = new MonduClient();
+        $authorizedNetTerm = 0;
+        $monduOrderApi = $monduClient->getOrder($_SESSION['monduOrderUuid']); 
+
+        if (!empty($monduOrderApi['order']['authorized_net_term'])) {
+            $authorizedNetTerm = $monduOrderApi['order']['authorized_net_term'];
+        }
+
         $monduOrder->create([
             'order_id' => $order->kBestellung,
             'state' => 'created',
             'external_reference_id' => $order->cBestellNr,
-            'order_uuid' => $_SESSION['monduOrderUuid']
+            'order_uuid' => $_SESSION['monduOrderUuid'],
+            'authorized_net_term' => $authorizedNetTerm
         ]);
 
         if ($configService->shouldMarkOrderAsPaid())
