@@ -1,6 +1,6 @@
 # Plugin
 
-JTL 5 integration plugin for Mondu Payment.
+JTL 5 Integration plugin for Mondu Payment.
 
 ## Installation
 
