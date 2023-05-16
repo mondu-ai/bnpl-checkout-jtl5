@@ -9,7 +9,6 @@ class DataBaseMigrations extends Migration
     public function run_up()
     {
         $this->call([
-            MonduOrdersTable::class,
             MonduInvoicesTable::class
         ], 'up');
     }
