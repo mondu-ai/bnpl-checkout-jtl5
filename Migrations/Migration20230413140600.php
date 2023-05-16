@@ -16,11 +16,12 @@ class Migration20230413140600 extends Migration implements IMigration
               `state` varchar(256) DEFAULT NULL,
               `external_reference_id` varchar(256) DEFAULT NULL,
               `order_uuid` varchar(256) DEFAULT NULL,
-              `authorized_net_term` int(11) DEFAULT NULL,
               `created_at` datetime DEFAULT NULL,
               `updated_at` datetime DEFAULT NULL,
               PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            
+            ALTER TABLE `mondu_orders` ADD `authorized_net_term` INT NULL AFTER `updated_at`;
         ");
     }
 
