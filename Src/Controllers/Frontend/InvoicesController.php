@@ -54,10 +54,11 @@ class InvoicesController
         }
 
         $invoiceData = [
+            'currency' => $bestellung->Waehrung->code,
             'order_uuid' => $monduOrder->order_uuid,
             'external_reference_id' => (string) $invoiceId,
             'invoice_url' => 'http://localhost',
-            'gross_amount_cents' => round(round(floatval($bestellung->fGesamtsumme), 2) * 100),
+            'gross_amount_cents' => round(round(floatval($bestellung->fGesamtsummeKundenwaehrung), 2) * 100),
             'line_items' => $invoiceLineItems
         ];
 
