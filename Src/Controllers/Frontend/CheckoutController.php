@@ -90,9 +90,11 @@ class CheckoutController
             $buyer['zip_code'] = $customer->cPLZ;
 
         $buyer['is_registered'] = $customer->kKunde != null;
+
+        $currency = Frontend::getCurrency()->getCode();
         
         $data = [
-            'currency' => 'EUR',
+            'currency' => $currency,
             'state_flow' => $this->configService->getOrderFlow(),
             'payment_method' => $this->getPaymentMethod($paymentMethod),
             'gross_amount_cents' => round($basket->total[1] * 100),
