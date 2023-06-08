@@ -1,0 +1,6 @@
+.vscode
+.idea
+/Src/Resources/*.png
+/Src/Resources/*.jpg
+/Src/Resources/*.jpeg
+.env

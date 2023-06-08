@@ -1,0 +1,70 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 3.2.2\n"
+
+msgid "Sie haben die volle Kontrolle. Sie können den Betrag jederzeit innerhalb von {net_term} Tagen überweisen.|Datenschutz ist uns wichtig - Ihre Daten werden lediglich zur Identifizierung verwendet."
+msgstr "Gardez le contrôle. Vous pouvez transférer le montant à tout moment dans un délai de {net_term} jours.|La protection des données est importante pour nous - vos données ne seront utilisées que pour vous identifier."
+
+msgid "Sie müssen nichts tun! Wir nutzen Ihre IBAN zur Ausführung der Lastschrift.|Bevor wir den Betrag abbuchen, informieren wir Sie per E-Mail.|Gebührenfrei! Es fallen für Sie keine zusätzlichen Kosten für Ihre SEPA-Zahlung an."
+msgstr "Vous n’avez rien à faire. Nous utilisons votre IBAN pour le prélèvement du montant.|Nous vous informons par e-mail avant le prélèvement du montant sans frais.|Vous n’avez pas de frais supplémentaires à payer pour votre paiement par prélèvement automatique."
+
+msgid "Kostenfrei! Sie zahlen keine versteckten Gebühren oder Zinsen.|Automatische Zahlung alle 30 Tage nach Versand der Ware.|Jederzeit die Kontrolle! Wir informieren Sie über anstehende Ratenzahlungen per E-Mail."
+msgstr "Paiement sans frais ! Vous ne payez pas de frais cachés ni d’intérêts.|Prélèvement automatique tous les 30 jours à compter de la date d’envoi.|Gardez le contrôle à tout moment ! Nous vous informons par e-mail des paiements échelonnés à venir."
+
+msgid "API Sandbox Mode"
+msgstr "Mode test de l’API"
+
+msgid "API Secret"
+msgstr "API key"
+
+msgid "Webhooks Secret"
+msgstr "Clé webhooks"
+
+msgid "Mark order status as \"Paid\"?"
+msgstr "Changer le statut de la commande comme “Payé” ?"
+
+msgid "Yes"
+msgstr "Oui"
+
+msgid "No"
+msgstr "Non"
+
+msgid "Layout Configuration"
+msgstr "Configuration de la mise en page"
+
+msgid "Enable Payment Method Group"
+msgstr "Activer le groupe de méthodes de paiement"
+
+msgid "Net Term Group Title"
+msgstr "Terme net Titre du groupe"
+
+msgid "Net Term Group Description"
+msgstr "Terme net Description du groupe"
+
+msgid "If set to \"Yes\" in JTL Wawi, column \"Is Paid\" will be set to Yes."
+msgstr "Si le JTL Wawi est réglé sur “Oui”, la colonne “Est payé” sera réglée sur “Oui”."
+
+msgid "Please enter your Mondu Webhooks Secret."
+msgstr "Veuillez saisir votre clé Mondu Webhooks."
+
+msgid "Please enter your Mondu API Secret."
+msgstr "Veuillez saisir votre clé API Mondu."
+
+msgid "When enabled, payment methods will be grouped by net terms."
+msgstr "Lorsque cette option est activée, les méthodes de paiement sont regroupées par leur termes nets."
+
+msgid "Title for the net term group. Use {net_term} symbol to replace with net term in the frontend."
+msgstr "Titre du groupe de termes nets. Utilisez le symbole {net_term} pour remplacer le délai de paiement sur le frontend."
+
+msgid "Description for the net term group. Use {net_term} symbol to replace with net term in the frontend."
+msgstr "Description du groupe de termes nets. Utilisez le symbole {net_term} pour remplacer le délai de paiement sur le frontend."
