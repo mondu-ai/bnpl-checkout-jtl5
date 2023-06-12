@@ -1,6 +1,6 @@
 <?php
 
-namespace Plugin\MonduPayment\Src\Controllers\Frontend;
+namespace Plugin\MonduPayment\Src\Services;
 
 use Plugin\MonduPayment\Src\Helpers\BasketHelper;
 use Plugin\MonduPayment\Src\Helpers\Text;
@@ -16,7 +16,7 @@ use JTL\Catalog\Product\Preise;
 use JTL\Cart\CartItem;
 use Plugin\MonduPayment\Src\Helpers\OrderHashHelper;
 
-class CheckoutController
+class OrderService
 {
     private MonduClient $monduClient;
     private ConfigService $configService;
@@ -27,38 +27,34 @@ class CheckoutController
         $this->configService = new ConfigService();
     }
 
-    public function token(Request $request, int $pluginId)
+    public function token($paymentMethod)
     {
-        $paymentMethod = $request->all()['payment_method'] ?? null;
-        $formParams = $request->allRaw()['form_params'] ?? null;
 
-        $orderData = $this->getOrderData($paymentMethod, $formParams);
+        $orderData = $this->getOrderData($paymentMethod);
         $order = $this->monduClient->createOrder($orderData);
 
         $monduOrderUuid = @$order['order']['uuid'];
+        $hostedCheckoutUrl = '';
 
         if ($monduOrderUuid != null) {
             $_SESSION['monduOrderUuid'] = $monduOrderUuid;
             $_SESSION['monduCartHash'] = OrderHashHelper::getOrderHash($orderData);
         }
 
-        return Response::json(
-            [
-                'error' => @$order['error'] ?? false,
-                'token' => $monduOrderUuid
-            ]
-        );
-    }
 
-    public function getOrderData($paymentMethod, $formParams = null)
-    {
-        if($formParams) {
-            \parse_str($formParams, $params);
-            $params = Text::filterXSS($params);
-
-            BasketHelper::addSurcharge($this->getPaymentId($paymentMethod), $params);
+        if (isset($order['order']['hosted_checkout_url'])) {
+            $hostedCheckoutUrl = $order['order']['hosted_checkout_url'];
         }
 
+        return [
+                'error' => @$order['error'] ?? false,
+                'token' => $monduOrderUuid,
+                'hosted_checkout_url' => $hostedCheckoutUrl
+            ];
+    }
+
+    public function getOrderData($paymentMethod)
+    {
         $basket = BasketHelper::getBasket();
 
         $customer = Frontend::getCustomer();
@@ -92,10 +88,17 @@ class CheckoutController
         $buyer['is_registered'] = $customer->kKunde != null;
 
         $currency = Frontend::getCurrency()->getCode();
-        
+
+        $url = "https://678a-2a02-27b0-5501-b0a0-d993-9949-7150-5bc1.ngrok-free.app";
+
+        // use get_static_route bestellvorgang
+
         $data = [
             'currency' => $currency,
             'state_flow' => $this->configService->getOrderFlow(),
+            'success_url' => $url . '/Bestellvorgang?payment=accepted',
+            'cancel_url' => $url . '/Bestellvorgang?editVersandart=1&payment=cancelled',
+            'declined_url' => $url . '/Bestellvorgang?editVersandart=1&payment=declined',
             'payment_method' => $this->getPaymentMethod($paymentMethod),
             'gross_amount_cents' => round($basket->total[1] * 100),
             'source' => 'widget',

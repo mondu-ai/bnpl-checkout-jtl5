@@ -38,6 +38,9 @@ class CheckoutPaymentMethod
      */
     public function execute($args_arr = []): void
     {
+        unset($_SESSION['monduOrderUuid']);
+        unset($_SESSION['monduCartHash']);
+
         $this->filterPaymentMethods();
 
         if (!$this->isPaymentGroupingEnabled()){
