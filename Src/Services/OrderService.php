@@ -89,16 +89,12 @@ class OrderService
 
         $currency = Frontend::getCurrency()->getCode();
 
-        $url = "https://678a-2a02-27b0-5501-b0a0-d993-9949-7150-5bc1.ngrok-free.app";
-
-        // use get_static_route bestellvorgang
-
         $data = [
             'currency' => $currency,
             'state_flow' => $this->configService->getOrderFlow(),
-            'success_url' => $url . '/Bestellvorgang?payment=accepted',
-            'cancel_url' => $url . '/Bestellvorgang?editVersandart=1&payment=cancelled',
-            'declined_url' => $url . '/Bestellvorgang?editVersandart=1&payment=declined',
+            'success_url' => $this->getPaymentSuccessURL(),
+            'cancel_url' => $this->getPaymentCancelURL(),
+            'declined_url' => $this->getPaymentDeclineURL(),
             'payment_method' => $this->getPaymentMethod($paymentMethod),
             'gross_amount_cents' => round($basket->total[1] * 100),
             'source' => 'widget',
@@ -207,10 +203,24 @@ class OrderService
         );
     }
 
-    public function getPaymentId($cModulId): int
+    public function getCheckoutURL(): string
     {
-        $payment = $this->getPayment($cModulId);
+        return Shop::Container()->getLinkService()->getStaticRoute('bestellvorgang.php');
 
-        return (int)($payment->kZahlungsart ?? 0);
+    }
+
+    public function getPaymentSuccessURL(): string
+    {
+        return $this->getCheckoutURL() . '?payment=accepted';
+    }
+
+    public function getPaymentCancelURL(): string
+    {
+        return $this->getCheckoutURL() . '?editZahlungsart=1&payment=cancelled';
+    }
+
+    public function getPaymentDeclineURL(): string
+    {
+        return $this->getCheckoutURL() . '?editZahlungsart=1&payment=declined';
     }
 }
