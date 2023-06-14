@@ -56,6 +56,30 @@ class MonduCheckoutPlugin {
             }
         });
 
+        jQuery('html').on('submit', '.checkout-shipping-form', function (e) {
+            const value = jQuery('input[name="Zahlungsart"]:checked').val(); //110
+            const monduPaymentMethods = window.MONDU_CONFIG.payment_methods;
+            const isMondu = Object.keys(monduPaymentMethods).includes(value);
+
+            if (!submittedForm && that._paypalEnabled()) {
+                e.preventDefault();
+
+                var pppMethod = ppp.getPaymentMethod();
+
+                if (pppMethod == null || $('#pp-plus').length == 0) {
+                    submittedForm = true;
+
+                    if (!isMondu) return this.submit();
+
+                    $('.checkout-shipping-form .submit_once').attr('disabled', 'disabled');
+                    this.submit();
+                } else {
+                    $('.mondu-payment-method-groups').remove();
+                    ppp.doContinue();
+                }
+            }
+        });
+
 
         window.addEventListener("message", (event) => {
             var isPaypal = event.origin.includes('paypal');
