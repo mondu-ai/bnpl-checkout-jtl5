@@ -8,6 +8,7 @@ use JTL\Plugin\Payment\Method;
 use JTL\Session\Frontend;
 use JTL\Shop;
 use PHPMailer\PHPMailer\Exception;
+use Plugin\MonduPayment\Src\Services\OrderService;
 use stdClass;
 use JTL\Checkout\Bestellung;
 use Plugin\MonduPayment\Src\Support\HttpClients\MonduClient;
@@ -48,7 +49,7 @@ class MonduPayment extends Method
 
     private function confirmOrder($order)
     {
-        $checkoutController = new CheckoutController();
+        $checkoutController = new OrderService();
         $orderData = $checkoutController->getOrderData($order->Zahlungsart->cModulId);
 
         if(OrderHashHelper::getOrderHash($orderData) !== $_SESSION['monduCartHash']) {

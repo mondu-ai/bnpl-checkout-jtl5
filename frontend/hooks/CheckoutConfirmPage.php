@@ -3,6 +3,7 @@
 namespace Plugin\MonduPayment\Hooks;
 
 use JTL\Shop;
+use Plugin\MonduPayment\Src\Services\OrderService;
 
 class CheckoutConfirmPage
 {
@@ -10,11 +11,12 @@ class CheckoutConfirmPage
     {
         if (isset($_SESSION['Zahlungsart']) && $_SESSION['Zahlungsart']->cAnbieter == 'Mondu') {
             if (isset($GLOBALS['step']) && $GLOBALS['step'] == 'Bestaetigung') {
-                if (!isset($_SESSION['monduOrderUuid']) || empty($_SESSION['monduOrderUuid'])) {
-                  $linkHelper = Shop::Container()->getLinkService();
+                if (!isset($_SESSION['monduOrderUuid']) || empty($_SESSION['monduOrderUuid']) || $_GET['payment'] != 'accepted') {
+                    $orderService = new OrderService();
+                    $orderData = $orderService->token($_SESSION['Zahlungsart']->cModulId);
 
-                  header('Location: ' . $linkHelper->getStaticRoute('bestellvorgang.php') . '?editZahlungsart=1', true, 303);
-                  exit;
+                    header('Location: ' . $orderData['hosted_checkout_url'], true, 303);
+                    exit;
                 }
             }
         }
