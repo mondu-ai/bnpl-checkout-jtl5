@@ -7,6 +7,9 @@ use Plugin\MonduPayment\Src\Services\OrderService;
 
 class CheckoutConfirmPage
 {
+    /**
+     * @return void
+     */
     public function execute(): void
     {
         if (!$this->isMonduPayment() || !$this->isConfirmStep()) return;
@@ -17,28 +20,38 @@ class CheckoutConfirmPage
 
         if ($_GET['payment'] == 'accepted' || !$this->isMonduOrderSessionMissing()) return;
 
-        if ($_GET['monduCreateOrder'] !== 'true') {
-            header('Location: ' . Shop::Container()->getLinkService()->getStaticRoute('bestellvorgang.php') . '?monduCreateOrder=true');
-            exit;
-        }
-
         if ($_GET['monduCreateOrder'] === 'true') {
             $orderService = new OrderService();
             $orderData = $orderService->token($_SESSION['Zahlungsart']->cModulId);
             header('Location: ' . $orderData['hosted_checkout_url'], true, 303);
             exit;
+        } else {
+            header('Location: ' . Shop::Container()->getLinkService()->getStaticRoute('bestellvorgang.php') . '?monduCreateOrder=true');
+            exit;
         }
     }
 
-    protected function isMonduPayment() {
+    /**
+     * @return bool
+     */
+    protected function isMonduPayment(): bool
+    {
         return isset($_SESSION['Zahlungsart']) && $_SESSION['Zahlungsart']->cAnbieter == 'Mondu';
     }
 
-    protected function isConfirmStep() {
+    /**
+     * @return bool
+     */
+    protected function isConfirmStep(): bool
+    {
         return isset($GLOBALS['step']) && $GLOBALS['step'] == 'Bestaetigung';
     }
 
-    protected function isMonduOrderSessionMissing() {
+    /**
+     * @return bool
+     */
+    protected function isMonduOrderSessionMissing(): bool
+    {
         return !isset($_SESSION['monduOrderUuid']) || empty($_SESSION['monduOrderUuid']);
     }
 }

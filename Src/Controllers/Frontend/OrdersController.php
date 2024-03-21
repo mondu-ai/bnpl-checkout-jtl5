@@ -2,17 +2,9 @@
 
 namespace Plugin\MonduPayment\Src\Controllers\Frontend;
 
-use Plugin\MonduPayment\Src\Support\Http\Request;
 use Plugin\MonduPayment\Src\Helpers\Response;
 use Plugin\MonduPayment\Src\Support\HttpClients\MonduClient;
-use JTL\Shop;
-use JTL\Cart\CartHelper;
-use JTL\Session\Frontend;
-use Plugin\MonduPayment\Src\Support\Debug\Debugger;
-use JTL\Checkout\Bestellung;
-use Plugin\MonduPayment\Src\Models\Order;
 use Plugin\MonduPayment\Src\Models\MonduOrder;
-
 
 class OrdersController
 {
@@ -23,6 +15,9 @@ class OrdersController
         $this->monduClient = new MonduClient();
     }
 
+    /**
+     * @return null
+     */
     public function cancel()
     {        
         $requestData = $_REQUEST;

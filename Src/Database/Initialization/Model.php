@@ -45,7 +45,6 @@ abstract class Model extends Connection
 
     public function select(String ...$columns)
     {
-
         $this->columns = implode(',', $columns);
 
         $this->query = <<<QUERY
@@ -56,7 +55,6 @@ abstract class Model extends Connection
 
     public function selectWith(String ...$columns)
     {
-
         $this->columns = implode(',', $columns);
 
         $this->query = <<<QUERY
@@ -244,14 +242,14 @@ abstract class Model extends Connection
     {
         $keys = array_keys($values);
 
-        $binds  = array_map(fn ($colum) => $colum = "$colum = :$colum", $keys);
+        $binds = array_map(fn ($colum) => $colum = "$colum = :$colum", $keys);
 
-        $binds  = implode(',', $binds);
+        $binds = implode(',', $binds);
 
         $this->query = <<<QUERY
             UPDATE $this->table
             SET   $binds
-            WHERE $this->primaryKey= :$this->primaryKey
+            WHERE $this->primaryKey = :$this->primaryKey
         QUERY;
 
         $values['id'] = $id;
@@ -335,7 +333,6 @@ abstract class Model extends Connection
         return $this;
     }
 
-
     public function join($table, $foreign, $lastTable, $lastTableId)
     {
         $this->query .= <<<QUERY
@@ -344,7 +341,6 @@ abstract class Model extends Connection
         QUERY;
         return  $this;
     }
-
 
     public function belongsTo($class, $foreign = null)
     {
@@ -372,7 +368,6 @@ abstract class Model extends Connection
         if (class_exists($class)) {
             $class = new $class;
             $table = $class->table;
-            // $primary_key = $class->primaryKey;
         } else {
             new RelationClassException();
         }
@@ -410,7 +405,6 @@ abstract class Model extends Connection
 
     public function attach($pivot, int $id, $foreignKey, $attachedIds, $joiningTableForeignKey, string $column = '', $value = NULL)
     {
-
         for ($i = 0; $i < count($attachedIds); $i++) {
 
             $this->query = <<<QUERY
@@ -437,7 +431,6 @@ abstract class Model extends Connection
 
     public function detach($pivot, $detachingTableForeignKey, $foreignKeyValue)
     {
-
         $this->query = <<<QUERY
         DELETE FROM $pivot
         WHERE $detachingTableForeignKey =:$detachingTableForeignKey
@@ -450,12 +443,12 @@ abstract class Model extends Connection
         if (!!$result->queryString === false) {
             throw new DatabaseQueryException();
         }
+
         return $result;
     }
 
     public function attachWith($pivot, int $id, $foreignKey, array $additionalValues)
     {
-
         $keys = [];
         $values = [];
 
@@ -468,29 +461,27 @@ abstract class Model extends Connection
         $binds  = array_map(fn ($colum) => $colum = ":$colum", $keys);
         $binds  = implode(',', $binds);
 
+        $this->query = <<<QUERY
+        INSERT INTO $pivot
+        ($foreignKey,$columns,created_at,updated_at) 
+        VALUES (:foreignKey,$binds,:created_at,:updated_at)
+        QUERY;
 
+        $additionalValues['foreignKey'] = $id;
 
-            $this->query = <<<QUERY
-            INSERT INTO $pivot
-            ($foreignKey,$columns,created_at,updated_at) 
-            VALUES (:foreignKey,$binds,:created_at,:updated_at)
-            QUERY;
+        $date = new \DateTime();
+        $additionalValues['created_at'] = $date->format('Y-m-d H:i:s');
+        $additionalValues['updated_at'] = $date->format('Y-m-d H:i:s');
 
-            $additionalValues['foreignKey'] = $id;
-
-            $date = new \DateTime();
-            $additionalValues['created_at'] = $date->format('Y-m-d H:i:s');
-            $additionalValues['updated_at'] = $date->format('Y-m-d H:i:s');
-
-            try {
-                $rows = $this->db->queryPrepared(
-                    $this->query,
-                    $additionalValues,
-                    ReturnType::ARRAY_OF_OBJECTS
-                );
-            } catch (\Exception $e) {
-                return $e->getMessage();
-            }
+        try {
+            $rows = $this->db->queryPrepared(
+                $this->query,
+                $additionalValues,
+                ReturnType::ARRAY_OF_OBJECTS
+            );
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
         
         return $rows;
     }

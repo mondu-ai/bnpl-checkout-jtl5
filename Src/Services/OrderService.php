@@ -3,17 +3,10 @@
 namespace Plugin\MonduPayment\Src\Services;
 
 use Plugin\MonduPayment\Src\Helpers\BasketHelper;
-use Plugin\MonduPayment\Src\Helpers\Text;
-use Plugin\MonduPayment\Src\Support\Http\Request;
-use Plugin\MonduPayment\Src\Helpers\Response;
 use Plugin\MonduPayment\Src\Support\HttpClients\MonduClient;
 use JTL\Shop;
 use JTL\Session\Frontend;
-use Plugin\MonduPayment\Src\Services\ConfigService;
 use JTL\DB\ReturnType;
-use JTL\Helpers\Tax;
-use JTL\Catalog\Product\Preise;
-use JTL\Cart\CartItem;
 use Plugin\MonduPayment\Src\Helpers\OrderHashHelper;
 
 class OrderService
@@ -29,7 +22,6 @@ class OrderService
 
     public function token($paymentMethod)
     {
-
         $orderData = $this->getOrderData($paymentMethod);
         $order = $this->monduClient->createOrder($orderData);
 
@@ -40,7 +32,6 @@ class OrderService
             $_SESSION['monduOrderUuid'] = $monduOrderUuid;
             $_SESSION['monduCartHash'] = OrderHashHelper::getOrderHash($orderData);
         }
-
 
         if (isset($order['order']['hosted_checkout_url'])) {
             $hostedCheckoutUrl = $order['order']['hosted_checkout_url'];
@@ -169,8 +160,7 @@ class OrderService
             }
 
             return 'invoice';
-        } catch (Exception $e) 
-        {
+        } catch (Exception $e) {
             return 'invoice';
         } 
     }
@@ -186,8 +176,7 @@ class OrderService
             }
 
             return null;
-        } catch (Exception $e) 
-        {
+        } catch (Exception $e) {
             return null;
         } 
     }
@@ -206,7 +195,6 @@ class OrderService
     public function getCheckoutURL(): string
     {
         return Shop::Container()->getLinkService()->getStaticRoute('bestellvorgang.php');
-
     }
 
     public function getPaymentSuccessURL(): string

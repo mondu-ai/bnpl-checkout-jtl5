@@ -3,9 +3,6 @@
 namespace Plugin\MonduPayment\Src\Support\Http;
 
 use Plugin\MonduPayment\Src\Exceptions\InvalidRequestException;
-use Plugin\MonduPayment\Src\Exceptions\UnsupportedAuthenticationType;
-use Plugin\MonduPayment\Src\Exceptions\UnsupportedRequestType;
-use Plugin\MonduPayment\Src\Support\Debug\Debugger;
 
 class HttpRequest
 {
@@ -26,17 +23,15 @@ class HttpRequest
     /**
      * baseUrl of the request
      *
-     * @var array
+     * @var string
      */
     private string $baseUrl;
-    private Debugger $debugger;
 
     public function __construct(string $baseUrl, array $headers = ['Content-type' => 'application/json'])
     {
         $this->curl = curl_init();
         $this->headers = $headers;
         $this->baseUrl = $baseUrl;
-        $this->debugger = new Debugger();
     }
 
     /**
@@ -44,8 +39,10 @@ class HttpRequest
      *
      * @param string $url
      * @param array $data
-     * @param array $headers
-     * @return void
+     * @param array|null $headers
+     *
+     * @return array
+     * @throws InvalidRequestException
      */
     public function get(string $url, array $data = [], array $headers = null)
     {
@@ -59,8 +56,10 @@ class HttpRequest
      *
      * @param string $url
      * @param array $data
-     * @param array $headers
-     * @return void
+     * @param array|null $headers
+     *
+     * @return array
+     * @throws InvalidRequestException
      */
     public function post(string $url, array $data = [], array $headers = null)
     {
@@ -75,7 +74,9 @@ class HttpRequest
      * @param string $url
      * @param array $data
      * @param array $headers
-     * @return void
+     *
+     * @return array
+     * @throws InvalidRequestException
      */
     public function patch(string $url, array $data = [], array $headers = ['Content-type' => 'application/json'])
     {
@@ -90,7 +91,9 @@ class HttpRequest
      * @param string $url
      * @param array $data
      * @param array $headers
-     * @return void
+     *
+     * @return array
+     * @throws InvalidRequestException
      */
     public function put(string $url, array $data = [], array $headers = ['Content-type' => 'application/json'])
     {
@@ -105,7 +108,9 @@ class HttpRequest
      * @param string $url
      * @param array $data
      * @param array $headers
-     * @return void
+     *
+     * @return array
+     * @throws InvalidRequestException
      */
     public function delete(string $url, array $data = [], array $headers = ['Content-type' => 'application/json'])
     {
@@ -115,11 +120,14 @@ class HttpRequest
     }
 
     /**
-     * for sending request 
+     * for sending request
      *
+     * @param string $url
      * @param array $data
-     * @param boolean $token
+     * @param string $method
+     *
      * @return array $response
+     * @throws InvalidRequestException
      */
     public function send_request(string $url, array $data, string $method)
     {

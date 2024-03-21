@@ -19,11 +19,13 @@ class Checkout
         $this->configService = new ConfigService();
         $this->smarty = Shop::Smarty();
     }
+
     /**
      * @param array $args_arr
+     *
      * @throws Exception
      */
-    public function execute($args_arr = []): void
+    public function execute(array $args_arr = []): void
     {
         try {
             $monduConfig = [
@@ -38,18 +40,21 @@ class Checkout
         }
     }
 
-    public function getMonduTokenUrl(): string {
+    /**
+     * @return string
+     */
+    public function getMonduTokenUrl(): string
+    {
         return $this->getLinkByID('mondu_payment_token');
     }
 
     /**
-     * @return string
+     * @param string $identifier
+     *
+     * @return string|null
      */
-    private function getLinkByID(string $identifier): string
+    private function getLinkByID(string $identifier): ?string
     {
-        if ($identifier === null) {
-            return null;
-        }
         foreach ($this->linkHelper->getLinkGroups() as $linkGroup) {
             /** @var LinkGroupInterface $linkGroup */
             $first = $linkGroup->getLinks()->first(static function (LinkInterface $link) use ($identifier) {
