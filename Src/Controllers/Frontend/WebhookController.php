@@ -2,12 +2,14 @@
 
 namespace Plugin\MonduPayment\Src\Controllers\Frontend;
 
-use JTL\DB\DbInterface;
 use JTL\Shop;
+use Mondu\Exceptions\MonduException;
 use Plugin\MonduPayment\Src\Helpers\Response;
+use Plugin\MonduPayment\Src\Middlewares\CheckWebhookSecret;
 use Plugin\MonduPayment\Src\Models\MonduInvoice;
 use Plugin\MonduPayment\Src\Models\MonduOrder;
 use Plugin\MonduPayment\Src\Models\Order;
+use Plugin\MonduPayment\Src\Services\ConfigService;
 use Plugin\MonduPayment\Src\Support\Http\Request;
 use Plugin\MonduPayment\Src\Support\HttpClients\MonduClient;
 
@@ -18,21 +20,30 @@ class WebhookController
     private MonduInvoice $monduInvoice;
     private MonduOrder $monduOrder;
     private Order $order;
+    private CheckWebhookSecret $checkWebhookSecret;
+    private ConfigService $configService;
 
-    public function __construct(private DbInterface $db)
+    public function __construct()
     {
         $this->monduClient = new MonduClient();
         $this->request = new Request;
         $this->monduInvoice = new MonduInvoice();
         $this->monduOrder = new MonduOrder();
         $this->order = new Order();
+        $this->checkWebhookSecret = new CheckWebhookSecret();
+        $this->configService = new ConfigService();
     }
 
     /**
      * @return array
+     * @throws \Exception
      */
     public function handleWebhook()
     {
+        if (!$this->checkWebhookSecret()) {
+            return [['error' => 'Signature mismatch or webhooks secret is missing'], Response::HTTP_UNPROCESSABLE_ENTITY];
+        }
+
         $requestData = $this->request->all();
 
         $params = [
@@ -53,7 +64,7 @@ class WebhookController
             case 'invoice/canceled':
                 return $this->handleInvoiceStateChanged($params, 'canceled');
             default:
-                return [['error' => 'Unregistered topic'], Response::HTTP_UNPROCESSABLE_ENTITY];
+                return [['error' => 'Unregistered topic'], Response::HTTP_OK];
         }
     }
 
@@ -130,5 +141,25 @@ class WebhookController
             'Mondu order is on pending state.',
             (object)['kBestellung' => $monduOrder['order_id']]
         );
+    }
+
+    /**
+     * @throws \Exception
+     */
+    private function checkWebhookSecret()
+    {
+        $data = $this->request->all();
+
+        if (isset($data['webhooks_secret'])) {
+            $ws = $data['webhooks_secret'];
+
+            if ($ws != $this->configService->getWebhooksSecret()) {
+                return false;
+            }
+        } else {
+            return false;
+        }
+
+        return true;
     }
 }
