@@ -20,12 +20,15 @@ class RoutesService
 
         Route::group(['CheckWebhookSecret'], function () {
             Route::post('invoice-create', 'Frontend\InvoicesController@create');
-            Route::post('webhook-create', 'Frontend\WebhookController@create');
             Route::post('cancel-invoice', 'Frontend\InvoicesController@cancel');
             Route::post('cancel-order', 'Frontend\OrdersController@cancel');
         });
-        
+
+        Route::group(['CheckMonduSignature'], function () {
+            Route::post('webhook', 'Frontend\WebhookController@index');
+        });
+
+
         Route::resolve(Request::uri(), Request::type(), $pluginId);
-        
     }
 }
