@@ -3,7 +3,7 @@
 namespace Plugin\MonduPayment\Src\Controllers\Frontend;
 
 use JTL\Shop;
-use Mondu\Exceptions\MonduException;
+use Plugin\MonduPayment\PaymentMethod\MonduPayment;
 use Plugin\MonduPayment\Src\Helpers\Response;
 use Plugin\MonduPayment\Src\Middlewares\CheckWebhookSecret;
 use Plugin\MonduPayment\Src\Models\MonduInvoice;
@@ -15,6 +15,13 @@ use Plugin\MonduPayment\Src\Support\HttpClients\MonduClient;
 
 class WebhookController
 {
+    public const MONDU_JTL_MAPPING = [
+        MonduPayment::STATE_CONFIRMED => \BESTELLUNG_STATUS_BEZAHLT,
+        MonduPayment::STATE_PENDING => \BESTELLUNG_STATUS_IN_BEARBEITUNG,
+        MonduPayment::STATE_CANCELED => \BESTELLUNG_STATUS_STORNO,
+        MonduPayment::STATE_DECLINED => \BESTELLUNG_STATUS_STORNO,
+    ];
+
     private MonduClient $monduClient;
     private Request $request;
     private MonduInvoice $monduInvoice;
@@ -34,37 +41,30 @@ class WebhookController
         $this->configService = new ConfigService();
     }
 
+    public function index()
+    {
+        [$response, $status] = $this->handleWebhook();
+
+        Response::json($response, $status);
+    }
+
     /**
      * @return array
      * @throws \Exception
      */
-    public function handleWebhook()
+    private function handleWebhook()
     {
-        if (!$this->checkWebhookSecret()) {
-            return [['error' => 'Signature mismatch or webhooks secret is missing'], Response::HTTP_UNPROCESSABLE_ENTITY];
-        }
-
         $requestData = $this->request->all();
-
-        $params = [
-            'order_id' => $requestData['order_id'],
-            'order_number' => $requestData['order_uuid'],
-            'invoice_uuid' => $requestData['invoice_uuid'],
-            'order_state' => $requestData['order_state']
-        ];
 
         switch ($requestData['topic']) {
             case 'order/confirmed':
-            case 'order/canceled':
             case 'order/declined':
             case 'order/pending':
-                return $this->handleOrderStateChanged($params);
-            case 'invoice/created':
-                return $this->handleInvoiceStateChanged($params, 'created');
+                return $this->handleOrderStateChanged($requestData);
             case 'invoice/canceled':
-                return $this->handleInvoiceStateChanged($params, 'canceled');
+                return $this->handleInvoiceStateChanged($requestData, 'canceled');
             default:
-                return [['error' => 'Unregistered topic'], Response::HTTP_OK];
+                return [['message' => 'Unregistered topic'], Response::HTTP_OK];
         }
     }
 
@@ -73,21 +73,26 @@ class WebhookController
      *
      * @return array
      */
-    public function handleOrderStateChanged($params)
+    public function handleOrderStateChanged($requestData)
     {
-        $monduOrder = $this->getOrder($params['order_number']);
+        $params = [
+            'order_id' => $requestData['external_reference_id'],
+            'order_state' => $requestData['order_state']
+        ];
+
+        $monduOrder = $this->getOrder($params['order_id']);
 
         if ($monduOrder) {
-            $monduOrder->update(['state' => $params['order_state']], $params['order_id']);
+            $this->monduOrder->update(['state' => $params['order_state']], $monduOrder->id);
 
-            if ($params['order_state'] == 'pending') {
-                $this->updateOrderWithPendingStatus($monduOrder);
+            if (isset(self::MONDU_JTL_MAPPING[$params['order_state']])) {
+                $this->updateOrderStatus($monduOrder, self::MONDU_JTL_MAPPING[$params['order_state']]);
             }
 
-            return [['order' => $monduOrder], Response::HTTP_OK];
+            return [['message' => 'ok'], Response::HTTP_OK];
         }
 
-        return [['error' => 'Order not found'], Response::HTTP_BAD_REQUEST];
+        return [['message' => 'Order not found'], Response::HTTP_NOT_FOUND];
     }
 
     /**
@@ -96,16 +101,20 @@ class WebhookController
      *
      * @return array
      */
-    public function handleInvoiceStateChanged($params, $state)
+    public function handleInvoiceStateChanged($requestData, $state)
     {
+        $params = [
+            'invoice_uuid' => $requestData['invoice_uuid']
+        ];
+
         $monduInvoice = $this->getInvoice($params['invoice_uuid']);
 
         if ($monduInvoice) {
-            $monduInvoice->update(['state' => $state], $params['invoice_uuid']);
-            return [['invoice' => $monduInvoice], Response::HTTP_OK];
+            $this->monduInvoice->update(['state' => $state], $monduInvoice->id);
+            return [['message' => 'ok'], Response::HTTP_OK];
         }
 
-        return [['error' => 'Invoice not found'], Response::HTTP_BAD_REQUEST];
+        return [['message' => 'Invoice not found'], Response::HTTP_NOT_FOUND];
     }
 
     /**
@@ -115,7 +124,7 @@ class WebhookController
      */
     private function getOrder($orderUuid)
     {
-        return $this->monduOrder->select('order_uuid')->where('external_reference_id', $orderUuid)->first()[0];
+        return $this->monduOrder->select('id', 'order_uuid', 'order_id')->where('external_reference_id', $orderUuid)->first()[0];
     }
 
     /**
@@ -125,41 +134,21 @@ class WebhookController
      */
     private function getInvoice($invoiceUuid)
     {
-        return $this->monduInvoice->select('invoice_uuid, order_id')->where('external_reference_id', $invoiceUuid)->first()[0];
+        return $this->monduInvoice->select('id', 'invoice_uuid')->where('invoice_uuid', $invoiceUuid)->first()[0];
     }
 
     /**
      * @param $monduOrder
-     *
+     * @param $status
      * @return int
      */
-    private function updateOrderWithPendingStatus($monduOrder)
+    private function updateOrderStatus($monduOrder, $status)
     {
-        return Shop::Container()->getDB()->update(
+        Shop::Container()->getDB()->update(
             'tbestellung',
-            'cKommentar',
-            'Mondu order is on pending state.',
-            (object)['kBestellung' => $monduOrder['order_id']]
+            'kBestellung',
+            $monduOrder->order_id,
+            (object)['cStatus' => $status]
         );
-    }
-
-    /**
-     * @throws \Exception
-     */
-    private function checkWebhookSecret()
-    {
-        $data = $this->request->all();
-
-        if (isset($data['webhooks_secret'])) {
-            $ws = $data['webhooks_secret'];
-
-            if ($ws != $this->configService->getWebhooksSecret()) {
-                return false;
-            }
-        } else {
-            return false;
-        }
-
-        return true;
     }
 }
