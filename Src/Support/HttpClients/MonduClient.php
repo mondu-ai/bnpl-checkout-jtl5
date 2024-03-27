@@ -131,4 +131,25 @@ class MonduClient
             return ['error' => true];
         }
     }
+
+    public function registerWebhooks(array $data = []): ?array
+    {
+        try {
+            return $this->client->post('webhooks', $data);
+        } catch (InvalidRequestException $e) {
+            $this->logEvent($e);
+            return ['error' => true];
+        }
+    }
+
+    public function getWebhookKeys(): ?array
+    {
+        try {
+            return $this->client->get('webhooks/keys');
+        } catch (InvalidRequestException $e) {
+            $this->logEvent($e);
+            return ['error' => true];
+        }
+    }
+
 }
