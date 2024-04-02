@@ -45,10 +45,8 @@ class MonduClient
     public function createOrder(array $data = []): ?array
     {
         try {
-            $order = $this->client->post('orders', $data);
-            return $order;
-        }
-        catch (InvalidRequestException $e) {
+            return $this->client->post('orders', $data);
+        } catch (InvalidRequestException $e) {
             $this->logEvent($e);
             return ['error' => true];
         }
@@ -57,11 +55,8 @@ class MonduClient
     public function cancelOrder(array $data = []): ?array
     {
         try {
-            $order = $this->client->post('orders/' . $data['order_uuid'] . '/cancel');
-
-            return $order;
-        }
-        catch (InvalidRequestException $e) {
+            return $this->client->post( 'orders/' . $data['order_uuid'] . '/cancel');
+        } catch (InvalidRequestException $e) {
             $this->logEvent($e);
             return ['error' => true];
         }
@@ -70,11 +65,8 @@ class MonduClient
     public function cancelInvoice(array $data = []): ?array
     {
         try {
-            $order = $this->client->post('orders/' . $data['order_uuid'] . '/invoices/' . $data['invoice_uuid'] . '/cancel');
-
-            return $order;
-        }
-        catch (InvalidRequestException $e) {
+            return $this->client->post( 'orders/' . $data['order_uuid'] . '/invoices/' . $data['invoice_uuid'] . '/cancel');
+        } catch (InvalidRequestException $e) {
             $this->logEvent($e);
             return ['error' => true];
         }
@@ -83,11 +75,8 @@ class MonduClient
     public function createInvoice(array $data = []): ?array
     {
         try {
-            $invoice = $this->client->post('orders/' . $data['order_uuid'] . '/invoices', $data);
-
-            return $invoice;
-        }
-        catch (InvalidRequestException $e) {
+            return $this->client->post( 'orders/' . $data['order_uuid'] . '/invoices', $data);
+        } catch (InvalidRequestException $e) {
             $this->logEvent($e);
             return ['error' => true];
         }
@@ -96,11 +85,8 @@ class MonduClient
     public function getPaymentMethods(): ?array
     {
         try {
-            $paymentMethods = $this->client->get('payment_methods', []);
-
-            return $paymentMethods;
-        }
-        catch (InvalidRequestException $e) {
+            return $this->client->get('payment_methods');
+        } catch (InvalidRequestException $e) {
             $this->logEvent($e);
             return ['error' => true];
         }
@@ -109,11 +95,8 @@ class MonduClient
     public function getOrder($uuid): ?array
     {
         try {
-            $order = $this->client->get('orders/' . $uuid, []);
-
-            return $order;
-        }
-        catch (InvalidRequestException $e) {
+            return $this->client->get( 'orders/' . $uuid);
+        } catch (InvalidRequestException $e) {
             $this->logEvent($e);
             return ['error' => true];
         }
@@ -122,11 +105,8 @@ class MonduClient
     public function getNetTerms(): ?array
     {
         try {
-            $paymentTerms = $this->client->get('payment_terms', []);
-
-            return $paymentTerms;
-        }
-        catch (InvalidRequestException $e) {
+            return $this->client->get('payment_terms');
+        } catch (InvalidRequestException $e) {
             $this->logEvent($e);
             return ['error' => true];
         }
@@ -135,11 +115,8 @@ class MonduClient
     public function updateExternalInfo(array $data = []): ?array
     {
         try {
-            $order = $this->client->post('orders/' . $data['uuid'] . '/update_external_info', $data);
-
-            return $order;
-        }
-        catch (InvalidRequestException $e) {
+            return $this->client->post( 'orders/' . $data['uuid'] . '/update_external_info', $data);
+        } catch (InvalidRequestException $e) {
             $this->logEvent($e);
             return ['error' => true];
         }
@@ -148,13 +125,31 @@ class MonduClient
     public function confirmOrder(array $data = []): ?array
     {
         try {
-            $order = $this->client->post('orders/' . $data['uuid'] . '/confirm', $data);
-
-            return $order;
-        }
-        catch (InvalidRequestException $e) {
+            return $this->client->post( 'orders/' . $data['uuid'] . '/confirm', $data);
+        } catch (InvalidRequestException $e) {
             $this->logEvent($e);
             return ['error' => true];
         }
     }
+
+    public function registerWebhooks(array $data = []): ?array
+    {
+        try {
+            return $this->client->post('webhooks', $data);
+        } catch (InvalidRequestException $e) {
+            $this->logEvent($e);
+            return ['error' => true];
+        }
+    }
+
+    public function getWebhookKeys(): ?array
+    {
+        try {
+            return $this->client->get('webhooks/keys');
+        } catch (InvalidRequestException $e) {
+            $this->logEvent($e);
+            return ['error' => true];
+        }
+    }
+
 }

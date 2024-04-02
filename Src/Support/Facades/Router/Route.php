@@ -14,6 +14,16 @@ class Route
     private static array $routes = [];
 
     /**
+     * @var array|null
+     */
+    private static array $setMiddlewares = [];
+
+    /**
+     * @var array|null
+     */
+    private static array $middlewares;
+
+    /**
      * get request
      *
      * @param  $route
@@ -84,18 +94,20 @@ class Route
     public static function register(string $route, string $requestType, $action): void
     {
         self::$routes[$requestType][$route] = $action;
+        self::$middlewares[$requestType][$route] = array_merge(...self::$setMiddlewares);
     }
 
     /**
      * resolve routes
      *
-     * @param [string] $route
-     * @param [string] $Request
-     * @return RouteHandler
+     * @param string $fetch
+     * @param string $requestType
+     * @param int|null $pluginId
+     * @return mixed|void|null
+     * @throws RouteNotFoundException
      */
     public static function resolve(string $fetch, string $requestType, ?int $pluginId = null)
     {
-
         if (!!stripos($fetch, '?') === false) {
             return;
         }
@@ -112,7 +124,7 @@ class Route
             if (!$action) {
                 throw new RouteNotFoundException();
             }
-            return RouteHandler::call($action,$pluginId);
+            return RouteHandler::call($action, $pluginId, self::$middlewares[$requestType][$route]);
         }
 
         if (stripos($fetch, 'redirect') === 0) {
@@ -124,7 +136,7 @@ class Route
             if (!$action) {
                 throw new RouteNotFoundException();
             }
-            return RouteHandler::call($action, $pluginId);
+            return RouteHandler::call($action, $pluginId, self::$middlewares[$requestType][$route]);
         }
 
         if (!!stripos($fetch, '&') === true) {
@@ -157,9 +169,10 @@ class Route
 
     public static function group(array $middlewares, callable $callback)
     {
-        foreach ($middlewares as $middleware) {
-            MiddlewareHandler::call($middleware);
-        };
-        return call_user_func($callback);
+        self::$setMiddlewares[] = $middlewares;
+
+        call_user_func($callback);
+
+        array_pop(self::$setMiddlewares);
     }
 }

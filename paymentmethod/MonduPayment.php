@@ -2,28 +2,27 @@
 namespace Plugin\MonduPayment\PaymentMethod;
 
 use JTL\Alert\Alert;
-use JTL\Mail\Mail\Mail;
-use JTL\Mail\Mailer;
 use JTL\Plugin\Payment\Method;
-use JTL\Session\Frontend;
 use JTL\Shop;
-use PHPMailer\PHPMailer\Exception;
 use Plugin\MonduPayment\Src\Services\OrderService;
-use stdClass;
-use JTL\Checkout\Bestellung;
 use Plugin\MonduPayment\Src\Support\HttpClients\MonduClient;
 use Plugin\MonduPayment\Src\Models\MonduOrder;
 use Plugin\MonduPayment\Src\Services\ConfigService;
-use JTL\Cart\Cart;
 use Plugin\MonduPayment\Src\Helpers\OrderHashHelper;
 use Plugin\MonduPayment\Src\Controllers\Frontend\CheckoutController;
-
 
 /**
 * Class MonduPayment.
 */
 class MonduPayment extends Method
 {
+    public const STATE_CONFIRMED = 'confirmed';
+    public const STATE_DECLINED = 'declined';
+    public const STATE_CANCELED = 'canceled';
+    public const STATE_PENDING = 'pending';
+    public const STATE_COMPLETE = 'complete';
+    public const STATE_SHIPPED = 'shipped';
+
     public function isValidIntern($args_arr = []): bool
     {
       if ($this->duringCheckout) {
@@ -37,27 +36,24 @@ class MonduPayment extends Method
     {
         parent::preparePaymentProcess($order);
 
-        $configService = ConfigService::getInstance();
-
         $this->confirmOrder($order);
     }
 
     public function createInvoice(int $orderID, int $languageID): object
     {
-       parent::createInvoice($orderID, $languageID);
+       return parent::createInvoice($orderID, $languageID);
     }
 
     private function confirmOrder($order)
     {
-        $checkoutController = new OrderService();
-        $orderData = $checkoutController->getOrderData($order->Zahlungsart->cModulId);
+        $orderService = new OrderService();
+        $orderData = $orderService->getOrderData($order->Zahlungsart->cModulId);
 
         if(OrderHashHelper::getOrderHash($orderData) !== $_SESSION['monduCartHash']) {
             $this->handleFail($order->kBestellung);
             return;
         }
 
-        $configService = ConfigService::getInstance();
         $monduClient = new MonduClient();
 
         $monduOrder = $monduClient->confirmOrder([
@@ -73,7 +69,8 @@ class MonduPayment extends Method
         $this->afterApiRequest($order);
     }
 
-    private function afterApiRequest($order) {
+    private function afterApiRequest($order)
+    {
         $monduOrder = new MonduOrder();
         $configService = ConfigService::getInstance();
 
@@ -87,15 +84,14 @@ class MonduPayment extends Method
 
         $monduOrder->create([
             'order_id' => $order->kBestellung,
-            'state' => 'created',
+            'state' => $monduOrderApi['order']['state'],
             'external_reference_id' => $order->cBestellNr,
             'order_uuid' => $_SESSION['monduOrderUuid'],
             'authorized_net_term' => $authorizedNetTerm
         ]);
 
-        if ($configService->shouldMarkOrderAsPaid())
-        {
-            $payValue  = $order->fGesamtsumme;
+        if ($configService->shouldMarkOrderAsPaid()) {
+            $payValue = $order->fGesamtsumme;
             $hash = $this->generateHash($order);
 
             $this->deletePaymentHash($hash);
@@ -105,7 +101,13 @@ class MonduPayment extends Method
                 'cHinweis' => $_SESSION['monduOrderUuid'],
             ]);
 
-            $this->setOrderStatusToPaid($order);
+            if ($monduOrderApi['order']['state'] === MonduPayment::STATE_CONFIRMED) {
+                $this->setOrderStatusToPaid($order);
+            } else if ($monduOrderApi['order']['state'] === MonduPayment::STATE_PENDING) {
+                $upd                = new \stdClass();
+                $upd->cStatus       = \BESTELLUNG_STATUS_IN_BEARBEITUNG;
+                Shop::Container()->getDB()->update('tbestellung', 'kBestellung', (int) $order->kBestellung, $upd);
+            }
         }
 
         unset($_SESSION['monduOrderUuid']);
@@ -132,8 +134,6 @@ class MonduPayment extends Method
         $lang = Shop::Lang()->getIso();
 
         switch($lang) {
-            case 'eng':
-                return 'There was an error processing your request with Mondu. Please try again.';
             case 'ger':
                 return 'Bei der Bearbeitung Ihrer Anfrage an Mondu ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.';
             default:

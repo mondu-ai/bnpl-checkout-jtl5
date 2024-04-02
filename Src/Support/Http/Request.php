@@ -6,9 +6,25 @@ class Request
 {
     private static array $data = [];
     private static array $rawData = [];
+    private static array $headers = [];
+
+    /**
+     * @var false|string
+     */
+    private static $body;
 
     public function __construct()
     {
+        $headers = [];
+        foreach($_SERVER as $key => $value) {
+            if (substr($key, 0, 5) != 'HTTP_') {
+                continue;
+            }
+            $header = str_replace(' ', '-', ucwords(str_replace('_', ' ', strtolower(substr($key, 5)))));
+            $headers[$header] = $value;
+        }
+        self::$headers = $headers;
+
         if (!!$_GET) {
             foreach ($_GET as $key => $item) {
                 self::$data[$key] = filter_input(INPUT_GET, $key,  FILTER_SANITIZE_SPECIAL_CHARS);
@@ -22,6 +38,8 @@ class Request
             }
         }
         $data = file_get_contents('php://input');
+        self::$body = $data;
+
         if (!!$data) {
             $data = json_decode($data, true);
             if ((is_array($data)) && (count($data) > 0)) {
@@ -55,6 +73,21 @@ class Request
     public function all()
     {
         return self::$data;
+    }
+
+    public function headers(): array
+    {
+        return self::$headers;
+    }
+
+    public function header($key)
+    {
+        return self::$headers[$key] ?? null;
+    }
+
+    public function getBody()
+    {
+        return self::$body;
     }
 
     public function allRaw()

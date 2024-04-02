@@ -6,9 +6,9 @@ use Plugin\MonduPayment\Src\Database\Initialization\Model;
 
 class MonduInvoice extends Model
 {
-    protected $table    = 'mondu_invoices';
+    protected $table = 'mondu_invoices';
 
-    protected $primaryKey  = 'id';
+    protected $primaryKey = 'id';
 
     protected $fillable = [
         'order_id',

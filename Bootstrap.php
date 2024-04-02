@@ -57,13 +57,12 @@ class Bootstrap extends Bootstrapper
      * writing adminpanel routes for retriving data from database
      * @return string
      */
-    public function renderAdminMenuTab(string $template, int $menuID, JTLSmarty $smarty): string
+    public function renderAdminMenuTab(string $tabName, int $menuID, JTLSmarty $smarty): string
     {
-        $routes = new RoutesService;
-        $routes->adminRoutes($this->getPlugin());
+        $request = $_REQUEST;
 
         $render = new AdminRender($this->getPlugin());
-        return $render->renderPage($template, $smarty);
+        return $render->renderPage($tabName, $smarty, $request);
     }
 
     /**

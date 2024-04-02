@@ -2,6 +2,8 @@
 
 namespace Plugin\MonduPayment\Src\Services;
 
+use Plugin\MonduPayment\Src\Exceptions\RouteNotFoundException;
+use Plugin\MonduPayment\Src\Helpers\Response;
 use Plugin\MonduPayment\Src\Support\Facades\Router\Route;
 use Plugin\MonduPayment\Src\Support\Http\Request;
 
@@ -23,8 +25,20 @@ class RoutesService
             Route::post('cancel-invoice', 'Frontend\InvoicesController@cancel');
             Route::post('cancel-order', 'Frontend\OrdersController@cancel');
         });
-        
-        Route::resolve(Request::uri(), Request::type(), $pluginId);
-        
+
+        Route::group(['CheckMonduSignature'], function () {
+            Route::post('webhook', 'Frontend\WebhookController@index');
+        });
+
+        try {
+            Route::resolve(Request::uri(), Request::type(), $pluginId);
+        } catch (RouteNotFoundException $e) {
+            Response::json(
+                [
+                    'message' => 'Route not Found'
+                ],
+                Response::HTTP_NOT_FOUND
+            );
+        }
     }
 }

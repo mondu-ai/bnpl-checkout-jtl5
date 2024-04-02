@@ -91,6 +91,7 @@ class ConfigService
     {
         return $this->config->getValue($kPlugin . '_net_term');
     }
+
     public function getApiUrl()
     {
         if ($this->getSandboxMode()) {
