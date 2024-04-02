@@ -15,11 +15,10 @@ class CheckMonduSignature
         $body = $request->getBody();
         $monduSignature = $request->header('X-Mondu-Signature');
         $localSecret = $configService->getWebhooksSecret();
-
         if (!self::validateSignature($body, $monduSignature, $localSecret)) {
             Response::json([
                 'message' => 'Signature mismatch',
-            ], 422);
+            ], Response::HTTP_UNAUTHORIZED);
         }
     }
 

@@ -100,9 +100,11 @@ class Route
     /**
      * resolve routes
      *
-     * @param [string] $route
-     * @param [string] $Request
-     * @return RouteHandler
+     * @param string $fetch
+     * @param string $requestType
+     * @param int|null $pluginId
+     * @return mixed|void|null
+     * @throws RouteNotFoundException
      */
     public static function resolve(string $fetch, string $requestType, ?int $pluginId = null)
     {
