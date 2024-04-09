@@ -4,14 +4,11 @@ namespace Plugin\MonduPayment\Src\Controllers\Frontend;
 
 use JTL\Shop;
 use Plugin\MonduPayment\PaymentMethod\MonduPayment;
+use Plugin\MonduPayment\Src\Exceptions\DatabaseQueryException;
 use Plugin\MonduPayment\Src\Helpers\Response;
-use Plugin\MonduPayment\Src\Middlewares\CheckWebhookSecret;
 use Plugin\MonduPayment\Src\Models\MonduInvoice;
 use Plugin\MonduPayment\Src\Models\MonduOrder;
-use Plugin\MonduPayment\Src\Models\Order;
-use Plugin\MonduPayment\Src\Services\ConfigService;
 use Plugin\MonduPayment\Src\Support\Http\Request;
-use Plugin\MonduPayment\Src\Support\HttpClients\MonduClient;
 
 class WebhookController
 {
@@ -22,23 +19,15 @@ class WebhookController
         MonduPayment::STATE_DECLINED => \BESTELLUNG_STATUS_STORNO,
     ];
 
-    private MonduClient $monduClient;
     private Request $request;
     private MonduInvoice $monduInvoice;
     private MonduOrder $monduOrder;
-    private Order $order;
-    private CheckWebhookSecret $checkWebhookSecret;
-    private ConfigService $configService;
 
     public function __construct()
     {
-        $this->monduClient = new MonduClient();
         $this->request = new Request;
         $this->monduInvoice = new MonduInvoice();
         $this->monduOrder = new MonduOrder();
-        $this->order = new Order();
-        $this->checkWebhookSecret = new CheckWebhookSecret();
-        $this->configService = new ConfigService();
     }
 
     public function index()
@@ -69,9 +58,9 @@ class WebhookController
     }
 
     /**
-     * @param $params
-     *
+     * @param $requestData
      * @return array
+     * @throws DatabaseQueryException
      */
     public function handleOrderStateChanged($requestData)
     {
@@ -82,17 +71,21 @@ class WebhookController
 
         $monduOrder = $this->getOrder($params['order_id']);
 
-        if ($monduOrder) {
-            $this->monduOrder->update(['state' => $params['order_state']], $monduOrder->id);
-
-            if (isset(self::MONDU_JTL_MAPPING[$params['order_state']])) {
-                $this->updateOrderStatus($monduOrder, self::MONDU_JTL_MAPPING[$params['order_state']]);
-            }
-
-            return [['message' => 'ok'], Response::HTTP_OK];
+        if (!$monduOrder) {
+            return [['message' => 'Order not found'], Response::HTTP_NOT_FOUND];
         }
 
-        return [['message' => 'Order not found'], Response::HTTP_NOT_FOUND];
+        $this->monduOrder->update(['state' => $params['order_state']], $monduOrder->id);
+
+        if (isset(self::MONDU_JTL_MAPPING[$params['order_state']])) {
+            $this->updateOrderStatus($monduOrder, self::MONDU_JTL_MAPPING[$params['order_state']]);
+        }
+
+        if ($params['order_state'] === MonduPayment::STATE_CONFIRMED) {
+            $this->unlockOrderForWawi($monduOrder);
+        }
+
+        return [['message' => 'ok'], Response::HTTP_OK];
     }
 
     /**
@@ -101,7 +94,7 @@ class WebhookController
      *
      * @return array
      */
-    public function handleInvoiceStateChanged($requestData, $state)
+    public function handleInvoiceStateChanged($requestData, $state): array
     {
         $params = [
             'invoice_uuid' => $requestData['invoice_uuid']
@@ -109,12 +102,17 @@ class WebhookController
 
         $monduInvoice = $this->getInvoice($params['invoice_uuid']);
 
-        if ($monduInvoice) {
-            $this->monduInvoice->update(['state' => $state], $monduInvoice->id);
-            return [['message' => 'ok'], Response::HTTP_OK];
+        if (!$monduInvoice) {
+            return [['message' => 'Invoice not found'], Response::HTTP_NOT_FOUND];
         }
 
-        return [['message' => 'Invoice not found'], Response::HTTP_NOT_FOUND];
+        try {
+            $this->monduInvoice->update(['state' => $state], $monduInvoice->id);
+        } catch (DatabaseQueryException $e) {
+            return [['message' => 'Invoice not found'], Response::HTTP_NOT_FOUND];
+        }
+
+        return [['message' => 'ok'], Response::HTTP_OK];
     }
 
     /**
@@ -148,7 +146,17 @@ class WebhookController
             'tbestellung',
             'kBestellung',
             $monduOrder->order_id,
-            (object)['cStatus' => $status]
+            (object) ['cStatus' => $status]
+        );
+    }
+
+    private function unlockOrderForWawi($monduOrder)
+    {
+        Shop::Container()->getDB()->update(
+            'tbestellung',
+            'kBestellung',
+            $monduOrder->order_id,
+            (object) ['cAbgeholt' => 'Y']
         );
     }
 }
