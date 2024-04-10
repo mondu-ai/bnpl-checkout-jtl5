@@ -19,7 +19,8 @@ JTL 5 Integration plugin for Mondu Payment.
 3. Configure the fields:
    * API Sandbox Mode: Select yes to point the plugin to the sandbox environment
    * Fill in API Secret
-   * Fill in Webhooks Secret
+   * Save configuration
+   * Click register webhooks button
 
 **Configure Payment Methods**
 
