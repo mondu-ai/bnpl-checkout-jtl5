@@ -82,14 +82,14 @@ class WebhookController
         }
 
         if ($params['order_state'] === MonduPayment::STATE_CONFIRMED) {
-            $this->unlockOrderForWawi($monduOrder);
+            $this->unlockOrderForWawiSync($monduOrder);
         }
 
         return [['message' => 'ok'], Response::HTTP_OK];
     }
 
     /**
-     * @param $params
+     * @param $requestData
      * @param $state
      *
      * @return array
@@ -138,7 +138,7 @@ class WebhookController
     /**
      * @param $monduOrder
      * @param $status
-     * @return int
+     * @return void
      */
     private function updateOrderStatus($monduOrder, $status)
     {
@@ -150,13 +150,17 @@ class WebhookController
         );
     }
 
-    private function unlockOrderForWawi($monduOrder)
+    /**
+     * @param $monduOrder
+     * @return void
+     */
+    private function unlockOrderForWawiSync($monduOrder)
     {
         Shop::Container()->getDB()->update(
             'tbestellung',
             'kBestellung',
             $monduOrder->order_id,
-            (object) ['cAbgeholt' => 'Y']
+            (object) ['cAbgeholt' => 'N']
         );
     }
 }
