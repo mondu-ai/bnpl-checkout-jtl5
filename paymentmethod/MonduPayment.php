@@ -106,6 +106,8 @@ class MonduPayment extends Method
             } else if ($monduOrderApi['order']['state'] === MonduPayment::STATE_PENDING) {
                 $upd                = new \stdClass();
                 $upd->cStatus       = \BESTELLUNG_STATUS_IN_BEARBEITUNG;
+                // Prevent Wawi sync for pending orders
+                $upd->cAbgeholt = 'M';
                 Shop::Container()->getDB()->update('tbestellung', 'kBestellung', (int) $order->kBestellung, $upd);
             }
         }
