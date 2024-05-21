@@ -132,7 +132,7 @@ class ConfigService
 
     public function getPaymentMethodNetTerm($method)
     {
-        return $this->config->getValue($method.'_net_term');
+        return $this->config->getValue($method . '_net_term');
     }
 
     public static function getInstance() {
