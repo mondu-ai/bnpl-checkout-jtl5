@@ -130,6 +130,11 @@ class ConfigService
         return self::AUTHORIZATION_FLOW;
     }
 
+    public function getPaymentMethodNetTerm($method)
+    {
+        return $this->config->getValue($method . '_net_term');
+    }
+
     public static function getInstance() {
         $cls = static::class;
         if (!isset(self::$instances[$cls])) {

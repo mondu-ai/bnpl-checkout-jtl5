@@ -62,12 +62,26 @@ class CheckoutPaymentMethod
         $paymentMethods = $this->smarty->getTemplateVars('Zahlungsarten');
         $monduPaymentMethods = [];
 
+        $allowedNetTerms = $this->getAllowedNetTerms();
+
         foreach ($paymentMethods as $key => $method) {
             if ($method->cAnbieter == 'Mondu') {
                 $paymentMethodType = $this->configService->getPaymentMethodByKPlugin($method->cModulId);
                 $monduPaymentMethods[$method->kZahlungsart] = $method->cModulId;
 
                 if (!in_array($paymentMethodType, $allowedPaymentMethods)){
+                    unset($paymentMethods[$key]);
+                    continue;
+                }
+
+                $netTerm = (int) $this->configService->getPaymentMethodNetTerm($method->cModulId);
+
+                // Installments
+                if (!$netTerm) {
+                    continue;
+                }
+
+                if (!in_array($netTerm, $allowedNetTerms)) {
                     unset($paymentMethods[$key]);
                 }
             }
