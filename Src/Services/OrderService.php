@@ -3,21 +3,35 @@
 namespace Plugin\MonduPayment\Src\Services;
 
 use Plugin\MonduPayment\Src\Helpers\BasketHelper;
+use Plugin\MonduPayment\Src\Services\OrderServices\AbstractOrderAdditionalCostsService;
 use Plugin\MonduPayment\Src\Support\HttpClients\MonduClient;
 use JTL\Shop;
 use JTL\Session\Frontend;
 use JTL\DB\ReturnType;
 use Plugin\MonduPayment\Src\Helpers\OrderHashHelper;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 class OrderService
 {
     private MonduClient $monduClient;
     private ConfigService $configService;
-    
+
+    private ?AbstractOrderAdditionalCostsService $orderAdditionalCostsService;
+
     public function __construct()
     {
         $this->monduClient = new MonduClient();
         $this->configService = new ConfigService();
+
+        try {
+            /**
+             * @var $orderAdditionalCostsService AbstractOrderAdditionalCostsService
+             */
+            $this->orderAdditionalCostsService = Shop::Container()->get(AbstractOrderAdditionalCostsService::class);
+        } catch (NotFoundExceptionInterface | ContainerExceptionInterface $e) {
+            $this->orderAdditionalCostsService = null;
+        }
     }
 
     public function token($paymentMethod)
@@ -105,7 +119,7 @@ class OrderService
             ],
             'lines' => [
                 [
-                    'buyer_fee_cents' => round($basket->surcharge[0] * 100),
+                    'buyer_fee_cents' => (int) $this->orderAdditionalCostsService?->getAdditionalCostsCentsFromOrder($basket),
                     'discount_cents' => round($basket->discount[0] * 100),
                     'shipping_price_cents' => round($basket->shipping[0] * 100),
                     'tax_cents' => round(($basket->total[1] - $basket->total[0]) * 100),

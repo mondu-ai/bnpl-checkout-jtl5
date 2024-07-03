@@ -7,8 +7,11 @@ namespace Plugin\MonduPayment;
 use JTL\Events\Dispatcher;
 use JTL\Link\LinkInterface;
 use JTL\Plugin\Bootstrapper;
+use JTL\Shop;
 use JTL\Smarty\JTLSmarty;
 use Plugin\MonduPayment\Src\Services\InstallService;
+use Plugin\MonduPayment\Src\Services\OrderServices\AbstractOrderAdditionalCostsService;
+use Plugin\MonduPayment\Src\Services\OrderServices\OrderAdditionalCostsService;
 use Plugin\MonduPayment\Src\Services\RoutesService;
 
 /**
@@ -23,6 +26,8 @@ class Bootstrap extends Bootstrapper
     public function boot(Dispatcher $dispatcher)
     {
         parent::boot($dispatcher);
+
+        $this->registerServices();
     }
 
     /**
@@ -76,5 +81,17 @@ class Bootstrap extends Bootstrapper
         $routes->frontEndRoutes($this->getPlugin());
 
         return true;
+    }
+
+    protected function registerServices(): void
+    {
+        $container = Shop::Container();
+        try {
+            $container->setSingleton(AbstractOrderAdditionalCostsService::class, function () {
+                return new OrderAdditionalCostsService();
+            });
+        } catch (\Exception $e) {
+            // Silence
+        }
     }
 }
