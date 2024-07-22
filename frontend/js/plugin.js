@@ -100,8 +100,6 @@ class MonduCheckoutPlugin {
         }
     }
 
-
-
     _isMonduPaymentSelected() {
         return window.MONDU_CONFIG != undefined && window.MONDU_CONFIG.selected;
     }
