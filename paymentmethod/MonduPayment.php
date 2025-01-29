@@ -34,6 +34,23 @@ class MonduPayment extends Method
 
     public function preparePaymentProcess($order): void
     {
+        if (
+            isset($order['status']) &&
+            $order['status'] == MonduPayment::STATE_DECLINED ||
+            $order['status'] == MonduPayment::STATE_CANCELED
+        ) {
+            $this->handleFail($order->kBestellung);
+            $upd            = new \stdClass();
+            $upd->cStatus   = \BESTELLUNG_STATUS_IN_BEARBEITUNG;
+            $upd->cAbgeholt = 'M';
+            Shop::Container()->getDB()->update('tbestellung', 'kBestellung', (int) $order->kBestellung, $upd);
+
+            unset($_SESSION['monduOrderUuid']);
+            unset($_SESSION['monduCartHash']);
+
+            return;
+        }
+
         parent::preparePaymentProcess($order);
 
         $this->confirmOrder($order);
