@@ -38,6 +38,7 @@ JTL 5 Integration plugin for Mondu Payment.
 Rechnungskauf - jetzt kaufen, später bezahlen
 SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen
 Ratenzahlung - Bequem in Raten per Bankeinzug zahlen
+Echtzeitüberweisung – Direkt von Ihrem Bankkonto bezahlen
 ```
 
 **Note: In case Payment Method names are changed manually in the JTL Shop, please update accordingly in the JTL Wawi.**
@@ -52,6 +53,7 @@ Ratenzahlung - Bequem in Raten per Bankeinzug zahlen
    1. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Rechnungskauf - jetzt kaufen, später bezahlen
    2. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen
    3. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Ratenzahlung - Bequem in Raten per Bankeinzug zahlen
+   4. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Echtzeitüberweisung – Direkt von Ihrem Bankkonto bezahlen
 5. Configure action
    1. Web-Request POST:
       1. URL:
@@ -77,6 +79,7 @@ Ratenzahlung - Bequem in Raten per Bankeinzug zahlen
    1. Auftrag\Zahlungsart\Name **Enthalt** Rechnungskauf - jetzt kaufen, später bezahlen
    2. Auftrag\Zahlungsart\Name **Enthalt** SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen
    3. Auftrag\Zahlungsart\Name **Enthalt** Ratenzahlung - Bequem in Raten per Bankeinzug zahlen
+   4. Auftrag\Zahlungsart\Name **Enthalt** Echtzeitüberweisung – Direkt von Ihrem Bankkonto bezahlen
 6. Configure action
    1. Web-Request POST:
       1. URL:
@@ -101,6 +104,7 @@ Ratenzahlung - Bequem in Raten per Bankeinzug zahlen
    1. Zahlungen\Zahlungsart\Name **Enthalt** Rechnungskauf - jetzt kaufen, später bezahlen
    2. Zahlungen\Zahlungsart\Name **Enthalt** SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen
    3. Zahlungen\Zahlungsart\Name **Enthalt** Ratenzahlung - Bequem in Raten per Bankeinzug zahlen
+   3. Zahlungen\Zahlungsart\Name **Enthalt** Echtzeitüberweisung – Direkt von Ihrem Bankkonto bezahlen
 5. Configure action
    1. Web-Request POST:
       1. URL:

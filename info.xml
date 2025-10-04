@@ -7,7 +7,7 @@
     <PluginID>MonduPayment</PluginID>
     <XMLVersion>100</XMLVersion>
     <ShopVersion>5.0.0</ShopVersion>
-    <Version>3.0.6</Version>
+    <Version>3.0.7</Version>
     <CreateDate>2022-06-07</CreateDate>
     <Install>
         <Hooks>
@@ -64,6 +64,13 @@
                       <Description>Kostenfrei! Sie zahlen keine versteckten Gebühren oder Zinsen.|Automatische Zahlung alle 30 Tage nach Versand der Ware.|Jederzeit die Kontrolle! Wir informieren Sie über anstehende Ratenzahlungen per E-Mail.</Description>
                       <ValueName>installments_benefits</ValueName>
                   </Setting>
+
+                  <Setting type="none" initialValue="" sort="1" conf="Y">
+                      <Name>PayNow Payment Method Benefits</Name>
+                      <Description></Description>
+                      <ValueName>pay_now_benefits</ValueName>
+                  </Setting>
+
                </Settingslink>
                <Settingslink sort="2">
                     <Name>Layout Configuration</Name>
@@ -541,6 +548,43 @@
                     <ValueName>payment_method</ValueName>
                     <SelectboxOptions>
                         <Option sort="1" value="direct_debit">Mondu SEPA-Lastschrift</Option>
+                    </SelectboxOptions>
+                </Setting>
+            </Method>
+            <Method>
+                <Name>Mondu Echtzeitüberweisung – Direkt von Ihrem Bankkonto bezahlen</Name>
+                <PictureURL>images/plugin.png</PictureURL>
+                <Sort>9</Sort>
+                <SendMail>1</SendMail>
+                <Provider>Mondu</Provider>
+                <TSCode>OTHER</TSCode>
+                <PreOrder>0</PreOrder>
+                <Soap>0</Soap>
+                <Curl>1</Curl>
+                <Sockets>0</Sockets>
+                <ClassFile>MonduPayment.php</ClassFile>
+                <ClassName>MonduPayment</ClassName>
+                <TemplateFile>template/mondu_payment.tpl</TemplateFile>
+                <MethodLanguage iso="GER">
+                    <Name>Echtzeitüberweisung – Direkt von Ihrem Bankkonto bezahlen</Name>
+                    <ChargeName>Mondu</ChargeName>
+                    <InfoText>Informationen über die Verarbeitung Ihrer persönlichen Daten durch die Mondu GmbH finden Sie [url=https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/]hier[/url].</InfoText>
+                </MethodLanguage>
+                <MethodLanguage iso="DUT">
+                    <Name>Instant Pay – Betaal direct vanaf uw bankrekening</Name>
+                    <ChargeName>Mondu</ChargeName>
+                    <InfoText>Instant Pay – Betaal direct vanaf uw bankrekening [url=https://www.mondu.ai/nl/gdpr-notification-for-merchants/]hier[/url].</InfoText>
+                </MethodLanguage>
+                <MethodLanguage iso="FRE">
+                    <Name>Virement Instantané – Payez directement depuis votre compte bancaire</Name>
+                    <ChargeName>Mondu</ChargeName>
+                    <InfoText>Des informations sur la façon dont Mondu GmbH traite vos données personnelles peuvent être trouvées [url=https://mondu.ai/fr/gdpr-notification-for-buyers]ici[/url].</InfoText>
+                </MethodLanguage>
+                <Setting type="selectbox" initialValue="direct_debit" sort="50" conf="Y">
+                    <Name>Payment Method</Name>
+                    <ValueName>payment_method</ValueName>
+                    <SelectboxOptions>
+                        <Option sort="1" value="pay_now">Mondu Echtzeitüberweisung</Option>
                     </SelectboxOptions>
                 </Setting>
             </Method>

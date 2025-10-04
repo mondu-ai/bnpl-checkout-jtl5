@@ -115,7 +115,8 @@ class ConfigService
         return [
             'invoice' => $this->getConfigurationDescription('invoice_benefits'),
             'direct_debit' => $this->getConfigurationDescription('sepa_benefits'),
-            'installment' => $this->getConfigurationDescription('installments_benefits')
+            'installment' => $this->getConfigurationDescription('installments_benefits'),
+            'pay_now' => $this->getConfigurationDescription('pay_now_benefits'),
         ];
 
     }
