@@ -55,6 +55,17 @@ class AdminRender
 
         $smarty->assign('pluginURL', $this->plugin->getPaths()->getShopURL());
 
+        // Add JS script to Settings page for webhooks_secret field
+        if ($tabName === 'Settings') {
+            $jsUrl = $this->plugin->getPaths()->getAdminURL() . 'js/mondu_admin.js?v=3.0.8';
+            $postUrl = Shop::getURL() . '/' . \PFAD_ADMIN . 'plugin.php?kPlugin=' . $this->plugin->getID();
+            
+            pq('body')->append('
+                <input type="hidden" name="mondu_post_url" id="mondu_post_url" value="' . $postUrl . '">
+                <script type="text/javascript" src="' . $jsUrl . '"></script>
+            ');
+        }
+
         if ($tabName === 'Info') {
             return $smarty
                 ->assign('postUrl', Shop::getURL() . '/' . \PFAD_ADMIN . 'plugin.php?kPlugin=' . $this->plugin->getID())
@@ -93,6 +104,7 @@ class AdminRender
                     $response,
                     Response::HTTP_UNPROCESSABLE_ENTITY
                 );
+                exit;
             }
         }
 

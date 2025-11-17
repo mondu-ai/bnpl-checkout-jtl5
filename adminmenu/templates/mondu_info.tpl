@@ -12,4 +12,4 @@
     <p style="font-size: 14px;">Visit Mondu&apos;s <a href="https://www.mondu.ai/" target="_blank" rel="noreferrer">website</a>, the <a href="https://www.mondu.ai/faq/" target="_blank" rel="noreferrer">FAQ&nbsp;</a>page or contact us via our <a href="https://www.mondu.ai/contact/" target="_blank" rel="noreferrer">contact form</a> to find out more about Mondu.</p>
 </div>
 
-<script type="text/javascript" src="{$pluginPath}js/mondu_admin.js"></script>
+<script type="text/javascript" src="{$pluginPath}js/mondu_admin.js?v=3.0.8"></script>

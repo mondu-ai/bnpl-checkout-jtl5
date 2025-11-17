@@ -1,4 +1,12 @@
 jQuery(document).ready(function() {
+    // Disable webhooks_secret field so users can't manually edit it
+    jQuery('#webhooks_secret').prop('disabled', true).css('background-color', '#e9ecef');
+    
+    // Enable field before form submit so value gets sent
+    jQuery('form').on('submit', function() {
+        jQuery('#webhooks_secret').prop('disabled', false);
+    });
+    
     if (jQuery('.mondu_webhook_button').length === 0) {
         jQuery('#webhooks_secret')
             .parent()
@@ -28,13 +36,36 @@ jQuery(document).ready(function() {
             },
             success: function (result) {
                 if (result.success) {
-                    jQuery('#webhooks_secret').val(result.webhooks_secret);
+                    // Temporarily enable field to update value, then disable again
+                    jQuery('#webhooks_secret')
+                        .prop('disabled', false)
+                        .val(result.webhooks_secret)
+                        .prop('disabled', true);
+                    alert('Webhook registered successfully!');
                 } else {
                     alert('Something went wrong, make sure you filled out API Secret correctly and saved the configuration.')
                 }
             },
-            error: function() {
-                alert('Something went wrong, make sure you filled out API Secret correctly and saved the configuration.')
+            error: function(xhr) {
+                let errorMessage = 'Something went wrong, make sure you filled out API Secret correctly and saved the configuration.';
+                
+                // Check if status code is 422 (Unprocessable Entity) - webhooks already registered
+                if (xhr.status === 422) {
+                    errorMessage = 'Webhooks are already registered.';
+                } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                    const apiMessage = xhr.responseJSON.message.toLowerCase();
+                    
+                    // Double-check message content for webhook duplicates
+                    if (apiMessage.includes('already exists') || 
+                        apiMessage.includes('already registered') ||
+                        apiMessage.includes('duplicate')) {
+                        errorMessage = 'Webhooks are already registered.';
+                    } else {
+                        errorMessage = xhr.responseJSON.message;
+                    }
+                }
+                
+                alert(errorMessage);
             },
             complete: function() {
                 jQuery('#mondu_webhook_register_button').prop('disabled', false);

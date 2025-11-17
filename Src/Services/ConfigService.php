@@ -72,16 +72,6 @@ class ConfigService
         return $this->config->getValue('payment_method_name_visible');
     }
 
-    public function getNetTermTitle()
-    {
-        return $this->config->getValue('net_term_title');
-    }
-
-    public function getNetTermDescription()
-    {
-        return $this->config->getValue('net_term_description');
-    }
-
     public function getPaymentMethodByKPlugin($kPlugin)
     {
         return $this->config->getValue($kPlugin . '_payment_method');
@@ -115,8 +105,7 @@ class ConfigService
         return [
             'invoice' => $this->getConfigurationDescription('invoice_benefits'),
             'direct_debit' => $this->getConfigurationDescription('sepa_benefits'),
-            'installment' => $this->getConfigurationDescription('installments_benefits'),
-            'pay_now' => $this->getConfigurationDescription('pay_now_benefits'),
+            'installment' => $this->getConfigurationDescription('installments_benefits')
         ];
 
     }

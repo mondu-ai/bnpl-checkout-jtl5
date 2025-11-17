@@ -35,10 +35,10 @@ JTL 5 Integration plugin for Mondu Payment.
 2. Add following payment methods:
 
 ```
-Rechnungskauf - jetzt kaufen, später bezahlen
-SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen
-Ratenzahlung - Bequem in Raten per Bankeinzug zahlen
-Echtzeitüberweisung – Direkt von Ihrem Bankkonto bezahlen
+Ratenkauf (3, 6, 12 Monaten)
+SEPA-Lastschrift (30 Tage)
+Rechnungskauf (30 Tage)
+Echtzeitüberweisung
 ```
 
 **Note: In case Payment Method names are changed manually in the JTL Shop, please update accordingly in the JTL Wawi.**
@@ -50,10 +50,25 @@ Echtzeitüberweisung – Direkt von Ihrem Bankkonto bezahlen
 2. Select **Rechnungen** tab
 3. Select Rechnungen -> Erstellt -> Rechnungen_Erstellt workflow
 4. Configure condition with "One condition met" (Eine Bedingung erfüllt")
-   1. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Rechnungskauf - jetzt kaufen, später bezahlen
-   2. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen
-   3. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Ratenzahlung - Bequem in Raten per Bankeinzug zahlen
-   4. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Echtzeitüberweisung – Direkt von Ihrem Bankkonto bezahlen
+   ### New installation:
+   Just create the workflows with the name of the payment methods which are mentioned in step 2 (add payment methods):
+   * Ratenkauf (3, 6, 12 Monaten)
+   * SEPA-Lastschrift (30 Tage)
+   * Rechnungskauf (30 Tage)
+   * Echtzeitüberweisung
+   
+   ### Update from existing installation:
+   Update the conditions so that the rules will match for old AND new naming e.g.:
+   * Ratenkauf (3, 6, 12 Monaten)
+   * SEPA-Lastschrift (30 Tage)
+   * Rechnungskauf (30 Tage)
+   * Echtzeitüberweisung
+   OR create additional rules so that all new payment methods will be covered
+   
+   1. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Rechnungskauf
+   2. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** SEPA-Lastschrift
+   3. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Ratenkauf
+   4. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Echtzeitüberweisung
 5. Configure action
    1. Web-Request POST:
       1. URL:
@@ -76,10 +91,25 @@ Echtzeitüberweisung – Direkt von Ihrem Bankkonto bezahlen
 3. Select Rechnungen - Manuell, create new Event with "Ereignis anlegen" button
 4. Create new event
 4. Configure condition with "One condition met" (Eine Bedingung erfüllt")
-   1. Auftrag\Zahlungsart\Name **Enthalt** Rechnungskauf - jetzt kaufen, später bezahlen
-   2. Auftrag\Zahlungsart\Name **Enthalt** SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen
-   3. Auftrag\Zahlungsart\Name **Enthalt** Ratenzahlung - Bequem in Raten per Bankeinzug zahlen
-   4. Auftrag\Zahlungsart\Name **Enthalt** Echtzeitüberweisung – Direkt von Ihrem Bankkonto bezahlen
+   ### New installation:
+   Just create the workflows with the name of the payment methods which are mentioned in step 2 (add payment methods):
+    * Ratenkauf (3, 6, 12 Monaten)
+    * SEPA-Lastschrift (30 Tage)
+    * Rechnungskauf (30 Tage)
+    * Echtzeitüberweisung
+
+   ### Update from existing installation:
+   Update the conditions so that the rules will match for old AND new naming e.g.:
+    * Ratenkauf (3, 6, 12 Monaten)
+    * SEPA-Lastschrift (30 Tage)
+    * Rechnungskauf (30 Tage)
+    * Echtzeitüberweisung
+      OR create additional rules so that all new payment methods will be covered
+
+    1. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Rechnungskauf
+    2. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** SEPA-Lastschrift
+    3. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Ratenkauf
+    4. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Echtzeitüberweisung
 6. Configure action
    1. Web-Request POST:
       1. URL:
@@ -100,11 +130,26 @@ Echtzeitüberweisung – Direkt von Ihrem Bankkonto bezahlen
 1. Navigate to the Admin -> JTL-Workflows
 2. Select **Auftrage** tab
 3. Select Auftrag -> Storniert and create a workflow
-4. 4. Configure condition with "One condition met" (Eine Bedingung erfüllt")
-   1. Zahlungen\Zahlungsart\Name **Enthalt** Rechnungskauf - jetzt kaufen, später bezahlen
-   2. Zahlungen\Zahlungsart\Name **Enthalt** SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen
-   3. Zahlungen\Zahlungsart\Name **Enthalt** Ratenzahlung - Bequem in Raten per Bankeinzug zahlen
-   3. Zahlungen\Zahlungsart\Name **Enthalt** Echtzeitüberweisung – Direkt von Ihrem Bankkonto bezahlen
+4. Configure condition with "One condition met" (Eine Bedingung erfüllt")
+   ### New installation:
+   Just create the workflows with the name of the payment methods which are mentioned in step 2 (add payment methods):
+    * Ratenkauf (3, 6, 12 Monaten)
+    * SEPA-Lastschrift (30 Tage)
+    * Rechnungskauf (30 Tage)
+    * Echtzeitüberweisung
+
+   ### Update from existing installation:
+   Update the conditions so that the rules will match for old AND new naming e.g.:
+    * Ratenkauf (3, 6, 12 Monaten)
+    * SEPA-Lastschrift (30 Tage)
+    * Rechnungskauf (30 Tage)
+    * Echtzeitüberweisung
+      OR create additional rules so that all new payment methods will be covered
+
+    1. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Rechnungskauf
+    2. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** SEPA-Lastschrift
+    3. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Ratenkauf
+    4. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Echtzeitüberweisung
 5. Configure action
    1. Web-Request POST:
       1. URL:

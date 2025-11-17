@@ -56,12 +56,9 @@ class CheckoutPaymentMethod
      */
     private function filterPaymentMethods(): void
     {
-        $allowedPaymentMethodsCache = $this->cache->get('mondu_payment_methods');
-        $allowedPaymentMethods = $allowedPaymentMethodsCache ?: $this->getAllowedPaymentMethods();
-      
+        $allowedPaymentMethods = $this->getAllowedPaymentMethods();
         $paymentMethods = $this->smarty->getTemplateVars('Zahlungsarten');
         $monduPaymentMethods = [];
-
         $allowedNetTerms = $this->getAllowedNetTerms();
 
         foreach ($paymentMethods as $key => $method) {
@@ -74,13 +71,33 @@ class CheckoutPaymentMethod
                     continue;
                 }
 
+                // Set localized image based on payment type (for non-grouped mode)
+                switch ($paymentMethodType) {
+                    case 'invoice':
+                        $method->cBild = $this->getPaymentMethodImage('invoice');
+                        break;
+                    case 'direct_debit':
+                        $method->cBild = $this->getPaymentMethodImage('direct_debit');
+                        break;
+                    case 'installment':
+                        $method->cBild = $this->getPaymentMethodImage('installment');
+                        break;
+                    case 'pay_now':
+                        $method->cBild = $this->getPaymentMethodImage('pay_now');
+                        break;
+                    default:
+                        // Keep default image from database
+                        break;
+                }
+                
                 $netTerm = (int) $this->configService->getPaymentMethodNetTerm($method->cModulId);
 
-                // Installments
+                // Installments and Pay Now don't have net terms - no filtering needed
                 if (!$netTerm) {
                     continue;
                 }
 
+                // For invoice and direct_debit, check if net term is allowed
                 if (!in_array($netTerm, $allowedNetTerms)) {
                     unset($paymentMethods[$key]);
                 }
@@ -97,10 +114,10 @@ class CheckoutPaymentMethod
     private function isPaymentGroupingEnabled(): bool
     {
         $groupEnabled = $this->configService->getPaymentMethodGroupEnabled() == '1';
-        $paymentMethodNameVisible = $this->configService->getPaymentMethodNameVisible() == '1';
         
         $this->smarty->assign('paymentMethodGroupEnabled', $groupEnabled);
-        $this->smarty->assign('paymentMethodNameVisible', $paymentMethodNameVisible);
+        // Always show payment method name - no configuration needed
+        $this->smarty->assign('paymentMethodNameVisible', true);
 
         return $groupEnabled;
     }
@@ -130,56 +147,153 @@ class CheckoutPaymentMethod
     {
         $availablePaymentMethods = $this->smarty->getTemplateVars('Zahlungsarten');
         
-        $allowedNetTermsCache = $this->cache->get('mondu_net_terms');
-        $netTerms = $allowedNetTermsCache ?: $this->getAllowedNetTerms();
+        // Temporarily disable cache - always fetch fresh data from API
+        $netTerms = $this->getAllowedNetTerms();
 
         $monduGroups = [];
 
         // Config
         $benefits = $this->configService->getBenefitsText();
-        $netTermTitle = $this->configService->getNetTermTitle();
-        $netTermDescription = $this->configService->getNetTermDescription();
 
-        // Invoice & Direct Debit 
+        // Collect all Invoice methods with different net terms
+        $invoiceMethods = [];
+        $invoiceNetTerms = [];
+        
         foreach ($netTerms as $netTerm) {
-            $paymentMethods = array_filter($availablePaymentMethods, function ($method) use ($netTerm) {
-                return $method->cAnbieter == 'Mondu' && str_contains( $method->cModulId, $netTerm . 'tagen' );
+            $methods = array_filter($availablePaymentMethods, function ($method) use ($netTerm) {
+                $paymentMethodType = $this->configService->getPaymentMethodByKPlugin($method->cModulId);
+                return $method->cAnbieter == 'Mondu' && 
+                       $paymentMethodType === 'invoice' && 
+                       str_contains($method->cModulId, $netTerm . 'tage');
             });
-
-            foreach ($paymentMethods as $method) {
-                $paymentMethodType     = $this->configService->getPaymentMethodByKPlugin($method->cModulId);
-                $method->monduBenefits = str_replace('{net_term}', $netTerm, $this->__translate($benefits[$paymentMethodType]));
-            }
-
-            if (count($paymentMethods) != 0) {
-                $monduGroups[] = [
-                    'title' => str_replace('{net_term}', $netTerm, $netTermTitle),
-                    'description' => str_replace('{net_term}', $netTerm, $netTermDescription),
-                    'payment_methods' => $paymentMethods
-                ];
+            
+            foreach ($methods as $method) {
+                $method->monduBenefits = str_replace('{net_term}', $netTerm, $this->__translate($benefits['invoice']));
+                $method->monduNetTerm = $netTerm; // Store net term for sorting
+                $method->cBild = $this->getPaymentMethodImage('invoice'); // Set localized image
+                $invoiceMethods[] = $method;
+                $invoiceNetTerms[] = $netTerm;
             }
         }
 
-        // Installments
+        // Group all Invoice methods together if any exist
+        if (count($invoiceMethods) > 0) {
+            // Sort payment methods by net term (14, 30, 45, 60, 90)
+            usort($invoiceMethods, function($a, $b) {
+                return $a->monduNetTerm <=> $b->monduNetTerm;
+            });
+            
+            $uniqueNetTerms = array_unique($invoiceNetTerms);
+            sort($uniqueNetTerms);
+            $netTermsText = implode(', ', $uniqueNetTerms) . ' ' . $this->__translate('Tage');
+            
+            $monduGroups[] = [
+                'title' => $this->__translate('Rechnungskauf') . ' (' . $netTermsText . ')',
+                'description' => '',
+                'image' => $this->getPaymentMethodImage('invoice'),
+                'payment_methods' => $invoiceMethods
+            ];
+        }
+
+        // Collect all SEPA methods with different net terms
+        $sepaMethods = [];
+        $sepaNetTerms = [];
+        
+        foreach ($netTerms as $netTerm) {
+            $methods = array_filter($availablePaymentMethods, function ($method) use ($netTerm) {
+                $paymentMethodType = $this->configService->getPaymentMethodByKPlugin($method->cModulId);
+                return $method->cAnbieter == 'Mondu' && 
+                       $paymentMethodType === 'direct_debit' && 
+                       str_contains($method->cModulId, $netTerm . 'tage');
+            });
+            
+            foreach ($methods as $method) {
+                $method->monduBenefits = str_replace('{net_term}', $netTerm, $this->__translate($benefits['direct_debit']));
+                $method->monduNetTerm = $netTerm; // Store net term for sorting
+                $method->cBild = $this->getPaymentMethodImage('direct_debit'); // Set localized image
+                $sepaMethods[] = $method;
+                $sepaNetTerms[] = $netTerm;
+            }
+        }
+
+        // Group all SEPA methods together if any exist
+        if (count($sepaMethods) > 0) {
+            // Sort payment methods by net term (14, 30, 45, 60, 90)
+            usort($sepaMethods, function($a, $b) {
+                return $a->monduNetTerm <=> $b->monduNetTerm;
+            });
+            
+            $uniqueNetTerms = array_unique($sepaNetTerms);
+            sort($uniqueNetTerms);
+            $netTermsText = implode(', ', $uniqueNetTerms) . ' ' . $this->__translate('Tage');
+            
+            $monduGroups[] = [
+                'title' => $this->__translate('SEPA-Lastschrift') . ' (' . $netTermsText . ')',
+                'description' => '',
+                'image' => $this->getPaymentMethodImage('direct_debit'),
+                'payment_methods' => $sepaMethods
+            ];
+        }
+
+        // Installments (Ratenkauf) - Collect all installment methods and show as ONE method
         $installmentPaymentMethods = array_filter($availablePaymentMethods, function ($method) {
-          return $method->cAnbieter == 'Mondu' && str_contains($method->cModulId, 'monduratenzahlung');
+            // Search for 'ratenkauf' in cModulId (DB has 'kPlugin_2_ratenkauf(3,6,12monaten)')
+            return $method->cAnbieter == 'Mondu' && 
+                   (str_contains(strtolower($method->cModulId), 'ratenkauf') || 
+                    str_contains(strtolower($method->cModulId), 'installment'));
         });
 
+        $installmentPeriods = [];
         foreach ($installmentPaymentMethods as $method) {
-          $paymentMethodType     = $this->configService->getPaymentMethodByKPlugin($method->cModulId);
-          $method->monduBenefits = $this->__translate($benefits[$paymentMethodType]);
+            $paymentMethodType = $this->configService->getPaymentMethodByKPlugin($method->cModulId);
+            if (isset($benefits[$paymentMethodType]) && $benefits[$paymentMethodType]) {
+                $method->monduBenefits = $this->__translate($benefits[$paymentMethodType]);
+            } else {
+                $method->monduBenefits = '';
+            }
+            
+            $method->cBild = $this->getPaymentMethodImage('installment'); // Set localized image
+            
+            // Extract all periods from module ID (e.g., "ratenkauf(3,6,12monaten)" -> "3, 6, 12")
+            // The DB has format like: kPlugin_2_ratenkauf(3,6,12monaten)
+            if (preg_match('/ratenkauf\(([\d,]+)monaten\)/i', $method->cModulId, $matches)) {
+                $periods = explode(',', $matches[1]);
+                $installmentPeriods = array_merge($installmentPeriods, $periods);
+            }
         }
 
+        // Create ONE Ratenkauf method (no grouping) with all periods in title
         if (count($installmentPaymentMethods) > 0) {
-            $installment = reset($installmentPaymentMethods);
+            $uniquePeriods = array_unique($installmentPeriods);
+            sort($uniquePeriods, SORT_NUMERIC);
+            $periodsText = implode(', ', $uniquePeriods) . ' ' . $this->__translate('Monaten');
+            
+            $monduGroups[] = [
+                'title' => $this->__translate('Ratenkauf') . ' (' . $periodsText . ')',
+                'description' => '',
+                'image' => $this->getPaymentMethodImage('installment'),
+                'payment_methods' => $installmentPaymentMethods
+            ];
+        }
 
-            if (count($installmentPaymentMethods) != 0) {
-                $monduGroups[] = [
-                    'title' => $installment->angezeigterName[$_SESSION['cISOSprache']],
-                    'description' => $installment->cHinweisText[$_SESSION['cISOSprache']],
-                    'payment_methods' => $installmentPaymentMethods
-                ];
-            }
+        // Pay Now (Echtzeitüberweisung) - NO grouping, show as separate method
+        $payNowPaymentMethods = array_filter($availablePaymentMethods, function ($method) {
+            $paymentMethodType = $this->configService->getPaymentMethodByKPlugin($method->cModulId);
+            return $method->cAnbieter == 'Mondu' && $paymentMethodType === 'pay_now';
+        });
+
+        foreach ($payNowPaymentMethods as $method) {
+            // Pay Now doesn't have benefits configured, use empty string
+            $method->monduBenefits = '';
+            $method->cBild = $this->getPaymentMethodImage('pay_now'); // Set localized image
+            
+            // Each Pay Now method as separate group (no grouping)
+            $monduGroups[] = [
+                'title' => $method->angezeigterName[$_SESSION['cISOSprache']],
+                'description' => '',
+                'image' => $this->getPaymentMethodImage('pay_now'),
+                'payment_methods' => [$method]
+            ];
         }
 
         $this->smarty->assign('Zahlungsarten', array_filter($availablePaymentMethods, function ($method) {
@@ -199,8 +313,6 @@ class CheckoutPaymentMethod
             $apiAllowedPaymentMethods = $this->monduClient->getPaymentMethods();
 
             if (!isset($apiAllowedPaymentMethods['payment_methods'])){
-                $this->debugger->log('[ERROR]: Get Payment Methods request failed.');
-
                 $this->setMonduPaymentMethodsCache(['error']);
                 return ['error'];
             } 
@@ -214,8 +326,6 @@ class CheckoutPaymentMethod
             return $allowedPaymentMethods;
 
         } catch (Exception $e) {
-            $this->debugger->log('[ERROR]: Get Allowed Payment Methods failed with exception: ' . $e->getMessage());
-
             $this->setMonduPaymentMethodsCache(['error']);
             return ['error'];
         }
@@ -230,25 +340,23 @@ class CheckoutPaymentMethod
             $allowedNetTerms = $this->monduClient->getNetTerms();
 
             if(!isset($allowedNetTerms['payment_terms'])){
-            $this->debugger->log('[ERROR]: Get Net Terms request failed.');
-
-            $this->setMonduNetTermsCache([]);
+                $this->setMonduNetTermsCache([]);
                 return [];
             }
 
-            $netTerms = array_unique(array_filter(array_map(function ($paymentMethod) {
-                if ($this->getBuyerCountryCode() == $paymentMethod['country_code']){
+            $buyerCountry = $this->getBuyerCountryCode();
+
+            $netTerms = array_unique(array_filter(array_map(function ($paymentMethod) use ($buyerCountry) {
+                if ($buyerCountry == $paymentMethod['country_code']){
                     return $paymentMethod['net_term'];
                 }
             }, (array) $allowedNetTerms['payment_terms'])));
 
-        $this->setMonduNetTermsCache($netTerms);
+            $this->setMonduNetTermsCache($netTerms);
 
-        return $netTerms;
+            return $netTerms;
 
         } catch (Exception $e) {
-            $this->debugger->log('[ERROR]: Get Allowed Net Terms failed with exception: ' . $e->getMessage());
-
             $this->setMonduNetTermsCache([]);
             return [];
         }
@@ -282,6 +390,57 @@ class CheckoutPaymentMethod
     public function setMonduNetTermsCache($methods): void
     {
         $this->cache->set('mondu_net_terms', $methods, ['mondu'], 3600);
+    }
+
+    /**
+     * Get payment method image based on locale and payment type
+     * 
+     * @param string $paymentType (invoice, direct_debit, installment, pay_now)
+     * @return string Path to image
+     */
+    private function getPaymentMethodImage(string $paymentType): string
+    {
+        // Get current language ISO code
+        $currentLang = Shop::Lang()->getIso(); // Returns 'ger', 'eng', etc.
+        
+        // Map ISO codes to locale folders
+        $localeMap = [
+            'ger' => 'de',
+            'eng' => 'en',
+            'dut' => 'nl',
+            'fre' => 'fr'
+        ];
+        
+        // Map payment types to image filenames
+        $imageMap = [
+            'invoice' => 'invoice_white_rectangle.png',
+            'direct_debit' => 'sepa_white_rectangle.png',
+            'installment' => 'installments_white_rectangle.png',
+            'pay_now' => 'instant_pay_white_rectangle.png'
+        ];
+        
+        // Get locale folder (default to 'de' if not mapped)
+        $locale = $localeMap[$currentLang] ?? 'de';
+        
+        // Get image filename
+        $imageFilename = $imageMap[$paymentType] ?? null;
+        
+        if (!$imageFilename) {
+            // Return default image if payment type not recognized
+            return $this->plugin->getPaths()->getBaseURL() . 'paymentmethod/images/plugin.png';
+        }
+        
+        // Build localized image path
+        $localizedImagePath = $this->plugin->getPaths()->getBaseURL() . 'paymentmethod/images/' . $locale . '/' . $imageFilename;
+        $localizedImageFile = $this->plugin->getPaths()->getBasePath() . 'paymentmethod/images/' . $locale . '/' . $imageFilename;
+        
+        // Check if localized image exists
+        if (file_exists($localizedImageFile)) {
+            return $localizedImagePath;
+        }
+        
+        // Fallback to default image
+        return $this->plugin->getPaths()->getBaseURL() . 'paymentmethod/images/plugin.png';
     }
 }
 

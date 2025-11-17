@@ -1,0 +1,80 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.2.2\n"
+
+# Payment method group titles
+msgid "Rechnungskauf"
+msgstr "Invoice"
+
+msgid "SEPA-Lastschrift"
+msgstr "Direct Debit"
+
+msgid "Ratenkauf"
+msgstr "Installment"
+
+msgid "Echtzeitüberweisung"
+msgstr "Instant Payment"
+
+msgid "Tage"
+msgstr "Days"
+
+msgid "Monaten"
+msgstr "Months"
+
+# Benefits texts
+msgid "Sie haben die volle Kontrolle. Sie können den Betrag jederzeit innerhalb von {net_term} Tagen überweisen.|Datenschutz ist uns wichtig - Ihre Daten werden lediglich zur Identifizierung verwendet."
+msgstr "You have full control. You can transfer the amount at any time within {net_term} days.|Data protection is important to us - your data will only be used for identification."
+
+msgid "Sie müssen nichts tun! Wir nutzen Ihre IBAN zur Ausführung der Lastschrift.|Bevor wir den Betrag abbuchen, informieren wir Sie per E-Mail.|Gebührenfrei! Es fallen für Sie keine zusätzlichen Kosten für Ihre SEPA-Zahlung an."
+msgstr "You don't have to do anything! We use your IBAN to execute the direct debit.|Before we debit the amount, we will inform you by email.|Free of charge! There are no additional costs for your SEPA payment."
+
+msgid "Kostenfrei! Sie zahlen keine versteckten Gebühren oder Zinsen.|Automatische Zahlung alle 30 Tage nach Versand der Ware.|Jederzeit die Kontrolle! Wir informieren Sie über anstehende Ratenzahlungen per E-Mail."
+msgstr "Free of charge! You pay no hidden fees or interest.|Automatic payment every 30 days after shipping.|Always in control! We will inform you about upcoming installment payments by email."
+
+# Admin settings
+msgid "API Sandbox Mode"
+msgstr "API Sandbox Mode"
+
+msgid "API Secret"
+msgstr "API Secret"
+
+msgid "Webhooks Secret"
+msgstr "Webhooks Secret"
+
+msgid "Mark order status as \"Paid\"?"
+msgstr "Mark order status as \"Paid\"?"
+
+msgid "Yes"
+msgstr "Yes"
+
+msgid "No"
+msgstr "No"
+
+msgid "Layout Configuration"
+msgstr "Layout Configuration"
+
+msgid "Enable Payment Method Group"
+msgstr "Enable Payment Method Group"
+
+msgid "If set to \"Yes\" in JTL Wawi, column \"Is Paid\" will be set to Yes."
+msgstr "If set to \"Yes\" in JTL Wawi, column \"Is Paid\" will be set to Yes."
+
+msgid "Please enter your Mondu Webhooks Secret."
+msgstr "Please enter your Mondu Webhooks Secret."
+
+msgid "Please enter your Mondu API Secret."
+msgstr "Please enter your Mondu API Secret."
+
+msgid "When enabled, payment methods will be grouped by net terms."
+msgstr "When enabled, payment methods will be grouped by net terms."
+
