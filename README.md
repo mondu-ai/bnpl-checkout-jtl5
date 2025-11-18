@@ -61,8 +61,7 @@ Echtzeitüberweisung
    * Ratenkauf (3, 6, 12 Monaten)
    * SEPA-Lastschrift (30 Tage)
    * Rechnungskauf (30 Tage)
-   * Echtzeitüberweisung
-   OR create additional rules so that all new payment methods will be covered
+   * Echtzeitüberweisung <br/> OR create additional rules so that all new payment methods will be covered
    
    1. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Rechnungskauf
    2. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** SEPA-Lastschrift
@@ -101,8 +100,7 @@ Echtzeitüberweisung
     * Ratenkauf (3, 6, 12 Monaten)
     * SEPA-Lastschrift (30 Tage)
     * Rechnungskauf (30 Tage)
-    * Echtzeitüberweisung
-      OR create additional rules so that all new payment methods will be covered
+    * Echtzeitüberweisung <br/> OR create additional rules so that all new payment methods will be covered
 
     1. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Rechnungskauf
     2. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** SEPA-Lastschrift
@@ -140,8 +138,7 @@ Echtzeitüberweisung
     * Ratenkauf (3, 6, 12 Monaten)
     * SEPA-Lastschrift (30 Tage)
     * Rechnungskauf (30 Tage)
-    * Echtzeitüberweisung
-      OR create additional rules so that all new payment methods will be covered
+    * Echtzeitüberweisung <br/> OR create additional rules so that all new payment methods will be covered
 
     1. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Rechnungskauf
     2. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** SEPA-Lastschrift
