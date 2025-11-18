@@ -18,7 +18,7 @@ JTL 5 Integration plugin for Mondu Payment.
 2. Expand **Installed plug-ins** menu item on the left side and choose Mondu Payment
 3. Configure the fields:
    * API Sandbox Mode: Select yes to point the plugin to the sandbox environment
-   * Fill in API Secret
+   * Fill in API Secret (will be done automatically)
    * Save configuration
    * Click register webhooks button
 
@@ -41,8 +41,7 @@ Rechnungskauf (30 Tage)
 Echtzeitüberweisung
 ```
 
-**Note: In case Payment Method names are changed manually in the JTL Shop, please update accordingly in the JTL Wawi.**
-
+**Note: Please add or modify the net terms accordingly your contractual agreement. <br></br> In case the Mondu Payment Method names are changed manually in the JTL Shop, please update them accordingly in JTL Wawi.**
 
 ### Create Invoice Workflow
 
@@ -67,23 +66,22 @@ Echtzeitüberweisung
    
    1. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Rechnungskauf
    2. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** SEPA-Lastschrift
-   3. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Ratenkauf
+   3. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Rate
    4. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Echtzeitüberweisung
 5. Configure action
    1. Web-Request POST:
-      1. URL:
-         ```
-         http://{SHOP-URL}/mondu-api?return=invoice-create&webhooks_secret={WEBHOOK SECRET}
-         ```
-      2. Parameter:
-         ```
-         gross_amount_cents={{ Vorgang.Auftrag.Positionen.BruttopreisGesamt2 }}&net_amount_cents={{ Vorgang.Auftrag.Positionen.NettopreisGesamt2 }}&invoice_id={{ Vorgang.Rechnungsnummer }}&order_id={{ Vorgang.Auftrag.ExterneAuftragsnummer }}
-         ```
-      3. Header:
-         ```
-         Content-Type: application/x-www-form-urlencoded
-         ```
-
+       1. URL:
+          ```
+          http://{SHOP-URL}/mondu-api?return=invoice-create&webhooks_secret={WEBHOOK SECRET}
+          ```
+       2. Parameter:
+          ```
+          gross_amount_cents={{ Vorgang.Auftrag.Positionen.BruttopreisGesamt2 }}&net_amount_cents={{ Vorgang.Auftrag.Positionen.NettopreisGesamt2 }}&invoice_id={{ Vorgang.Rechnungsnummer }}&order_id={{ Vorgang.Auftrag.ExterneAuftragsnummer }}
+          ```
+       3. Header:
+          ```
+          Content-Type: application/x-www-form-urlencoded
+          ```
 ### Cancel Invoice Workflow
 
 1. Navigate to the Admin -> JTL-Workflows
@@ -108,23 +106,22 @@ Echtzeitüberweisung
 
     1. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Rechnungskauf
     2. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** SEPA-Lastschrift
-    3. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Ratenkauf
+    3. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Rate
     4. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Echtzeitüberweisung
 6. Configure action
-   1. Web-Request POST:
-      1. URL:
-         ```
-         http://{SHOP-URL}/mondu-api?return=cancel-invoice&webhooks_secret={WEBHOOK SECRET}
-         ```
-      2. Parameter:
-         ```
-         invoice_number={{ Vorgang.Rechnungsnummer }}
-         ```
-      3. Header:
-         ```
-         Content-Type: application/x-www-form-urlencoded
-         ```
-
+    1. Web-Request POST:
+        1. URL:
+           ```
+           http://{SHOP-URL}/mondu-api?return=cancel-invoice&webhooks_secret={WEBHOOK SECRET}
+           ```
+        2. Parameter:
+           ```
+           invoice_number={{ Vorgang.Rechnungsnummer }}
+           ```
+        3. Header:
+           ```
+           Content-Type: application/x-www-form-urlencoded
+           ```
 ### Cancel Order Workflow
 
 1. Navigate to the Admin -> JTL-Workflows
@@ -148,23 +145,22 @@ Echtzeitüberweisung
 
     1. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Rechnungskauf
     2. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** SEPA-Lastschrift
-    3. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Ratenkauf
+    3. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Rate
     4. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Echtzeitüberweisung
 5. Configure action
-   1. Web-Request POST:
-      1. URL:
-         ```
-         http://{SHOP-URL}/mondu-api?return=cancel-order&webhooks_secret={WEBHOOK SECRET}
-         ```
-      2. Parameter:
-         ```
-         order_number={{ Vorgang.Stammdaten.ExterneAuftragsnummer }}
-         ```
-      3. Header:
-         ```
-         Content-Type: application/x-www-form-urlencoded
-         ```
-
+    1. Web-Request POST:
+        1. URL:
+           ```
+           http://{SHOP-URL}/mondu-api?return=cancel-order&webhooks_secret={WEBHOOK SECRET}
+           ```
+        2. Parameter:
+           ```
+           order_number={{ Vorgang.Stammdaten.ExterneAuftragsnummer }}
+           ```
+        3. Header:
+           ```
+           Content-Type: application/x-www-form-urlencoded
+           ```
 ![image](https://user-images.githubusercontent.com/97665980/228552408-cf45d35d-9c62-4248-9ee8-fbf5aa6a7aa9.png)
 
 ### Configure Invoice Template
