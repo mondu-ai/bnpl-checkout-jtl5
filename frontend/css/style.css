@@ -1,3 +1,4 @@
+/* Updated: 1762960876 - CSS Cache Bust */
 #mondu-checkout-widget>div {
   position: fixed;
   top: 0;
@@ -52,14 +53,6 @@
     color: #fff;
     border-color: #692CCF;
     background-color: #692CCF
-  }
-  
-  .mondu-payment-method-box .custom-control-label::before {
-    margin-top: 10px
-  }
-  
-  .mondu-payment-method-box .custom-control-label::after {
-    margin-top: 10px
   }
   
   .mondu-payment-method-box .custom-control-label span {
@@ -171,9 +164,19 @@
     background: white;
 }
 
+.mondu-description {
+    margin-left: 20px;
+}
+
 @-moz-document url-prefix() {
     .mondu-paypal-plus-enabled {
         margin-bottom: -80px;
         padding-bottom: 0;
     }
-  }
+}
+
+/* Mondu payment method images for non-grouped mode */
+.mondu-small {
+    max-width: 80px;
+    height: auto;
+}

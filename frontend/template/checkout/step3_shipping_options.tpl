@@ -1,4 +1,24 @@
- extends file="{$parent_template_path}/checkout/step3_shipping_options.tpl"}
+extends file="{$parent_template_path}/checkout/step3_shipping_options.tpl"}
+
+{block name='checkout-step3-shipping-options-legend-payment' prepend}
+    <link rel="stylesheet" href="/plugins/MonduPayment/frontend/css/style.css?v=1762960876" type="text/css">
+    <style>
+        /* Inline Mondu styles */
+        .mondu-card .mondu-payment-method {
+            display: flex;
+            justify-content: space-between;
+        }
+        .mondu-card .mondu-payment-method .mondu-highlight {
+            display: flex;
+        }
+        .mondu-method-title {
+            font-weight: 700;
+            font-size: 16px;
+            line-height: 20px;
+            color: #000000;
+        }
+    </style>
+{/block}
 
 {block name='checkout-step3-shipping-options-legend-payment' append}
     {if $paymentMethodGroupEnabled && count($monduGroups) > 0}
@@ -10,11 +30,10 @@
                     <div class="mondu-payment-method">
                         <div class="mondu-highlight">
                             <div class="mondu-logo">
-                                {image src=$paymentMethod->cBild alt=$paymentMethod->angezeigterName|trans fluid=true class="img-sm mondu-payment-method-image" width="50"}
+                                {image src=$group['image'] alt=$group['title'] fluid=true class="img-sm mondu-payment-method-image"}
                             </div>
                             <div class="mondu-description">
                                 <p class="mondu-method-title">{$group['title']}</p>
-                                <p class="mondu-method-description">{$group['description']|replace: "[br]":"<br />"|replace:"[b]":"<b>"|replace:"[/b]":"</b>"|replace:"[url=": "<a target=\"_blank\" href=\""|replace:"[/url]":"</a>"|replace:"]":"\" >"}</p>
 
                                 {foreach $group['payment_methods'] as $zahlungsart}
                                     {if $zahlungsart->cAnbieter == 'Mondu'}
@@ -39,30 +58,11 @@
                                                     </strong>
                                                 {/block}
                                             {/if}
-
-                                            {if $zahlungsart->cHinweisText|has_trans}
-                                                {block name='checkout-inc-payment-methods-note'}
-                                                    <br />
-                                                    <span class="checkout-payment-method-note">
-                                                        <small>{$zahlungsart->cHinweisText|trans|replace: "[br]":"<br />"|replace:"[b]":"<b>"|replace:"[/b]":"</b>"|replace:"[url=": "<a target=\"_blank\" href=\""|replace:"[/url]":"</a>"|replace:"]":"\" >"}</small>
-                                                    </span>
-                                                {/block}
-                                            {/if}
-                                            <div class="mondu-benefits-text">
-                                                <ul>
-                                                {foreach explode("|", $zahlungsart->monduBenefits) as $benefit}
-                                                    <li>{$benefit}</li>
-                                                {/foreach}
-                                                </ul>
-                                            </div>
                                         {/radio}
                                     </div>
                                     {/if}
                                 {/foreach}
                             </div>
-                        </div>
-                        <div class="mondu-checkmark-box">
-                            <img class="mondu-checkmark" src="{$monduFrontendUrl}img/checkmark.png" />
                         </div>
                     </div>
                 </div>

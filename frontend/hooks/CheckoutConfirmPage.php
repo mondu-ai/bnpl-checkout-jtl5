@@ -14,13 +14,13 @@ class CheckoutConfirmPage
     {
         if (!$this->isMonduPayment() || !$this->isConfirmStep()) return;
 
-        if ($_GET['payment'] !== 'accepted' && $_SERVER['REQUEST_METHOD'] === 'GET') {
+        if (isset($_GET['payment']) && $_GET['payment'] !== 'accepted' && $_SERVER['REQUEST_METHOD'] === 'GET') {
             header('Location: ' . Shop::Container()->getLinkService()->getStaticRoute('bestellvorgang.php') . '?editZahlungsart=1');
         }
 
-        if ($_GET['payment'] == 'accepted' || !$this->isMonduOrderSessionMissing()) return;
+        if (isset($_GET['payment']) && $_GET['payment'] == 'accepted' || !$this->isMonduOrderSessionMissing()) return;
 
-        if ($_GET['monduCreateOrder'] === 'true') {
+        if (isset($_GET['monduCreateOrder']) && $_GET['monduCreateOrder'] === 'true') {
             $orderService = new OrderService();
             $orderData = $orderService->token($_SESSION['Zahlungsart']->cModulId);
             header('Location: ' . $orderData['hosted_checkout_url'], true, 303);

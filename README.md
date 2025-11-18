@@ -18,7 +18,7 @@ JTL 5 Integration plugin for Mondu Payment.
 2. Expand **Installed plug-ins** menu item on the left side and choose Mondu Payment
 3. Configure the fields:
    * API Sandbox Mode: Select yes to point the plugin to the sandbox environment
-   * Fill in API Secret
+   * Fill in API Secret (will be done automatically)
    * Save configuration
    * Click register webhooks button
 
@@ -35,13 +35,13 @@ JTL 5 Integration plugin for Mondu Payment.
 2. Add following payment methods:
 
 ```
-Rechnungskauf - jetzt kaufen, später bezahlen
-SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen
-Ratenzahlung - Bequem in Raten per Bankeinzug zahlen
+Ratenkauf (3, 6, 12 Monaten)
+SEPA-Lastschrift (30 Tage)
+Rechnungskauf (30 Tage)
+Echtzeitüberweisung
 ```
 
-**Note: In case Payment Method names are changed manually in the JTL Shop, please update accordingly in the JTL Wawi.**
-
+**Note: Please add or modify the net terms accordingly your contractual agreement. <br></br> In case the Mondu Payment Method names are changed manually in the JTL Shop, please update them accordingly in JTL Wawi.**
 
 ### Create Invoice Workflow
 
@@ -49,24 +49,38 @@ Ratenzahlung - Bequem in Raten per Bankeinzug zahlen
 2. Select **Rechnungen** tab
 3. Select Rechnungen -> Erstellt -> Rechnungen_Erstellt workflow
 4. Configure condition with "One condition met" (Eine Bedingung erfüllt")
-   1. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Rechnungskauf - jetzt kaufen, später bezahlen
-   2. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen
-   3. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Ratenzahlung - Bequem in Raten per Bankeinzug zahlen
+   ### New installation:
+   Just create the workflows with the name of the payment methods which are mentioned in step 2 (add payment methods):
+   * Ratenkauf (3, 6, 12 Monaten)
+   * SEPA-Lastschrift (30 Tage)
+   * Rechnungskauf (30 Tage)
+   * Echtzeitüberweisung
+   
+   ### Update from existing installation:
+   Update the conditions so that the rules will match for old AND new naming e.g.:
+   * Ratenkauf (3, 6, 12 Monaten)
+   * SEPA-Lastschrift (30 Tage)
+   * Rechnungskauf (30 Tage)
+   * Echtzeitüberweisung <br/> OR create additional rules so that all new payment methods will be covered
+   
+   1. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Rechnungskauf
+   2. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** SEPA-Lastschrift
+   3. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Rate
+   4. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Echtzeitüberweisung
 5. Configure action
    1. Web-Request POST:
-      1. URL:
-         ```
-         http://{SHOP-URL}/mondu-api?return=invoice-create&webhooks_secret={WEBHOOK SECRET}
-         ```
-      2. Parameter:
-         ```
-         gross_amount_cents={{ Vorgang.Auftrag.Positionen.BruttopreisGesamt2 }}&net_amount_cents={{ Vorgang.Auftrag.Positionen.NettopreisGesamt2 }}&invoice_id={{ Vorgang.Rechnungsnummer }}&order_id={{ Vorgang.Auftrag.ExterneAuftragsnummer }}
-         ```
-      3. Header:
-         ```
-         Content-Type: application/x-www-form-urlencoded
-         ```
-
+       1. URL:
+          ```
+          http://{SHOP-URL}/mondu-api?return=invoice-create&webhooks_secret={WEBHOOK SECRET}
+          ```
+       2. Parameter:
+          ```
+          gross_amount_cents={{ Vorgang.Auftrag.Positionen.BruttopreisGesamt2 }}&net_amount_cents={{ Vorgang.Auftrag.Positionen.NettopreisGesamt2 }}&invoice_id={{ Vorgang.Rechnungsnummer }}&order_id={{ Vorgang.Auftrag.ExterneAuftragsnummer }}
+          ```
+       3. Header:
+          ```
+          Content-Type: application/x-www-form-urlencoded
+          ```
 ### Cancel Invoice Workflow
 
 1. Navigate to the Admin -> JTL-Workflows
@@ -74,48 +88,76 @@ Ratenzahlung - Bequem in Raten per Bankeinzug zahlen
 3. Select Rechnungen - Manuell, create new Event with "Ereignis anlegen" button
 4. Create new event
 4. Configure condition with "One condition met" (Eine Bedingung erfüllt")
-   1. Auftrag\Zahlungsart\Name **Enthalt** Rechnungskauf - jetzt kaufen, später bezahlen
-   2. Auftrag\Zahlungsart\Name **Enthalt** SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen
-   3. Auftrag\Zahlungsart\Name **Enthalt** Ratenzahlung - Bequem in Raten per Bankeinzug zahlen
-6. Configure action
-   1. Web-Request POST:
-      1. URL:
-         ```
-         http://{SHOP-URL}/mondu-api?return=cancel-invoice&webhooks_secret={WEBHOOK SECRET}
-         ```
-      2. Parameter:
-         ```
-         invoice_number={{ Vorgang.Rechnungsnummer }}
-         ```
-      3. Header:
-         ```
-         Content-Type: application/x-www-form-urlencoded
-         ```
+   ### New installation:
+   Just create the workflows with the name of the payment methods which are mentioned in step 2 (add payment methods):
+    * Ratenkauf (3, 6, 12 Monaten)
+    * SEPA-Lastschrift (30 Tage)
+    * Rechnungskauf (30 Tage)
+    * Echtzeitüberweisung
 
+   ### Update from existing installation:
+   Update the conditions so that the rules will match for old AND new naming e.g.:
+    * Ratenkauf (3, 6, 12 Monaten)
+    * SEPA-Lastschrift (30 Tage)
+    * Rechnungskauf (30 Tage)
+    * Echtzeitüberweisung <br/> OR create additional rules so that all new payment methods will be covered
+
+    1. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Rechnungskauf
+    2. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** SEPA-Lastschrift
+    3. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Rate
+    4. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Echtzeitüberweisung
+6. Configure action
+    1. Web-Request POST:
+        1. URL:
+           ```
+           http://{SHOP-URL}/mondu-api?return=cancel-invoice&webhooks_secret={WEBHOOK SECRET}
+           ```
+        2. Parameter:
+           ```
+           invoice_number={{ Vorgang.Rechnungsnummer }}
+           ```
+        3. Header:
+           ```
+           Content-Type: application/x-www-form-urlencoded
+           ```
 ### Cancel Order Workflow
 
 1. Navigate to the Admin -> JTL-Workflows
 2. Select **Auftrage** tab
 3. Select Auftrag -> Storniert and create a workflow
-4. 4. Configure condition with "One condition met" (Eine Bedingung erfüllt")
-   1. Zahlungen\Zahlungsart\Name **Enthalt** Rechnungskauf - jetzt kaufen, später bezahlen
-   2. Zahlungen\Zahlungsart\Name **Enthalt** SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen
-   3. Zahlungen\Zahlungsart\Name **Enthalt** Ratenzahlung - Bequem in Raten per Bankeinzug zahlen
-5. Configure action
-   1. Web-Request POST:
-      1. URL:
-         ```
-         http://{SHOP-URL}/mondu-api?return=cancel-order&webhooks_secret={WEBHOOK SECRET}
-         ```
-      2. Parameter:
-         ```
-         order_number={{ Vorgang.Stammdaten.ExterneAuftragsnummer }}
-         ```
-      3. Header:
-         ```
-         Content-Type: application/x-www-form-urlencoded
-         ```
+4. Configure condition with "One condition met" (Eine Bedingung erfüllt")
+   ### New installation:
+   Just create the workflows with the name of the payment methods which are mentioned in step 2 (add payment methods):
+    * Ratenkauf (3, 6, 12 Monaten)
+    * SEPA-Lastschrift (30 Tage)
+    * Rechnungskauf (30 Tage)
+    * Echtzeitüberweisung
 
+   ### Update from existing installation:
+   Update the conditions so that the rules will match for old AND new naming e.g.:
+    * Ratenkauf (3, 6, 12 Monaten)
+    * SEPA-Lastschrift (30 Tage)
+    * Rechnungskauf (30 Tage)
+    * Echtzeitüberweisung <br/> OR create additional rules so that all new payment methods will be covered
+
+    1. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Rechnungskauf
+    2. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** SEPA-Lastschrift
+    3. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Rate
+    4. Rechnungen\Auftrag\Zahlungsart\Name **Enthalt** Echtzeitüberweisung
+5. Configure action
+    1. Web-Request POST:
+        1. URL:
+           ```
+           http://{SHOP-URL}/mondu-api?return=cancel-order&webhooks_secret={WEBHOOK SECRET}
+           ```
+        2. Parameter:
+           ```
+           order_number={{ Vorgang.Stammdaten.ExterneAuftragsnummer }}
+           ```
+        3. Header:
+           ```
+           Content-Type: application/x-www-form-urlencoded
+           ```
 ![image](https://user-images.githubusercontent.com/97665980/228552408-cf45d35d-9c62-4248-9ee8-fbf5aa6a7aa9.png)
 
 ### Configure Invoice Template

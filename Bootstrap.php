@@ -80,6 +80,19 @@ class Bootstrap extends Bootstrapper
         $routes = new RoutesService;
         $routes->frontEndRoutes($this->getPlugin());
 
+        // Register CSS and JS files via Smarty
+        $pluginUrl = $this->getPlugin()->getPaths()->getBaseURL();
+        $version = $this->getPlugin()->getMeta()->getVersion();
+        
+        // Add CSS to head
+        Shop::Smarty()->assign('monduPluginUrl', $pluginUrl);
+        Shop::Smarty()->assign('monduPluginVersion', $version);
+        
+        // Register in page header
+        \pq('head')->append(
+            '<link rel="stylesheet" href="' . $pluginUrl . 'frontend/css/style.css?v=' . $version . '" type="text/css" media="all">'
+        );
+
         return true;
     }
 

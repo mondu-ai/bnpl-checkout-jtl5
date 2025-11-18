@@ -7,7 +7,7 @@
     <PluginID>MonduPayment</PluginID>
     <XMLVersion>100</XMLVersion>
     <ShopVersion>5.0.0</ShopVersion>
-    <Version>3.0.6</Version>
+    <Version>4.0.0</Version>
     <CreateDate>2022-06-07</CreateDate>
     <Install>
         <Hooks>
@@ -64,6 +64,13 @@
                       <Description>Kostenfrei! Sie zahlen keine versteckten Gebühren oder Zinsen.|Automatische Zahlung alle 30 Tage nach Versand der Ware.|Jederzeit die Kontrolle! Wir informieren Sie über anstehende Ratenzahlungen per E-Mail.</Description>
                       <ValueName>installments_benefits</ValueName>
                   </Setting>
+
+                  <Setting type="none" initialValue="" sort="1" conf="Y">
+                      <Name>PayNow Payment Method Benefits</Name>
+                      <Description></Description>
+                      <ValueName>pay_now_benefits</ValueName>
+                  </Setting>
+
                </Settingslink>
                <Settingslink sort="2">
                     <Name>Layout Configuration</Name>
@@ -71,25 +78,6 @@
                         <Name>Enable Payment Method Group</Name>
                         <Description>When enabled, payment methods will be grouped by net terms.</Description>
                         <ValueName>payment_method_group_enabled</ValueName>
-                        <RadioOptions>
-                            <Option value="0" sort="1">No</Option>
-                            <Option value="1" sort="2">Yes</Option>
-                        </RadioOptions>
-                    </Setting>
-                    <Setting type="text" initialValue="Jetzt kaufen, in {net_term} Tagen bezahlen" sort="2" conf="Y">
-                        <Name>Net Term Group Title</Name>
-                        <Description>Title for the net term group. Use {net_term} symbol to replace with net term in the frontend.</Description>
-                        <ValueName>net_term_title</ValueName>
-                    </Setting>
-                    <Setting type="text" initialValue="" sort="3" conf="Y">
-                        <Name>Net Term Group Description</Name>
-                        <Description>Description for the net term group. Use {net_term} symbol to replace with net term in the frontend.</Description>
-                        <ValueName>net_term_description</ValueName>
-                    </Setting>
-                    <Setting type="radio" initialValue="0" sort="4" conf="Y">
-                        <Name>Show Payment Method Name </Name>
-                        <Description>When enabled, in the standard layout, the payment method name will be visible along with the Mondu logo.</Description>
-                        <ValueName>payment_method_name_visible</ValueName>
                         <RadioOptions>
                             <Option value="0" sort="1">No</Option>
                             <Option value="1" sort="2">Yes</Option>
@@ -103,7 +91,7 @@
         <PaymentMethod>
             <!-- Mondu Rechnungskauf -->
             <Method>
-                <Name>Mondu Rechnungskauf 14 Tagen</Name>
+                <Name>Rechnungskauf (14 Tage)</Name>
                 <PictureURL>images/plugin.png</PictureURL>
                 <Sort>1</Sort>
                 <SendMail>1</SendMail>
@@ -117,19 +105,24 @@
                 <ClassName>MonduPayment</ClassName>
                 <TemplateFile>template/mondu_payment.tpl</TemplateFile>
                 <MethodLanguage iso="GER">
-                    <Name>Rechnungskauf - jetzt kaufen, später bezahlen</Name>
+                    <Name>Rechnungskauf (14 Tage)</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie [url=https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/]hier[/url].</InfoText>
+                    <InfoText> </InfoText>
+                </MethodLanguage>
+                <MethodLanguage iso="ENG">
+                    <Name>Invoice (14 days)</Name>
+                    <ChargeName>Mondu</ChargeName>
+                    <InfoText> </InfoText>
                 </MethodLanguage>
                 <MethodLanguage iso="DUT">
-                    <Name>Aankoop op rekening - nu kopen, later betalen</Name>
+                    <Name>Factuur (14 dagen)</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Informatie over de verwerking van uw persoonsgegevens door Mondu GmbH vindt u [url=https://mondu.ai/nl/gdpr-notification-for-buyers]hier[/url].</InfoText>
+                    <InfoText> </InfoText>
                 </MethodLanguage>
                 <MethodLanguage iso="FRE">
-                    <Name>Achat sur facture - Payer plus tard par virement bancaire</Name>
+                    <Name>Facture (14 jours)</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Plus d'informations sur la façon dont Mondu GmbH traite vos données personnelles peuvent être trouvées [url=https://mondu.ai/fr/gdpr-notification-for-buyers]ici[/url].</InfoText>
+                    <InfoText> </InfoText>
                 </MethodLanguage>
                 <Setting type="selectbox" initialValue="14" sort="50" conf="Y">
                     <Name>Net Term</Name>
@@ -147,7 +140,7 @@
                 </Setting>
             </Method>
             <Method>
-                <Name>Mondu Rechnungskauf 30 Tagen</Name>
+                <Name>Rechnungskauf (30 Tage)</Name>
                 <PictureURL>images/plugin.png</PictureURL>
                 <Sort>2</Sort>
                 <SendMail>1</SendMail>
@@ -161,19 +154,24 @@
                 <ClassName>MonduPayment</ClassName>
                 <TemplateFile>template/mondu_payment.tpl</TemplateFile>
                 <MethodLanguage iso="GER">
-                    <Name>Rechnungskauf - jetzt kaufen, später bezahlen</Name>
+                    <Name>Rechnungskauf (30 Tage)</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie [url=https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/]hier[/url].</InfoText>
+                    <InfoText> </InfoText>
+                </MethodLanguage>
+                <MethodLanguage iso="ENG">
+                    <Name>Invoice (30 days)</Name>
+                    <ChargeName>Mondu</ChargeName>
+                    <InfoText> </InfoText>
                 </MethodLanguage>
                 <MethodLanguage iso="DUT">
-                    <Name>Aankoop op rekening - nu kopen, later betalen</Name>
+                    <Name>Factuur (30 dagen)</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Informatie over de verwerking van uw persoonsgegevens door Mondu GmbH vindt u [url=https://mondu.ai/nl/gdpr-notification-for-buyers]hier[/url].</InfoText>
+                    <InfoText> </InfoText>
                 </MethodLanguage>
                 <MethodLanguage iso="FRE">
-                    <Name>Achat sur facture - Payer plus tard par virement bancaire</Name>
+                    <Name>Facture (30 jours)</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Plus d'informations sur la façon dont Mondu GmbH traite vos données personnelles peuvent être trouvées [url=https://mondu.ai/fr/gdpr-notification-for-buyers]ici[/url].</InfoText>
+                    <InfoText> </InfoText>
                 </MethodLanguage>
                 <Setting type="selectbox" initialValue="30" sort="50" conf="Y">
                     <Name>Net Term</Name>
@@ -191,7 +189,7 @@
                 </Setting>
             </Method>
             <Method>
-                <Name>Mondu Rechnungskauf 45 Tagen</Name>
+                <Name>Rechnungskauf (45 Tage)</Name>
                 <PictureURL>images/plugin.png</PictureURL>
                 <Sort>3</Sort>
                 <SendMail>1</SendMail>
@@ -205,19 +203,24 @@
                 <ClassName>MonduPayment</ClassName>
                 <TemplateFile>template/mondu_payment.tpl</TemplateFile>
                 <MethodLanguage iso="GER">
-                    <Name>Rechnungskauf - jetzt kaufen, später bezahlen</Name>
+                    <Name>Rechnungskauf (45 Tage)</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie [url=https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/]hier[/url].</InfoText>
+                    <InfoText> </InfoText>
+                </MethodLanguage>
+                <MethodLanguage iso="ENG">
+                    <Name>Invoice (45 days)</Name>
+                    <ChargeName>Mondu</ChargeName>
+                    <InfoText> </InfoText>
                 </MethodLanguage>
                 <MethodLanguage iso="DUT">
-                    <Name>Aankoop op rekening - nu kopen, later betalen</Name>
+                    <Name>Factuur (45 dagen)</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Informatie over de verwerking van uw persoonsgegevens door Mondu GmbH vindt u [url=https://mondu.ai/nl/gdpr-notification-for-buyers]hier[/url].</InfoText>
+                    <InfoText> </InfoText>
                 </MethodLanguage>
                 <MethodLanguage iso="FRE">
-                    <Name>Achat sur facture - Payer plus tard par virement bancaire</Name>
+                    <Name>Facture (45 jours)</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Plus d'informations sur la façon dont Mondu GmbH traite vos données personnelles peuvent être trouvées [url=https://mondu.ai/fr/gdpr-notification-for-buyers]ici[/url].</InfoText>
+                    <InfoText> </InfoText>
                 </MethodLanguage>
                 <Setting type="selectbox" initialValue="45" sort="50" conf="Y">
                     <Name>Net Term</Name>
@@ -235,7 +238,7 @@
                 </Setting>
             </Method>
             <Method>
-                <Name>Mondu Rechnungskauf 60 Tagen</Name>
+                <Name>Rechnungskauf (60 Tage)</Name>
                 <PictureURL>images/plugin.png</PictureURL>
                 <Sort>4</Sort>
                 <SendMail>1</SendMail>
@@ -249,19 +252,24 @@
                 <ClassName>MonduPayment</ClassName>
                 <TemplateFile>template/mondu_payment.tpl</TemplateFile>
                 <MethodLanguage iso="GER">
-                    <Name>Rechnungskauf - jetzt kaufen, später bezahlen</Name>
+                    <Name>Rechnungskauf (60 Tage)</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie [url=https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/]hier[/url].</InfoText>
+                    <InfoText> </InfoText>
+                </MethodLanguage>
+                <MethodLanguage iso="ENG">
+                    <Name>Invoice (60 days)</Name>
+                    <ChargeName>Mondu</ChargeName>
+                    <InfoText> </InfoText>
                 </MethodLanguage>
                 <MethodLanguage iso="DUT">
-                    <Name>Aankoop op rekening - nu kopen, later betalen</Name>
+                    <Name>Factuur (60 dagen)</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Informatie over de verwerking van uw persoonsgegevens door Mondu GmbH vindt u [url=https://mondu.ai/nl/gdpr-notification-for-buyers]hier[/url].</InfoText>
+                    <InfoText> </InfoText>
                 </MethodLanguage>
                 <MethodLanguage iso="FRE">
-                    <Name>Achat sur facture - Payer plus tard par virement bancaire</Name>
+                    <Name>Facture (60 jours)</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Plus d'informations sur la façon dont Mondu GmbH traite vos données personnelles peuvent être trouvées [url=https://mondu.ai/fr/gdpr-notification-for-buyers]ici[/url].</InfoText>
+                    <InfoText> </InfoText>
                 </MethodLanguage>
                 <Setting type="selectbox" initialValue="60" sort="50" conf="Y">
                     <Name>Net Term</Name>
@@ -279,7 +287,7 @@
                 </Setting>
             </Method>
             <Method>
-                <Name>Mondu Rechnungskauf 90 Tagen</Name>
+                <Name>Rechnungskauf (90 Tage)</Name>
                 <PictureURL>images/plugin.png</PictureURL>
                 <Sort>4</Sort>
                 <SendMail>1</SendMail>
@@ -293,19 +301,24 @@
                 <ClassName>MonduPayment</ClassName>
                 <TemplateFile>template/mondu_payment.tpl</TemplateFile>
                 <MethodLanguage iso="GER">
-                    <Name>Rechnungskauf - jetzt kaufen, später bezahlen</Name>
+                    <Name>Rechnungskauf (90 Tage)</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie [url=https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/]hier[/url].</InfoText>
+                    <InfoText> </InfoText>
+                </MethodLanguage>
+                <MethodLanguage iso="ENG">
+                    <Name>Invoice (90 days)</Name>
+                    <ChargeName>Mondu</ChargeName>
+                    <InfoText> </InfoText>
                 </MethodLanguage>
                 <MethodLanguage iso="DUT">
-                    <Name>Aankoop op rekening - nu kopen, later betalen</Name>
+                    <Name>Factuur (90 dagen)</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Informatie over de verwerking van uw persoonsgegevens door Mondu GmbH vindt u [url=https://mondu.ai/nl/gdpr-notification-for-buyers]hier[/url].</InfoText>
+                    <InfoText> </InfoText>
                 </MethodLanguage>
                 <MethodLanguage iso="FRE">
-                    <Name>Achat sur facture - Payer plus tard par virement bancaire</Name>
+                    <Name>Facture (90 jours)</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Plus d'informations sur la façon dont Mondu GmbH traite vos données personnelles peuvent être trouvées [url=https://mondu.ai/fr/gdpr-notification-for-buyers]ici[/url].</InfoText>
+                    <InfoText> </InfoText>
                 </MethodLanguage>
                 <Setting type="selectbox" initialValue="90" sort="50" conf="Y">
                     <Name>Net Term</Name>
@@ -325,7 +338,7 @@
 
             <!-- Mondu SEPA-Lastschrift -->
             <Method>
-                <Name>Mondu SEPA-Lastschrift 14 Tagen</Name>
+                <Name>SEPA-Lastschrift (14 Tagen)</Name>
                 <PictureURL>images/plugin.png</PictureURL>
                 <Sort>5</Sort>
                 <SendMail>1</SendMail>
@@ -339,19 +352,24 @@
                 <ClassName>MonduPayment</ClassName>
                 <TemplateFile>template/mondu_payment.tpl</TemplateFile>
                 <MethodLanguage iso="GER">
-                    <Name>SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen</Name>
+                    <Name>SEPA-Lastschrift (14 Tagen)</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie [url=https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/]hier[/url].</InfoText>
+                    <InfoText> </InfoText>
+                </MethodLanguage>
+                <MethodLanguage iso="ENG">
+                    <Name>SEPA direct debit (14 days)</Name>
+                    <ChargeName>Mondu</ChargeName>
+                    <InfoText> </InfoText>
                 </MethodLanguage>
                 <MethodLanguage iso="DUT">
-                    <Name>SEPA automatische incasso - nu kopen, later betalen</Name>
+                    <Name>SEPA automatische incasso (14 dagen)</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Informatie over de verwerking van uw persoonsgegevens door Mondu GmbH vindt u [url=https://mondu.ai/nl/gdpr-notification-for-buyers]hier[/url].</InfoText>
+                    <InfoText> </InfoText>
                 </MethodLanguage>
                 <MethodLanguage iso="FRE">
-                    <Name>SEPA - Payer plus tard par prélèvement automatique SEPA</Name>
+                    <Name>Prélèvement automatique SEPA (14 jours)</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Plus d'informations sur la façon dont Mondu GmbH traite vos données personnelles peuvent être trouvées [url=https://mondu.ai/fr/gdpr-notification-for-buyers]ici[/url].</InfoText>
+                    <InfoText> </InfoText>
                 </MethodLanguage>
                 <Setting type="selectbox" initialValue="14" sort="50" conf="Y">
                     <Name>Net Term</Name>
@@ -369,7 +387,7 @@
                 </Setting>
             </Method>
             <Method>
-                <Name>Mondu SEPA-Lastschrift 30 Tagen</Name>
+                <Name>SEPA-Lastschrift (30 Tagen)</Name>
                 <PictureURL>images/plugin.png</PictureURL>
                 <Sort>6</Sort>
                 <SendMail>1</SendMail>
@@ -383,19 +401,24 @@
                 <ClassName>MonduPayment</ClassName>
                 <TemplateFile>template/mondu_payment.tpl</TemplateFile>
                 <MethodLanguage iso="GER">
-                    <Name>SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen</Name>
+                    <Name>SEPA-Lastschrift (30 Tage)</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie [url=https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/]hier[/url].</InfoText>
+                    <InfoText> </InfoText>
+                </MethodLanguage>
+                <MethodLanguage iso="ENG">
+                    <Name>SEPA direct debit (30 days)</Name>
+                    <ChargeName>Mondu</ChargeName>
+                    <InfoText> </InfoText>
                 </MethodLanguage>
                 <MethodLanguage iso="DUT">
-                    <Name>SEPA automatische incasso - nu kopen, later betalen</Name>
+                    <Name>SEPA automatische incasso (30 dagen)</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Informatie over de verwerking van uw persoonsgegevens door Mondu GmbH vindt u [url=https://mondu.ai/nl/gdpr-notification-for-buyers]hier[/url].</InfoText>
+                    <InfoText> </InfoText>
                 </MethodLanguage>
                 <MethodLanguage iso="FRE">
-                    <Name>SEPA - Payer plus tard par prélèvement automatique SEPA</Name>
+                    <Name>Prélèvement automatique SEPA (30 jours)</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Plus d'informations sur la façon dont Mondu GmbH traite vos données personnelles peuvent être trouvées [url=https://mondu.ai/fr/gdpr-notification-for-buyers]ici[/url].</InfoText>
+                    <InfoText> </InfoText>
                 </MethodLanguage>
                 <Setting type="selectbox" initialValue="30" sort="50" conf="Y">
                     <Name>Net Term</Name>
@@ -413,7 +436,7 @@
                 </Setting>
             </Method>
             <Method>
-                <Name>Mondu SEPA-Lastschrift 45 Tagen</Name>
+                <Name>SEPA-Lastschrift (45 Tage)</Name>
                 <PictureURL>images/plugin.png</PictureURL>
                 <Sort>7</Sort>
                 <SendMail>1</SendMail>
@@ -427,19 +450,24 @@
                 <ClassName>MonduPayment</ClassName>
                 <TemplateFile>template/mondu_payment.tpl</TemplateFile>
                 <MethodLanguage iso="GER">
-                    <Name>SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen</Name>
+                    <Name>SEPA-Lastschrift (45 Tage)</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie [url=https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/]hier[/url].</InfoText>
+                    <InfoText> </InfoText>
+                </MethodLanguage>
+                <MethodLanguage iso="ENG">
+                    <Name>SEPA direct debit (45 days)</Name>
+                    <ChargeName>Mondu</ChargeName>
+                    <InfoText> </InfoText>
                 </MethodLanguage>
                 <MethodLanguage iso="DUT">
-                    <Name>SEPA automatische incasso - nu kopen, later betalen</Name>
+                    <Name>SEPA automatische incasso (45 dagen)</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Informatie over de verwerking van uw persoonsgegevens door Mondu GmbH vindt u [url=https://mondu.ai/nl/gdpr-notification-for-buyers]hier[/url].</InfoText>
+                    <InfoText> </InfoText>
                 </MethodLanguage>
                 <MethodLanguage iso="FRE">
-                    <Name>SEPA - Payer plus tard par prélèvement automatique SEPA</Name>
+                    <Name>Prélèvement automatique SEPA (45 jours)</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Plus d'informations sur la façon dont Mondu GmbH traite vos données personnelles peuvent être trouvées [url=https://mondu.ai/fr/gdpr-notification-for-buyers]ici[/url].</InfoText>
+                    <InfoText> </InfoText>
                 </MethodLanguage>
                 <Setting type="selectbox" initialValue="45" sort="50" conf="Y">
                     <Name>Net Term</Name>
@@ -457,7 +485,7 @@
                 </Setting>
             </Method>
             <Method>
-                <Name>Mondu SEPA-Lastschrift 60 Tagen</Name>
+                <Name>SEPA-Lastschrift (60 Tage)</Name>
                 <PictureURL>images/plugin.png</PictureURL>
                 <Sort>8</Sort>
                 <SendMail>1</SendMail>
@@ -471,19 +499,24 @@
                 <ClassName>MonduPayment</ClassName>
                 <TemplateFile>template/mondu_payment.tpl</TemplateFile>
                 <MethodLanguage iso="GER">
-                    <Name>SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen</Name>
+                    <Name>SEPA-Lastschrift (60 Tage)</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie [url=https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/]hier[/url].</InfoText>
+                    <InfoText> </InfoText>
+                </MethodLanguage>
+                <MethodLanguage iso="ENG">
+                    <Name>SEPA direct debit (60 days)</Name>
+                    <ChargeName>Mondu</ChargeName>
+                    <InfoText> </InfoText>
                 </MethodLanguage>
                 <MethodLanguage iso="DUT">
-                    <Name>SEPA automatische incasso - nu kopen, later betalen</Name>
+                    <Name>SEPA automatische incasso (60 dagen)</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Informatie over de verwerking van uw persoonsgegevens door Mondu GmbH vindt u [url=https://mondu.ai/nl/gdpr-notification-for-buyers]hier[/url].</InfoText>
+                    <InfoText> </InfoText>
                 </MethodLanguage>
                 <MethodLanguage iso="FRE">
-                    <Name>SEPA - Payer plus tard par prélèvement automatique SEPA</Name>
+                    <Name>Prélèvement automatique SEPA (60 jours)</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Plus d'informations sur la façon dont Mondu GmbH traite vos données personnelles peuvent être trouvées [url=https://mondu.ai/fr/gdpr-notification-for-buyers]ici[/url].</InfoText>
+                    <InfoText> </InfoText>
                 </MethodLanguage>
                 <Setting type="selectbox" initialValue="60" sort="50" conf="Y">
                     <Name>Net Term</Name>
@@ -501,7 +534,7 @@
                 </Setting>
             </Method>
             <Method>
-                <Name>Mondu SEPA-Lastschrift 90 Tagen</Name>
+                <Name>SEPA-Lastschrift (90 Tage)</Name>
                 <PictureURL>images/plugin.png</PictureURL>
                 <Sort>8</Sort>
                 <SendMail>1</SendMail>
@@ -515,19 +548,24 @@
                 <ClassName>MonduPayment</ClassName>
                 <TemplateFile>template/mondu_payment.tpl</TemplateFile>
                 <MethodLanguage iso="GER">
-                    <Name>SEPA-Lastschrift - jetzt kaufen, später per Bankeinzug bezahlen</Name>
+                    <Name>SEPA-Lastschrift (90 Tage)</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie [url=https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/]hier[/url].</InfoText>
+                    <InfoText> </InfoText>
+                </MethodLanguage>
+                <MethodLanguage iso="ENG">
+                    <Name>SEPA direct debit (90 days)</Name>
+                    <ChargeName>Mondu</ChargeName>
+                    <InfoText> </InfoText>
                 </MethodLanguage>
                 <MethodLanguage iso="DUT">
-                    <Name>SEPA automatische incasso - nu kopen, later betalen</Name>
+                    <Name>SEPA automatische incasso (90 dagen)</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Informatie over de verwerking van uw persoonsgegevens door Mondu GmbH vindt u [url=https://mondu.ai/nl/gdpr-notification-for-buyers]hier[/url].</InfoText>
+                    <InfoText> </InfoText>
                 </MethodLanguage>
                 <MethodLanguage iso="FRE">
-                    <Name>SEPA - Payer plus tard par prélèvement automatique SEPA</Name>
+                    <Name>Prélèvement automatique SEPA (90 jours)</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Plus d'informations sur la façon dont Mondu GmbH traite vos données personnelles peuvent être trouvées [url=https://mondu.ai/fr/gdpr-notification-for-buyers]ici[/url].</InfoText>
+                    <InfoText> </InfoText>
                 </MethodLanguage>
                 <Setting type="selectbox" initialValue="90" sort="50" conf="Y">
                     <Name>Net Term</Name>
@@ -545,7 +583,7 @@
                 </Setting>
             </Method>
             <Method>
-                <Name>Mondu Ratenzahlung</Name>
+                <Name>Echtzeitüberweisung</Name>
                 <PictureURL>images/plugin.png</PictureURL>
                 <Sort>9</Sort>
                 <SendMail>1</SendMail>
@@ -559,19 +597,66 @@
                 <ClassName>MonduPayment</ClassName>
                 <TemplateFile>template/mondu_payment.tpl</TemplateFile>
                 <MethodLanguage iso="GER">
-                    <Name>Ratenzahlung - Bequem in Raten per Bankeinzug zahlen</Name>
+                    <Name>Echtzeitüberweisung</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie [url=https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/]hier[/url].</InfoText>
+                    <InfoText> </InfoText>
+                </MethodLanguage>
+                <MethodLanguage iso="ENG">
+                    <Name>Instant Pay</Name>
+                    <ChargeName>Mondu</ChargeName>
+                    <InfoText> </InfoText>
                 </MethodLanguage>
                 <MethodLanguage iso="DUT">
-                    <Name>Gespreid betalen, betaal gemakkelijk in termijnen via automatische incasso</Name>
+                    <Name>Echtzeitüberweisung</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Informatie over de verwerking van uw persoonsgegevens door Mondu GmbH vindt u [url=https://mondu.ai/nl/gdpr-notification-for-buyers]hier[/url].</InfoText>
+                    <InfoText> </InfoText>
                 </MethodLanguage>
                 <MethodLanguage iso="FRE">
-                    <Name>Paiement échelonné - Payer confortablement en plusieurs fois par prélèvement automatique</Name>
+                    <Name>Virement instantané</Name>
                     <ChargeName>Mondu</ChargeName>
-                    <InfoText>Plus d'informations sur la façon dont Mondu GmbH traite vos données personnelles peuvent être trouvées [url=https://mondu.ai/fr/gdpr-notification-for-buyers]ici[/url].</InfoText>
+                    <InfoText> </InfoText>
+                </MethodLanguage>
+                <Setting type="selectbox" initialValue="pay_now" sort="50" conf="Y">
+                    <Name>Payment Method</Name>
+                    <ValueName>payment_method</ValueName>
+                    <SelectboxOptions>
+                        <Option sort="1" value="pay_now">Mondu Echtzeitüberweisung</Option>
+                    </SelectboxOptions>
+                </Setting>
+            </Method>
+            <Method>
+                <Name>Ratenkauf (3, 6, 12 Monaten)</Name>
+                <PictureURL>images/plugin.png</PictureURL>
+                <Sort>10</Sort>
+                <SendMail>1</SendMail>
+                <Provider>Mondu</Provider>
+                <TSCode>OTHER</TSCode>
+                <PreOrder>0</PreOrder>
+                <Soap>0</Soap>
+                <Curl>1</Curl>
+                <Sockets>0</Sockets>
+                <ClassFile>MonduPayment.php</ClassFile>
+                <ClassName>MonduPayment</ClassName>
+                <TemplateFile>template/mondu_payment.tpl</TemplateFile>
+                <MethodLanguage iso="GER">
+                    <Name>Ratenkauf (3, 6, 12 Monaten)</Name>
+                    <ChargeName>Mondu</ChargeName>
+                    <InfoText> </InfoText>
+                </MethodLanguage>
+                <MethodLanguage iso="ENG">
+                    <Name>Installments (3, 6, 12 months)</Name>
+                    <ChargeName>Mondu</ChargeName>
+                    <InfoText> </InfoText>
+                </MethodLanguage>
+                <MethodLanguage iso="DUT">
+                    <Name>Betaling in termijnen (3, 6, 12 maanden)</Name>
+                    <ChargeName>Mondu</ChargeName>
+                    <InfoText> </InfoText>
+                </MethodLanguage>
+                <MethodLanguage iso="FRE">
+                    <Name>Paiement échelonnés (3, 6, 12 mois)</Name>
+                    <ChargeName>Mondu</ChargeName>
+                    <InfoText> </InfoText>
                 </MethodLanguage>
                 <Setting type="selectbox" initialValue="installment" sort="50" conf="Y">
                     <Name>Payment Method</Name>

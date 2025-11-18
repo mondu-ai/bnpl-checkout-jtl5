@@ -9,10 +9,11 @@ class Migration20221130105300 extends Migration implements IMigration
 {
     public function up()
     {
+        // Clear all hint texts for Mondu payment methods instead of setting them
         $this->execute("
           UPDATE `tzahlungsartsprache` zs
-            SET zs.`cHinweisTextShop` = 'Hinweise zur Verarbeitung Ihrer personenbezogenen Daten durch die Mondu GmbH finden Sie [url=https://www.mondu.ai/de/datenschutzgrundverordnung-kaeufer/]hier[/url].'
-            WHERE zs.`cGebuehrname` = 'Mondu' and zs.`cISOSprache` IN ('ger', 'eng');
+            SET zs.`cHinweisTextShop` = '', zs.`cHinweisText` = ''
+            WHERE zs.`cGebuehrname` = 'Mondu';
         ");
     }
 
@@ -21,3 +22,4 @@ class Migration20221130105300 extends Migration implements IMigration
 
     }
 }
+
