@@ -427,12 +427,12 @@ class CheckoutPaymentMethod
         
         if (!$imageFilename) {
             // Return default image if payment type not recognized
-            return $this->plugin->getPaths()->getBaseURL() . 'PaymentMethod/images/plugin.png';
+            return $this->plugin->getPaths()->getBaseURL() . 'paymentmethod/images/plugin.png';
         }
 
         // Build localized image path
-        $localizedImagePath = $this->plugin->getPaths()->getBaseURL() . 'PaymentMethod/images/' . $locale . '/' . $imageFilename;
-        $localizedImageFile = $this->plugin->getPaths()->getBasePath() . 'PaymentMethod/images/' . $locale . '/' . $imageFilename;
+        $localizedImagePath = $this->plugin->getPaths()->getBaseURL() . 'paymentmethod/images/' . $locale . '/' . $imageFilename;
+        $localizedImageFile = $this->plugin->getPaths()->getBasePath() . 'paymentmethod/images/' . $locale . '/' . $imageFilename;
 
         // Check if localized image exists
         if (file_exists($localizedImageFile)) {
@@ -440,7 +440,7 @@ class CheckoutPaymentMethod
         }
 
         // Fallback to default image
-        return $this->plugin->getPaths()->getBaseURL() . 'PaymentMethod/images/plugin.png';
+        return $this->plugin->getPaths()->getBaseURL() . 'paymentmethod/images/plugin.png';
     }
 }
 
