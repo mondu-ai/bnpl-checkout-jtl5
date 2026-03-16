@@ -137,15 +137,12 @@ class MonduClient
         try {
             return $this->client->post('webhooks', $data);
         } catch (InvalidRequestException $e) {
-            $this->logEvent($e);
             $exceptionData = $e->getExceptionData();
-            $responseBody = json_decode($exceptionData->response_body, true);
-            
-            return [
-                'error' => true,
-                'message' => $responseBody['detail'] ?? $responseBody['message'] ?? 'Unknown error',
-                'status_code' => $exceptionData->response_code
-            ];
+            if (isset($exceptionData->response_code) && $exceptionData->response_code === 422) {
+                return ['already_subscribed' => true];
+            }
+            $this->logEvent($e);
+            return ['error' => true];
         }
     }
 
