@@ -1,5 +1,5 @@
 <?php
-namespace Plugin\MonduPayment\paymentmethod;
+namespace Plugin\MonduPayment\PaymentMethod;
 
 use JTL\Alert\Alert;
 use JTL\Plugin\Payment\Method;
