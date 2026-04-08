@@ -3,10 +3,10 @@ extends file="{$parent_template_path}/checkout/inc_payment_methods.tpl"}
 {block name='checkout-inc-payment-methods-image-title'}
   {if $zahlungsart->cAnbieter == 'Mondu'}
     {if $zahlungsart->cBild}
-      {image src=$zahlungsart->cBild alt=$zahlungsart->angezeigterName|transByISO fluid=true class="img-sm mondu-small"}
+      {image src=$zahlungsart->cBild alt=$zahlungsart->angezeigterName|trans fluid=true class="img-sm mondu-small"}
     {/if}
     <span class="content">
-      <span class="title">{$zahlungsart->angezeigterName|transByISO}</span>
+      <span class="title">{$zahlungsart->angezeigterName|trans}</span>
     </span>
   {else}
     {parent}

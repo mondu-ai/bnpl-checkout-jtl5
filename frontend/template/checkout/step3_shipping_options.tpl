@@ -17,6 +17,16 @@ extends file="{$parent_template_path}/checkout/step3_shipping_options.tpl"}
             line-height: 20px;
             color: #000000;
         }
+        .mondu-logo {
+            width: 50px;
+            min-width: 50px;
+            margin-right: 12px;
+        }
+        .mondu-logo img {
+            max-width: 50px;
+            width: 100%;
+            height: auto;
+        }
     </style>
 {/block}
 
