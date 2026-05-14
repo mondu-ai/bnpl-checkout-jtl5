@@ -4,3 +4,5 @@
 /Src/Resources/*.jpg
 /Src/Resources/*.jpeg
 .env
+node_modules/
+test-results/
