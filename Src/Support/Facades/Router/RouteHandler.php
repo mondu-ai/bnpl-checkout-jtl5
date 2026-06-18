@@ -6,7 +6,7 @@ class RouteHandler
 {
     private const CONTROLLERS_NAMESPACE = 'Plugin\\MonduPayment\\Src\\Controllers\\';
 
-    public static function call($handler, int $pluginId = null, $middlewares = [])
+    public static function call($handler, ?int $pluginId = null, $middlewares = [])
     {
         foreach ($middlewares as $middleware) {
             MiddlewareHandler::call($middleware);

@@ -46,7 +46,9 @@ class InvoicesController
         }
 
         $invoiceData = [
-            'currency' => $bestellung->Waehrung->code,
+            'currency' => method_exists($bestellung->Waehrung, 'getCode')
+                ? $bestellung->Waehrung->getCode()
+                : $bestellung->Waehrung->code,
             'order_uuid' => $monduOrder->order_uuid,
             'external_reference_id' => (string) $invoiceId,
             'invoice_url' => 'http://localhost',
