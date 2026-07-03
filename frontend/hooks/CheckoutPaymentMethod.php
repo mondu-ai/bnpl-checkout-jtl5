@@ -127,7 +127,7 @@ class CheckoutPaymentMethod
      *
      * @return string
      */
-    private function __translate($original): string
+    private function translateText($original): string
     {
       $getText   = Shop::Container()->getGetText();
       $oldLocale = $getText->getLanguage();
@@ -168,7 +168,7 @@ class CheckoutPaymentMethod
             });
             
             foreach ($methods as $method) {
-                $method->monduBenefits = str_replace('{net_term}', $netTerm, $this->__translate($benefits['invoice']));
+                $method->monduBenefits = str_replace('{net_term}', $netTerm, $this->translateText($benefits['invoice']));
                 $method->monduNetTerm = $netTerm; // Store net term for sorting
                 $method->cBild = $this->getPaymentMethodImage('invoice'); // Set localized image
                 $invoiceMethods[] = $method;
@@ -185,10 +185,10 @@ class CheckoutPaymentMethod
             
             $uniqueNetTerms = array_unique($invoiceNetTerms);
             sort($uniqueNetTerms);
-            $netTermsText = implode(', ', $uniqueNetTerms) . ' ' . $this->__translate('Tage');
+            $netTermsText = implode(', ', $uniqueNetTerms) . ' ' . $this->translateText('Tage');
             
             $monduGroups[] = [
-                'title' => $this->__translate('Rechnungskauf') . ' (' . $netTermsText . ')',
+                'title' => $this->translateText('Rechnungskauf') . ' (' . $netTermsText . ')',
                 'description' => '',
                 'image' => $this->getPaymentMethodImage('invoice'),
                 'payment_methods' => $invoiceMethods
@@ -208,7 +208,7 @@ class CheckoutPaymentMethod
             });
             
             foreach ($methods as $method) {
-                $method->monduBenefits = str_replace('{net_term}', $netTerm, $this->__translate($benefits['direct_debit']));
+                $method->monduBenefits = str_replace('{net_term}', $netTerm, $this->translateText($benefits['direct_debit']));
                 $method->monduNetTerm = $netTerm; // Store net term for sorting
                 $method->cBild = $this->getPaymentMethodImage('direct_debit'); // Set localized image
                 $sepaMethods[] = $method;
@@ -225,10 +225,10 @@ class CheckoutPaymentMethod
             
             $uniqueNetTerms = array_unique($sepaNetTerms);
             sort($uniqueNetTerms);
-            $netTermsText = implode(', ', $uniqueNetTerms) . ' ' . $this->__translate('Tage');
+            $netTermsText = implode(', ', $uniqueNetTerms) . ' ' . $this->translateText('Tage');
             
             $monduGroups[] = [
-                'title' => $this->__translate('SEPA-Lastschrift') . ' (' . $netTermsText . ')',
+                'title' => $this->translateText('SEPA-Lastschrift') . ' (' . $netTermsText . ')',
                 'description' => '',
                 'image' => $this->getPaymentMethodImage('direct_debit'),
                 'payment_methods' => $sepaMethods
@@ -247,7 +247,7 @@ class CheckoutPaymentMethod
         foreach ($installmentPaymentMethods as $method) {
             $paymentMethodType = $this->configService->getPaymentMethodByKPlugin($method->cModulId);
             if (isset($benefits[$paymentMethodType]) && $benefits[$paymentMethodType]) {
-                $method->monduBenefits = $this->__translate($benefits[$paymentMethodType]);
+                $method->monduBenefits = $this->translateText($benefits[$paymentMethodType]);
             } else {
                 $method->monduBenefits = '';
             }
@@ -266,10 +266,10 @@ class CheckoutPaymentMethod
         if (count($installmentPaymentMethods) > 0) {
             $uniquePeriods = array_unique($installmentPeriods);
             sort($uniquePeriods, SORT_NUMERIC);
-            $periodsText = implode(', ', $uniquePeriods) . ' ' . $this->__translate('Monaten');
+            $periodsText = implode(', ', $uniquePeriods) . ' ' . $this->translateText('Monaten');
             
             $monduGroups[] = [
-                'title' => $this->__translate('Ratenkauf') . ' (' . $periodsText . ')',
+                'title' => $this->translateText('Ratenkauf') . ' (' . $periodsText . ')',
                 'description' => '',
                 'image' => $this->getPaymentMethodImage('installment'),
                 'payment_methods' => $installmentPaymentMethods

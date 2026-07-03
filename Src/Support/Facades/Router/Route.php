@@ -157,7 +157,7 @@ class Route
         return RouteHandler::call($action, $pluginId);
     }
 
-    public static function execute($controllerMethod, int $pluginId = null)
+    public static function execute($controllerMethod, ?int $pluginId = null)
     {
         return RouteHandler::call($controllerMethod, $pluginId);
     }
