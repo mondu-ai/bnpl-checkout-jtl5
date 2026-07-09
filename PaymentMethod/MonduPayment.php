@@ -90,6 +90,8 @@ class MonduPayment extends Method
             'authorized_net_term' => $authorizedNetTerm
         ]);
 
+        $state = $monduOrderApi['order']['state'] ?? null;
+
         if ($configService->shouldMarkOrderAsPaid()) {
             $payValue = $order->fGesamtsumme;
             $hash = $this->generateHash($order);
@@ -101,15 +103,20 @@ class MonduPayment extends Method
                 'cHinweis' => $_SESSION['monduOrderUuid'],
             ]);
 
-            if ($monduOrderApi['order']['state'] === MonduPayment::STATE_CONFIRMED) {
+            if ($state === MonduPayment::STATE_CONFIRMED) {
                 $this->setOrderStatusToPaid($order);
-            } else if ($monduOrderApi['order']['state'] === MonduPayment::STATE_PENDING) {
-                $upd                = new \stdClass();
-                $upd->cStatus       = \BESTELLUNG_STATUS_IN_BEARBEITUNG;
-                // Prevent Wawi sync for pending orders
-                $upd->cAbgeholt = 'M';
-                Shop::Container()->getDB()->update('tbestellung', 'kBestellung', (int) $order->kBestellung, $upd);
             }
+        }
+
+        // Prevent Wawi sync for every order that is not confirmed yet, regardless of
+        // the "mark order as paid" setting. The order is released for the Wawi only
+        // when Mondu confirms it (order/confirmed webhook -> unlockOrderForWawiSync).
+        // This stops created-but-cancelled/unconfirmed orders from being transmitted.
+        if ($state !== MonduPayment::STATE_CONFIRMED) {
+            $upd            = new \stdClass();
+            $upd->cStatus   = \BESTELLUNG_STATUS_IN_BEARBEITUNG;
+            $upd->cAbgeholt = 'M';
+            Shop::Container()->getDB()->update('tbestellung', 'kBestellung', (int) $order->kBestellung, $upd);
         }
 
         unset($_SESSION['monduOrderUuid']);

@@ -53,12 +53,13 @@ class WebhookController
             switch ($requestData['topic']) {
                 case 'order/confirmed':
                 case 'order/declined':
+                case 'order/canceled':
                 case 'order/pending':
                     return $this->handleOrderStateChanged($requestData);
                 case 'invoice/canceled':
                     return $this->handleInvoiceStateChanged($requestData, 'canceled');
                 default:
-                    return [['message' => 'Unregistered topic: ' . $requestData['topic'], 'available_topics' => ['order/confirmed', 'order/declined', 'order/pending', 'invoice/canceled']], Response::HTTP_OK];
+                    return [['message' => 'Unregistered topic: ' . $requestData['topic'], 'available_topics' => ['order/confirmed', 'order/declined', 'order/canceled', 'order/pending', 'invoice/canceled']], Response::HTTP_OK];
             }
         } catch (\Exception $e) {
             return [['message' => 'Error processing webhook', 'error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR];
