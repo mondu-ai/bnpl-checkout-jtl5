@@ -90,6 +90,18 @@ class MonduPayment extends Method
             'authorized_net_term' => $authorizedNetTerm
         ]);
 
+        $state = $monduOrderApi['order']['state'] ?? null;
+
+        if ($state === null) {
+            // getOrder response did not contain order.state: the order is held from the Wawi
+            // (fail-closed) and will only release on an order/confirmed webhook. Log it so an
+            // empty/failed Mondu response is diagnosable instead of the order being silently stuck.
+            Shop::Container()->getLogService()->warning(
+                'Mondu: could not read order state from getOrder response for order ' . $order->cBestellNr
+                . '; holding it from the Wawi until an order/confirmed webhook arrives.'
+            );
+        }
+
         if ($configService->shouldMarkOrderAsPaid()) {
             $payValue = $order->fGesamtsumme;
             $hash = $this->generateHash($order);
@@ -101,15 +113,30 @@ class MonduPayment extends Method
                 'cHinweis' => $_SESSION['monduOrderUuid'],
             ]);
 
-            if ($monduOrderApi['order']['state'] === MonduPayment::STATE_CONFIRMED) {
+            if ($state === MonduPayment::STATE_CONFIRMED) {
                 $this->setOrderStatusToPaid($order);
-            } else if ($monduOrderApi['order']['state'] === MonduPayment::STATE_PENDING) {
-                $upd                = new \stdClass();
-                $upd->cStatus       = \BESTELLUNG_STATUS_IN_BEARBEITUNG;
-                // Prevent Wawi sync for pending orders
-                $upd->cAbgeholt = 'M';
-                Shop::Container()->getDB()->update('tbestellung', 'kBestellung', (int) $order->kBestellung, $upd);
             }
+        }
+
+        // Prevent Wawi sync for every order that is not confirmed yet, regardless of
+        // the "mark order as paid" setting. The order is released for the Wawi only
+        // when Mondu confirms it (order/confirmed webhook -> unlockOrderForWawiSync).
+        // This stops created-but-cancelled/unconfirmed orders from being transmitted.
+        if ($state !== MonduPayment::STATE_CONFIRMED) {
+            $upd            = new \stdClass();
+            // Hold the order back from the Wawi for every non-confirmed state.
+            $upd->cAbgeholt = 'M';
+
+            // Only reflect a status the state actually justifies: pending -> In Bearbeitung,
+            // declined/canceled -> Storno (consistent with WebhookController::MONDU_JTL_MAPPING).
+            // Unknown/empty states are just held from the Wawi without forcing a misleading status.
+            if ($state === MonduPayment::STATE_PENDING) {
+                $upd->cStatus = \BESTELLUNG_STATUS_IN_BEARBEITUNG;
+            } elseif ($state === MonduPayment::STATE_DECLINED || $state === MonduPayment::STATE_CANCELED) {
+                $upd->cStatus = \BESTELLUNG_STATUS_STORNO;
+            }
+
+            Shop::Container()->getDB()->update('tbestellung', 'kBestellung', (int) $order->kBestellung, $upd);
         }
 
         unset($_SESSION['monduOrderUuid']);
