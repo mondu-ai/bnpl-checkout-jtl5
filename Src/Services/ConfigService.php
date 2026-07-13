@@ -62,6 +62,11 @@ class ConfigService
         return $this->config->getValue('mark_order_as_paid') == '1';
     }
 
+    public function shouldSkipInvoiceCreation()
+    {
+        return $this->config->getValue('skip_invoice_create') == '1';
+    }
+
     public function getPaymentMethodGroupEnabled()
     {
         return $this->config->getValue('payment_method_group_enabled');

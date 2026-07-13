@@ -23,6 +23,7 @@ class RoutesService
         Route::group(['CheckWebhookSecret'], function () {
             Route::post('invoice-create', 'Frontend\InvoicesController@create');
             Route::post('cancel-invoice', 'Frontend\InvoicesController@cancel');
+            Route::post('credit-note', 'Frontend\CreditNotesController@create');
             Route::post('cancel-order', 'Frontend\OrdersController@cancel');
         });
 

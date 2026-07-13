@@ -82,6 +82,26 @@ class MonduClient
         }
     }
 
+    public function createCreditNote(string $invoiceUuid, array $data = []): ?array
+    {
+        try {
+            return $this->client->post('invoices/' . $invoiceUuid . '/credit_notes', $data);
+        } catch (InvalidRequestException $e) {
+            $this->logEvent($e);
+            return ['error' => true];
+        }
+    }
+
+    public function getInvoices(string $orderUuid): ?array
+    {
+        try {
+            return $this->client->get('orders/' . $orderUuid . '/invoices');
+        } catch (InvalidRequestException $e) {
+            $this->logEvent($e);
+            return ['error' => true];
+        }
+    }
+
     public function getPaymentMethods(): ?array
     {
         try {
