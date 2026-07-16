@@ -82,7 +82,26 @@ class InvoiceHelper
 
         $response = $client->getInvoices($monduOrder->order_uuid);
 
+        return self::matchInvoiceUuid($response, $invoiceId);
+    }
+
+    /**
+     * Pure matching of a Mondu "GET orders/{uuid}/invoices" response against a JTL
+     * invoice number. Matches on either `invoice_number` or `external_reference_id`
+     * and returns the first matching invoice UUID (null when nothing matches).
+     *
+     * Extracted from resolveInvoiceUuid() so the matching logic can be unit-tested
+     * without any DB/HTTP dependency.
+     *
+     * @param array|null $response decoded Mondu getInvoices response
+     */
+    public static function matchInvoiceUuid(?array $response, string $invoiceId): ?string
+    {
         foreach ($response['invoices'] ?? [] as $invoice) {
+            if (!is_array($invoice)) {
+                continue;
+            }
+
             $number = isset($invoice['invoice_number']) ? (string) $invoice['invoice_number'] : null;
             $extRef = isset($invoice['external_reference_id']) ? (string) $invoice['external_reference_id'] : null;
 

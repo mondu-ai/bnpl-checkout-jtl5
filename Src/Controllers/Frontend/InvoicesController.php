@@ -33,18 +33,25 @@ class InvoicesController
         $order = $orderQuery->select('kBestellung')->where('cBestellNr', InvoiceHelper::escape((string) $orderId))->first()[0];
         $bestellung = new Bestellung($order->kBestellung, true);
 
-        // Workaround (PT-4010): optionally skip the create-invoice call to Mondu and
-        // only persist the invoice details locally. The invoice is submitted to Mondu
-        // through a separate PDF submission flow; credit notes resolve the Mondu
-        // invoice UUID on demand (see CreditNotesController). No Mondu order lookup or
-        // line items are needed in this mode.
+        // Workaround (PT-4010): optionally skip the create-invoice call to Mondu. The
+        // invoice is created in Mondu through a separate PDF-submission flow, so instead
+        // of creating it we fetch its details (the Mondu invoice UUID) from the Mondu
+        // order and store them locally, as required by the ticket. If the Mondu invoice
+        // is not available yet, the UUID stays empty and is resolved on demand later
+        // (credit-note / cancel via InvoiceHelper::resolveInvoiceUuid).
         if ($this->configService->shouldSkipInvoiceCreation()) {
+            $invoiceUuid = InvoiceHelper::resolveInvoiceUuid(
+                $this->monduClient,
+                $bestellung->kBestellung,
+                (string) $invoiceId
+            ) ?? '';
+
             $monduInvoice = new MonduInvoice();
             $monduInvoice->create([
                 'order_id' => $bestellung->kBestellung,
                 'state' => 'pending',
                 'external_reference_id' => $invoiceId,
-                'invoice_uuid' => ''
+                'invoice_uuid' => $invoiceUuid
             ]);
 
             return Response::json([
