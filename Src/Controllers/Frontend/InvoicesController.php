@@ -26,11 +26,26 @@ class InvoicesController
         $invoiceId = $requestData['invoice_id'];
 
         $orderQuery = new Order();
-        $order = $orderQuery->select('kBestellung')->where('cBestellNr', $orderId)->first()[0];
-        $bestellung = new Bestellung($order->kBestellung, true);
+        $order = $orderQuery->select('kBestellung')->where('cBestellNr', $orderId)->first()[0] ?? null;
+
+        if (!$order) {
+            return Response::json([
+                'error' => true,
+                'message' => 'Order not found for order_id ' . $orderId
+            ], Response::HTTP_NOT_FOUND);
+        }
+
+        $bestellung = new Bestellung((int) $order->kBestellung, true);
 
         $monduOrder = new MonduOrder();
-        $monduOrder = $monduOrder->select('order_uuid')->where('external_reference_id', $bestellung->cBestellNr)->first()[0];
+        $monduOrder = $monduOrder->select('order_uuid')->where('external_reference_id', $bestellung->cBestellNr)->first()[0] ?? null;
+
+        if (!$monduOrder || empty($monduOrder->order_uuid)) {
+            return Response::json([
+                'error' => true,
+                'message' => 'Mondu order not found for order_id ' . $orderId
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
 
         $invoiceLineItems = [];
 
@@ -79,10 +94,24 @@ class InvoicesController
         $invoiceNumber = $requestData['invoice_number'];
         
         $monduInvoice = new MonduInvoice();
-        $monduInvoice = $monduInvoice->select('invoice_uuid, order_id')->where('external_reference_id', $invoiceNumber)->first()[0];
+        $monduInvoice = $monduInvoice->select('invoice_uuid, order_id')->where('external_reference_id', $invoiceNumber)->first()[0] ?? null;
+
+        if (!$monduInvoice) {
+            return Response::json([
+                'error' => true,
+                'message' => 'Invoice not found for invoice_number ' . $invoiceNumber
+            ], Response::HTTP_NOT_FOUND);
+        }
 
         $monduOrder = new MonduOrder();
-        $monduOrder = $monduOrder->select('order_uuid')->where('order_id', $monduInvoice->order_id)->first()[0];
+        $monduOrder = $monduOrder->select('order_uuid')->where('order_id', $monduInvoice->order_id)->first()[0] ?? null;
+
+        if (!$monduOrder || empty($monduOrder->order_uuid)) {
+            return Response::json([
+                'error' => true,
+                'message' => 'Mondu order not found for invoice_number ' . $invoiceNumber
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
 
         $this->monduClient->cancelInvoice(['invoice_uuid' => $monduInvoice->invoice_uuid, 'order_uuid' => $monduOrder->order_uuid]);
 
