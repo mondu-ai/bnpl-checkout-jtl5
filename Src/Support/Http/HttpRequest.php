@@ -148,8 +148,6 @@ class HttpRequest
         $response = curl_exec($this->curl);
         $info = curl_getinfo($this->curl);
 
-        curl_close($this->curl);
-
         if (!$response || !($info['http_code'] >= 200 && $info['http_code'] <= 299)) {
             $exception = new \stdClass();
             $exception->method = $method;
