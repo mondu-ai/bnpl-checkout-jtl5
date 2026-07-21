@@ -160,6 +160,31 @@ Echtzeitüberweisung
            ```
 ![image](https://user-images.githubusercontent.com/97665980/228552408-cf45d35d-9c62-4248-9ee8-fbf5aa6a7aa9.png)
 
+### Credit Note Workflow
+
+1. Navigate to the Admin -> JTL-Workflows
+2. Select **Rechnungskorrekturen** tab
+3. Create a new event for credit notes (Rechnungskorrektur)
+4. Configure condition with "One condition met" ("Eine Bedingung erfüllt") for the Mondu payment methods, as in the workflows above
+5. Configure action
+    1. Web-Request POST:
+        1. URL:
+           ```
+           http://{SHOP-URL}/mondu-api?return=credit-note&webhooks_secret={WEBHOOK SECRET}
+           ```
+        2. Parameter:
+           ```
+           gross_amount_cents={{ Vorgang.Gesamtbetrag }}&invoice_id={{ Vorgang.Rechnung.Rechnungsnummer }}&external_reference_id={{ Vorgang.Rechnungskorrekturnummer }}
+           ```
+        3. Header:
+           ```
+           Content-Type: application/x-www-form-urlencoded
+           ```
+
+The plugin looks up the invoice by `invoice_id` (the original invoice number) and submits a credit note to Mondu with the given amount and the credit note reference (`external_reference_id`).
+
+> **Note:** If the setting **"Do not send invoice to Mondu (store locally only)?"** is enabled, invoices are only stored in the plugin database. In that case the credit note workflow resolves the Mondu invoice from the order automatically on the first credit note request.
+
 ### Configure Invoice Template
 
 1. Open your JTL-Wawi and navigate to the `Admin -> Druck- / E-Mail- / Exportvorlagen`

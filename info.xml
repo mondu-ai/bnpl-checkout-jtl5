@@ -7,7 +7,7 @@
     <PluginID>MonduPayment</PluginID>
     <XMLVersion>100</XMLVersion>
     <ShopVersion>5.0.0</ShopVersion>
-    <Version>4.1.1</Version>
+    <Version>4.1.2</Version>
     <CreateDate>2022-06-07</CreateDate>
     <Install>
         <Hooks>
@@ -45,6 +45,15 @@
                       <SelectboxOptions>
                           <Option value="1" sort="0">Yes</Option>
                           <Option value="0" sort="1">No</Option>
+                      </SelectboxOptions>
+                  </Setting>
+                  <Setting type="selectbox" initialValue="0" sort="1" conf="Y">
+                      <Name>Do not send invoice to Mondu (store locally only)?</Name>
+                      <Description>If set to "Yes", the invoice-create workflow will not call Mondu. The invoice details are only stored in the plugin database (workaround for separate PDF submission). Credit notes will resolve the Mondu invoice on demand.</Description>
+                      <ValueName>skip_invoice_create</ValueName>
+                      <SelectboxOptions>
+                          <Option value="0" sort="0">No</Option>
+                          <Option value="1" sort="1">Yes</Option>
                       </SelectboxOptions>
                   </Setting>
                   <Setting type="none" initialValue="" sort="1" conf="Y">
