@@ -53,12 +53,13 @@ class WebhookController
             switch ($requestData['topic']) {
                 case 'order/confirmed':
                 case 'order/declined':
+                case 'order/canceled':
                 case 'order/pending':
                     return $this->handleOrderStateChanged($requestData);
                 case 'invoice/canceled':
                     return $this->handleInvoiceStateChanged($requestData, 'canceled');
                 default:
-                    return [['message' => 'Unregistered topic: ' . $requestData['topic'], 'available_topics' => ['order/confirmed', 'order/declined', 'order/pending', 'invoice/canceled']], Response::HTTP_OK];
+                    return [['message' => 'Unregistered topic: ' . $requestData['topic'], 'available_topics' => ['order/confirmed', 'order/declined', 'order/canceled', 'order/pending', 'invoice/canceled']], Response::HTTP_OK];
             }
         } catch (\Exception $e) {
             return [['message' => 'Error processing webhook', 'error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR];
@@ -72,9 +73,17 @@ class WebhookController
      */
     public function handleOrderStateChanged($requestData)
     {
+        // Prefer the explicit order_state from the payload, but fall back to the topic
+        // (e.g. "order/canceled" -> "canceled") so the status mapping (incl. the STORNO
+        // transition) is guaranteed even if the payload does not populate order_state.
+        $orderState = $requestData['order_state'] ?? null;
+        if (empty($orderState) && isset($requestData['topic']) && strpos($requestData['topic'], 'order/') === 0) {
+            $orderState = substr($requestData['topic'], strlen('order/'));
+        }
+
         $params = [
             'order_id' => $requestData['external_reference_id'],
-            'order_state' => $requestData['order_state']
+            'order_state' => $orderState
         ];
 
         $monduOrder = $this->getOrder($params['order_id']);

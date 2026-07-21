@@ -63,11 +63,22 @@ class BasketHelper
             }
 
             if ($amount !== 0) {
-                Frontend::getCart()->erstelleSpezialPos(
+                $cart = Frontend::getCart();
+                if (\method_exists($cart, 'gibVersandkostenSteuerklasse')) {
+                    $taxClassID = $cart->gibVersandkostenSteuerklasse();
+                } else {
+                    $taxRateIDs = $cart->getShippingService()->getTaxRateIDs(
+                        '',
+                        $cart->PositionenArr,
+                        $_SESSION['Lieferadresse']->cLand ?? '',
+                    );
+                    $taxClassID = $taxRateIDs[0]->taxRateID ?? 0;
+                }
+                $cart->erstelleSpezialPos(
                     $name,
                     1,
                     $amount,
-                    Frontend::getCart()->gibVersandkostenSteuerklasse(),
+                    $taxClassID,
                     \C_WARENKORBPOS_TYP_ZAHLUNGSART
                 );
             }
