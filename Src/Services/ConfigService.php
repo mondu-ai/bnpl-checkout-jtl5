@@ -11,10 +11,6 @@ class ConfigService
     const API_SANDBOX_URL = 'https://api.demo.mondu.ai/api/v1/';
     const API_PRODUCTION_URL = 'https://api.mondu.ai/api/v1/';
 
-    const WIDGET_DEVELOPMENT_URL = 'http://localhost:3002/dist/widget.js';
-    const WIDGET_SANDBOX_URL = 'https://checkout.demo.mondu.ai/widget.js';
-    const WIDGET_PRODUCTION_URL = 'https://checkout.mondu.ai/widget.js';
-
     const AUTHORIZATION_FLOW = 'authorization_flow';
     const CONFIRMATION_FLOW = 'confirmation_flow';
 
@@ -89,15 +85,6 @@ class ConfigService
         }
 
         return self::API_PRODUCTION_URL;
-    }
-
-    public function getWidgetUrl()
-    {
-        if ($this->getSandboxMode()) {
-            return self::WIDGET_SANDBOX_URL;
-        }
-
-        return self::WIDGET_PRODUCTION_URL;
     }
 
     public function getBenefitsText()

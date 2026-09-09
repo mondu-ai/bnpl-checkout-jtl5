@@ -9,7 +9,6 @@ use Plugin\MonduPayment\Src\Support\HttpClients\MonduClient;
 use Plugin\MonduPayment\Src\Models\MonduOrder;
 use Plugin\MonduPayment\Src\Services\ConfigService;
 use Plugin\MonduPayment\Src\Helpers\OrderHashHelper;
-use Plugin\MonduPayment\Src\Controllers\Frontend\CheckoutController;
 
 /**
 * Class MonduPayment.

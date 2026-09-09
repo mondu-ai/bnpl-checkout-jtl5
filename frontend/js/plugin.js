@@ -1,20 +1,6 @@
 class MonduCheckoutPlugin {
     init() {
-        this._registerState();
         this._registerPaymentMethodEvents();
-
-        if (!this._isMonduPaymentSelected())
-            return;
-    }
-
-    _registerState() {
-        this.state = {
-            isSuccess: false
-        };
-    }
-
-    _monduPresent() {
-        $('.mondu-payment-method-groups').length > 0;
     }
 
     _paypalEnabled() {
@@ -98,10 +84,6 @@ class MonduCheckoutPlugin {
         if (this._paypalEnabled()) {
             $('.mondu-card-active').removeClass('mondu-card-active');
         }
-    }
-
-    _isMonduPaymentSelected() {
-        return window.MONDU_CONFIG != undefined && window.MONDU_CONFIG.selected;
     }
 
 }
