@@ -4,3 +4,9 @@
 /Src/Resources/*.jpg
 /Src/Resources/*.jpeg
 .env
+node_modules
+package-lock.json
+playwright-report
+test-results
+.hashes
+.current_version_files

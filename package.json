@@ -1,0 +1,16 @@
+{
+  "name": "mondu-jtl5-e2e",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Playwright E2E tests for the Mondu JTL5 plugin (hosted checkout + server endpoints)",
+  "scripts": {
+    "test": "playwright test",
+    "test:credit-note": "playwright test playwright/mondu-credit-note.spec.ts",
+    "report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.48.0",
+    "@types/node": "^20.11.16",
+    "dotenv": "^16.4.1"
+  }
+}
