@@ -18,8 +18,6 @@ class RoutesService
     {
         $pluginId = $plugin->getId();
 
-        Route::post('token', 'Frontend\CheckoutController@token');
-
         Route::group(['CheckWebhookSecret'], function () {
             Route::post('invoice-create', 'Frontend\InvoicesController@create');
             Route::post('cancel-invoice', 'Frontend\InvoicesController@cancel');

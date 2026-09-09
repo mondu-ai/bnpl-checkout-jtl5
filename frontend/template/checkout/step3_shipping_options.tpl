@@ -1,7 +1,7 @@
 extends file="{$parent_template_path}/checkout/step3_shipping_options.tpl"}
 
 {block name='checkout-step3-shipping-options-legend-payment' prepend}
-    <link rel="stylesheet" href="/plugins/MonduPayment/frontend/css/style.css?v=1762960876" type="text/css">
+    <link rel="stylesheet" href="/plugins/MonduPayment/frontend/css/style.css?v=1788994262" type="text/css">
     <style>
         /* Inline Mondu styles */
         .mondu-card .mondu-payment-method {
