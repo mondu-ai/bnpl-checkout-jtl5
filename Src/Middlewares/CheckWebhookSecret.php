@@ -34,7 +34,7 @@ class CheckWebhookSecret
     public static function isAllowed($data) 
     {
         if (isset($data['return'])){
-            if (in_array($data['return'], ['invoice-create', 'cancel-invoice', 'cancel-order']))
+            if (in_array($data['return'], ['invoice-create', 'cancel-invoice', 'credit-note', 'cancel-order']))
                 return true;
         }
 
