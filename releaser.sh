@@ -73,7 +73,9 @@ mkdir MonduPayment
 echo "Generating zip file"
 rsync -r --exclude 'MonduPayment' --exclude '.git' --exclude '.github' --exclude 'releaser.sh' \
 --exclude 'docker-compose.yml' --exclude 'activate.sh' --exclude 'shopscripts' --exclude 'docker' \
---exclude '.env.example' ./ MonduPayment
+--exclude '.env.example' --exclude 'node_modules' --exclude 'package.json' \
+--exclude 'package-lock.json' --exclude 'playwright.config.ts' --exclude 'playwright' \
+--exclude 'tests' --exclude 'playwright-report' --exclude 'test-results' ./ MonduPayment
 zip -r MonduPayment.zip MonduPayment
 
 echo "Done"

@@ -102,7 +102,6 @@ class OrderService
             'declined_url' => $this->getPaymentDeclineURL(),
             'payment_method' => $this->getPaymentMethod($paymentMethod),
             'gross_amount_cents' => round($basket->total[1] * 100),
-            'source' => 'widget',
             'external_reference_id' => uniqid('M_JTL_'),
             'buyer' => $buyer,
             'billing_address' => [
