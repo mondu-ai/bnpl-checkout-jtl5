@@ -88,10 +88,13 @@ class Bootstrap extends Bootstrapper
         Shop::Smarty()->assign('monduPluginUrl', $pluginUrl);
         Shop::Smarty()->assign('monduPluginVersion', $version);
         
-        // Register in page header
-        \pq('head')->append(
-            '<link rel="stylesheet" href="' . $pluginUrl . 'frontend/css/style.css?v=' . $version . '" type="text/css" media="all">'
-        );
+        // Register in page header — skip when DOM is not available (e.g. API requests)
+        try {
+            \pq('head')->append(
+                '<link rel="stylesheet" href="' . $pluginUrl . 'frontend/css/style.css?v=' . $version . '" type="text/css" media="all">'
+            );
+        } catch (\Throwable $e) {
+        }
 
         return true;
     }
