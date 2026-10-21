@@ -154,7 +154,7 @@ class Route
         if (!$action) {
             throw new RouteNotFoundException();
         }
-        return RouteHandler::call($action, $pluginId, self::$middlewares[$requestType][$route] ?? []);
+        return RouteHandler::call($action, $pluginId, self::$middlewares[$requestType][$route]);
     }
 
     public static function  routes_list(): array
