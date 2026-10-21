@@ -23,22 +23,13 @@ class CheckMonduSignature
     }
 
     private static function validateSignature($body, $monduSignature, $localSecret) {
-        $localSignature = hash_hmac('sha256', $body, $localSecret);
-
-        if ($monduSignature !== $localSignature) {
+        // An HMAC keyed with an empty secret can be computed by anyone from the body alone.
+        if (!is_string($localSecret) || $localSecret === '' || !is_string($monduSignature)) {
             return false;
         }
 
-        return true;
-    }
+        $localSignature = hash_hmac('sha256', (string) $body, $localSecret);
 
-    private static function isAllowed($data)
-    {
-        if (isset($data['return'])){
-            if (in_array($data['return'], ['webhook']))
-                return true;
-        }
-
-        return false;
+        return hash_equals($localSignature, $monduSignature);
     }
 }
