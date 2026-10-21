@@ -6,7 +6,11 @@ class RouteHandler
 {
     private const CONTROLLERS_NAMESPACE = 'Plugin\\MonduPayment\\Src\\Controllers\\';
 
-    public static function call($handler, ?int $pluginId = null, $middlewares = [])
+    /**
+     * The middleware list has no default on purpose: a dispatch site that forgets
+     * to pass it must fail loudly instead of running the controller unguarded.
+     */
+    public static function call($handler, ?int $pluginId, array $middlewares)
     {
         foreach ($middlewares as $middleware) {
             MiddlewareHandler::call($middleware);
