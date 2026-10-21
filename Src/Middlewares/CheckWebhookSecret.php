@@ -16,7 +16,8 @@ class CheckWebhookSecret
     {
         $request = new Request;
         $configService = new ConfigService();
-        $data = $request->all();
+        // Raw values: the sanitized ones turn & ' " < > into entities and would never match.
+        $data = $request->allRaw();
 
         if (!isset($data['webhooks_secret'])) {
             return Response::json([
@@ -25,7 +26,8 @@ class CheckWebhookSecret
         }
 
         $expected = (string) $configService->getWebhooksSecret();
-        if ($expected === '' || !hash_equals($expected, (string) $data['webhooks_secret'])) {
+        if ($expected === '' || !is_string($data['webhooks_secret'])
+            || !hash_equals($expected, $data['webhooks_secret'])) {
             return Response::json([
                 'message' => 'Webhooks secret is wrong.',
             ], 422);

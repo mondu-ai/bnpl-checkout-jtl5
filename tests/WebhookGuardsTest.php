@@ -4,8 +4,7 @@
  * Framework-free test for the two webhook guards, CheckWebhookSecret and CheckMonduSignature.
  *
  * JTL's plugin config and the exiting Response::json() are replaced by recording stubs, so the
- * guards' decisions can be observed without a shop. The real Request is used; its static data is
- * seeded directly because filter_input() does not see $_GET/$_POST written from the CLI.
+ * guards' decisions can be observed without a shop. The real Request reads $_GET and $_POST.
  * Run:  php tests/WebhookGuardsTest.php   (exit code 0 = all passed)
  */
 
@@ -70,13 +69,21 @@ namespace {
         }
     };
 
-    $requestData = new ReflectionProperty(Request::class, 'data');
-    $requestData->setAccessible(true);
+    // Request keeps its data in static arrays; start every case from an empty request.
+    $resetRequest = function () {
+        foreach (['data', 'rawData'] as $name) {
+            $property = new ReflectionProperty(Request::class, $name);
+            $property->setAccessible(true);
+            $property->setValue(null, []);
+        }
+    };
 
     // Returns the status the guard rejected with, or null when it let the request through.
-    $runSecretGuard = function ($configuredSecret, array $data) use ($requestData) {
+    $runSecretGuard = function ($configuredSecret, array $query, array $body = []) use ($resetRequest) {
         Helper::$config = ['webhooks_secret' => $configuredSecret];
-        $requestData->setValue(null, $data);
+        $resetRequest();
+        $_GET = $query;
+        $_POST = $body;
         Response::$status = null;
         CheckWebhookSecret::handle();
         return Response::$status;
@@ -89,25 +96,33 @@ namespace {
     $check('secret guard: wrong secret is rejected', 422,
         $runSecretGuard($secret, ['return' => 'cancel-order', 'webhooks_secret' => 'nope']));
     $check('secret guard: missing secret is rejected', 422,
-        $runSecretGuard($secret, ['return' => 'cancel-order']));
+        $runSecretGuard($secret, ['return' => 'cancel-order'], ['order_number' => '1']));
     // Body return=x overrides the query's return=cancel-order, the old isAllowed() then skipped the check.
     $check('secret guard: body return value does not switch the check off', 422,
-        $runSecretGuard($secret, ['return' => 'x', 'order_number' => '1']));
+        $runSecretGuard($secret, ['return' => 'cancel-order'], ['order_number' => '1', 'return' => 'x']));
     // ?redirect=cancel-order never sets return at all.
     $check('secret guard: request without return is still checked', 422,
-        $runSecretGuard($secret, ['redirect' => 'cancel-order', 'order_number' => '1']));
+        $runSecretGuard($secret, ['redirect' => 'cancel-order'], ['order_number' => '1']));
     $check('secret guard: unconfigured secret rejects an empty one', 422,
         $runSecretGuard(null, ['return' => 'cancel-order', 'webhooks_secret' => '']));
+    $check('secret guard: unconfigured secret rejects a request without one', 422,
+        $runSecretGuard(null, ['return' => 'cancel-order']));
     $check('secret guard: numeric looking secrets are compared as strings', 422,
         $runSecretGuard('0e123', ['return' => 'cancel-order', 'webhooks_secret' => '0e456']));
+    $check('secret guard: secret with HTML special characters matches', null,
+        $runSecretGuard('a&b"c<d', ['return' => 'cancel-order', 'webhooks_secret' => 'a&b"c<d']));
+    $check('secret guard: secret sent as an array is rejected', 422,
+        $runSecretGuard($secret, ['return' => 'cancel-order', 'webhooks_secret' => [$secret]]));
 
-    $runSignatureGuard = function ($configuredSecret, ?string $signature) use ($requestData) {
+    $runSignatureGuard = function ($configuredSecret, ?string $signature) use ($resetRequest) {
         Helper::$config = ['webhooks_secret' => $configuredSecret];
         unset($_SERVER['HTTP_X_MONDU_SIGNATURE']);
         if ($signature !== null) {
             $_SERVER['HTTP_X_MONDU_SIGNATURE'] = $signature;
         }
-        $requestData->setValue(null, []);
+        $resetRequest();
+        $_GET = [];
+        $_POST = [];
         Response::$status = null;
         CheckMonduSignature::handle();
         return Response::$status;

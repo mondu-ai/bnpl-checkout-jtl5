@@ -7,6 +7,9 @@ class MiddlewareHandler
     private const MIDDLEWARES_NAMESPACE = 'Plugin\\MonduPayment\\Src\\Middlewares';
     private const METHOD = 'handle';
 
+    /**
+     * A middleware rejects a request by ending it (Response::json() exits); its return value is ignored.
+     */
     public static function call(string $middleware)
     {
         $class = self::MIDDLEWARES_NAMESPACE .'\\'. $middleware;

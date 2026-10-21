@@ -157,11 +157,6 @@ class Route
         return RouteHandler::call($action, $pluginId, self::$middlewares[$requestType][$route] ?? []);
     }
 
-    public static function execute($controllerMethod, ?int $pluginId = null)
-    {
-        return RouteHandler::call($controllerMethod, $pluginId, []);
-    }
-
     public static function  routes_list(): array
     {
         return self::$routes;
